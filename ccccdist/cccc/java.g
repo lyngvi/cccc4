@@ -215,7 +215,10 @@ inline void endOfCommentLine(JLexer &lexer)
 #token STRINGCONST "\"" << mode(START); >>
 // thanks to Lynn Wilson for pointing out the need for a simple fix 
 // to handle escaped newlines within string constants
-#token LYNNS_FIX "\\\n"  <<  endOfLine(*this); >>   
+#token LYNNS_FIX "\\\n"  <<  endOfLine(*this); >> 
+// We also need to handle escaped double quotes
+#token ESCAPED_DQUOTE "\\\"" << skip(); >>
+#token ESCAPED_OTHER "\\~[\"]" << skip(); >>
 #token S_ANYTHING "~[\"]" << skip(); >>
 #lexclass START
 
@@ -227,30 +230,31 @@ inline void endOfCommentLine(JLexer &lexer)
 
 // keywords
 #token	ABSTRACT	"abstract"		<<;>>
-#token	BOOLEAN		"boolean"		<<;>>
+#token	KW_BOOLEAN		"boolean"		<<;>>
 #token	BREAK		"break"		<< IncrementCount(tcMCCABES_VG);>>
-#token	BYTE		"byte"		<<;>>
+#token	KW_BYTE		"byte"		<<;>>
 #token	CATCH		"catch"		<< /* IncrementCount(tcMCCABES_VG) ? */ ;>>
-#token	CHAR		"char"		<<;>>
+#token  DEFAULT         "default"       <<;>>
+#token	KW_CHAR		"char"		<<;>>
 #token	CLASS		"class"		<<;>>
-#token	CONST		"const"		<<;>>
+#token	KW_CONST		"const"		<<;>>
 #token	CONTINUE	"continue"		<< IncrementCount(tcMCCABES_VG); >>
 #token	DO			"do"		<<;>>
-#token	DOUBLE		"double"		<<;>>
+#token	KW_DOUBLE		"double"		<<;>>
 #token	ELSE		"else"		<<;>>
 #token	EXTENDS		"extends"		<<;>>
 #token	BFALSE		"false"		<<;>>
 #token	FINAL		"final"		<<;>>
 #token	FINALLY		"finally"		<<;>>
-#token	FLOAT		"float"		<<;>>
+#token	KW_FLOAT		"float"		<<;>>
 #token	FOR			"for"		<< IncrementCount(tcMCCABES_VG); >>
 #token	IF			"if"		<< IncrementCount(tcMCCABES_VG); >>
 #token	IMPLEMENTS	"implements"		<<;>>
 #token	IMPORT		"import"		<<;>>
 #token	INSTANCEOF	"instanceof"		<<;>>
-#token	INT			"int"		<<;>>
+#token	KW_INT			"int"		<<;>>
 #token	INTERFACE	"interface"		<<;>>
-#token	LONG		"long"		<<;>>
+#token	KW_LONG		"long"		<<;>>
 #token	NATIVE		"native"		<<;>>
 #token	NEW			"new"		<<;>>
 #token	PNULL		"null"		<<;>>
@@ -259,7 +263,7 @@ inline void endOfCommentLine(JLexer &lexer)
 #token	PROTECTED	"protected"		<<;>>
 #token	PUBLIC		"public"		<<;>>
 #token	RETURN		"return"		<<;>>
-#token	SHORT		"short"		<<;>>
+#token	KW_SHORT		"short"		<<;>>
 #token	SHUTUP		"shutup"		<<;>>
 #token	STATIC		"static"		<<;>>
 #token	STRING		"string"		<<;>>
@@ -267,16 +271,17 @@ inline void endOfCommentLine(JLexer &lexer)
 #token	SWITCH		"switch"		<< IncrementCount(tcMCCABES_VG); >>
 #token	SYNCHRONIZED	"synchronized"		<<;>>
 #token	THINGS		"things"		<<;>>
-#token	THIS		"this"		<<;>>
+#token	KW_THIS		"this"		<<;>>
 #token	THREADSAFE	"threadsafe"		<<;>>
 #token	THROW		"throw"		<<;>>
 #token	THROWS		"throws"		<<;>>
 #token	TRANSIENT	"transient"		<<;>>
 #token	BTRUE		"true"		<<;>>
 #token	TRY			"try"		<<;>>
-#token	VOID		"void"		<<;>>
+#token	KW_VOID		"void"		<<;>>
 #token	VOLATILE	"volatile"		<<;>>
 #token	WHILE		"while"		<< IncrementCount(tcMCCABES_VG); >>
+#token  CASE		"case"		<< IncrementCount(tcMCCABES_VG); >>
 
 // an identifier.  
 
@@ -294,6 +299,10 @@ inline void endOfCommentLine(JLexer &lexer)
 #token NUM_INT2	"0([0-7])*{[lL]}" <<;>>
 #token NUM_INT3 "0[xX]([0-9a-fA-F])*{[lL]}" <<;>>
 #token NUM_INT4	"[1-9]([0-9])*{[lL]}" <<;>>
+
+// Option 1 above does not cover a floating point value with an f at
+// the end but no decimal point
+#token NUM_INT1A "([0-9])+{[eE]{[\+\-]}([0-9])+}{[fFdD]}" <<;>>
 
 
 class JParser
@@ -455,15 +464,15 @@ type
 
 // The primitive types.
 builtInType
-	:	VOID
-	|	BOOLEAN
-	|	BYTE
-	|	CHAR
-	|	SHORT
-	|	INT
-	|	FLOAT
-	|	LONG
-	|	DOUBLE
+	:	KW_VOID
+	|	KW_BOOLEAN
+	|	KW_BYTE
+	|	KW_CHAR
+	|	KW_SHORT
+	|	KW_INT
+	|	KW_FLOAT
+	|	KW_LONG
+	|	KW_DOUBLE
 	;
 
 // A (possibly-qualified) java identifier.  We start with the first IDENT
@@ -519,7 +528,7 @@ modifier[Visibility& v]
 	|	NATIVE
 	|	THREADSAFE
 	|	SYNCHRONIZED
-//	|	CONST			// reserved word; leave out
+//	|	KW_CONST			// reserved word; leave out
 	|	VOLATILE
 	;
 
@@ -808,19 +817,21 @@ initializer
 ctorDefinition[const string& className, Visibility v]
 	:
 	<< 
-		assert(className==LT(1)->getText());
+                // The following assertion seemed like a good idea
+                // at the time, but it fails for nested classes.
+                // assert(className==LT(1)->getText());
 		int startLine=LT(1)->getLine();
 		string paramList;
 	>>
 	// constructors are the only methods allowed to occur without
 	// return types, and they must have definitions.  This makes
-    // life fairly easy
+	// life fairly easy
 	ctorHead[paramList,className,v] compoundStatement
 	<<
 		int endLine=LT(1)->getLine();
-	    ps->record_function_extent(startLine,endLine,
-					 "",className,className,paramList,
-					 "definition",v,utDEFINITION);
+		ps->record_function_extent(startLine,endLine,
+		 "",className,className,paramList,
+		 "definition",v,utDEFINITION);
 	>>	
 	;			
 
@@ -934,7 +945,19 @@ statement
 	// A list of statements in curly braces -- start a new scope!
 	:
 << string scope; >>
-	compoundStatement
+	  ifStatement
+	| forStatement
+	| whileStatement
+	| doWhileStatement
+	| breakStatement
+	| continueStatement
+	| returnStatement
+	| switchStatement
+	| throwStatement
+	| tryBlock
+	| syncStatement
+	| emptyStatement
+	| compoundStatement
 
 	// class definition
 	|	classDefinition[scope]
@@ -958,51 +981,71 @@ statement
 
 	// Attach a label to the front of a statement
 	|	IDENT c:COLON statement
-
+	;
+	
 	// If-else statement
-	|	IF LPAREN expression RPAREN statement
-		optElseClause
+ifStatement :
+	IF LPAREN expression RPAREN statement
+	optElseClause
+	;
 
 	// For statement
-	|	FOR
-			LPAREN
-				forInit SEMI   // initializer
-				forCond	SEMI   // condition test
-				forIter         // updater
-			RPAREN
-			statement                     // statement to loop over
+forStatement :
+	FOR
+		LPAREN
+			forInit SEMI   // initializer
+			forCond	SEMI   // condition test
+			forIter         // updater
+		RPAREN
+		statement                     // statement to loop over
+	;
 
 	// While statement
-	|	WHILE LPAREN expression RPAREN statement
+whileStatement :
+	WHILE LPAREN expression RPAREN statement
+	;
 
 	// do-while statement
-	|	DO statement "while" LPAREN expression RPAREN SEMI
+doWhileStatement :
+	DO statement "while" LPAREN expression RPAREN SEMI
+	;
 
 	// get out of a loop (or switch)
-	|	BREAK { IDENT } SEMI
+breakStatement :
+	BREAK { IDENT } SEMI
+	;
 
 	// do next iteration of a loop
-	|	CONTINUE { IDENT } SEMI
+continueStatement :
+	CONTINUE { IDENT } SEMI
+	;
 
 	// Return an expression
-	|	RETURN { expression } SEMI
+returnStatement :
+	RETURN { expression } SEMI
+	;
 
 	// switch/case statement
-	|	SWITCH LPAREN expression RPAREN LCURLY
-			( casesGroup )*
-		RCURLY
+switchStatement :
+	SWITCH LPAREN expression RPAREN LCURLY
+		( casesGroup )*
+	RCURLY
+	;
 
-	// exception try-catch block
-	|	tryBlock
 
 	// throw an exception
-	|	THROW expression SEMI
+throwStatement :
+	THROW expression SEMI
+	;
 
 	// synchronize a statement
-	|	SYNCHRONIZED LPAREN expression RPAREN compoundStatement
+syncStatement :
+	SYNCHRONIZED LPAREN expression RPAREN compoundStatement
+	;
 
 	// empty statement
-	|	SEMI 
+emptyStatement :
+	SEMI 
 	;
 
 optElseClause
@@ -1091,8 +1134,6 @@ handler
 // Once you have a precedence chart, writing the appropriate rules as below
 //   is usually very straightfoward
 
-
-
 // the mother of all expressions
 expression
 	:	assignmentExpression
@@ -1109,19 +1150,19 @@ expressionList
 assignmentExpression
 	:	conditionalExpression
 		{
-	    (	ASSIGN
-            |   PLUS_ASSIGN
-            |   MINUS_ASSIGN
-            |   STAR_ASSIGN
-            |   DIV_ASSIGN
-            |   MOD_ASSIGN
-            |   SR_ASSIGN
-            |   BSR_ASSIGN
-            |   SL_ASSIGN
-            |   BAND_ASSIGN
-            |   BXOR_ASSIGN
-            |   BOR_ASSIGN
-            )
+			(	ASSIGN
+			|   PLUS_ASSIGN
+			|   MINUS_ASSIGN
+			|   STAR_ASSIGN
+			|   DIV_ASSIGN
+			|   MOD_ASSIGN
+			|   SR_ASSIGN
+			|   BSR_ASSIGN
+			|   SL_ASSIGN
+			|   BAND_ASSIGN
+			|   BXOR_ASSIGN
+			|   BOR_ASSIGN
+            		)
 			assignmentExpression
 		}
 	;
@@ -1166,7 +1207,12 @@ andExpression
 
 // equality/inequality (==/!=) (level 6)
 equalityExpression
-	:	relationalExpression ((NOT_EQUAL | EQUAL) relationalExpression)*
+	:	relationalExpression relationalPredicate
+	;
+
+relationalPredicate 
+	:	INSTANCEOF typeSpec
+	|	((NOT_EQUAL | EQUAL) relationalExpression)*
 	;
 
 
@@ -1180,7 +1226,6 @@ relationalExpression
 			)
 			shiftExpression
 		)*
-	|	INSTANCEOF typeSpec
 	;
 
 // bit shift expressions (level 4)
@@ -1230,7 +1275,7 @@ postfixExpression
 
 		(	// qualified id (id.id.id.id...) -- build the name
 			DOT ( IDENT
-				| THIS
+				| KW_THIS
 				| CLASS
 				| newExpression
 				| SUPER LPAREN { expressionList } RPAREN
@@ -1274,7 +1319,7 @@ primaryExpression
 	|	SUPER
 	|	BTRUE
 	|	BFALSE
-	|	THIS
+	|	KW_THIS
 	|	PNULL
 	|	LPAREN assignmentExpression RPAREN
 	;
@@ -1363,7 +1408,8 @@ newArrayDeclarator
 
 
 constant
-	:	NUM_INT1
+        :       NUM_INT1
+        |       NUM_INT1A
 	|	NUM_INT2
 	|	NUM_INT3
 	|	NUM_INT4
@@ -1372,10 +1418,4 @@ constant
 	|	NUM_FLOAT
 	;
 }
-
-
-
-
-
-
 
