@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) External Target" 0x0106
 
-CFG=cccc - Win32 CBuilder
+CFG=cccc - Win32 Release
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,13 +13,12 @@ CFG=cccc - Win32 CBuilder
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "Cccc.mak" CFG="cccc - Win32 CBuilder"
+!MESSAGE NMAKE /f "Cccc.mak" CFG="cccc - Win32 Release"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "cccc - Win32 Release" (based on "Win32 (x86) External Target")
 !MESSAGE "cccc - Win32 Debug" (based on "Win32 (x86) External Target")
-!MESSAGE "cccc - Win32 CBuilder" (based on "Win32 (x86) External Target")
 !MESSAGE 
 
 # Begin Project
@@ -39,7 +38,7 @@ CFG=cccc - Win32 CBuilder
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
-# PROP Cmd_Line "..\w32bin\gmake -f cccc.mak CONF=w32vc DEBUG=false"
+# PROP Cmd_Line "nmake -f w32vc.mak DEBUG=false"
 # PROP Rebuild_Opt ""
 # PROP Target_File "\ccccprod\bin\cccc.exe"
 # PROP Bsc_Name ""
@@ -58,26 +57,7 @@ CFG=cccc - Win32 CBuilder
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
-# PROP Cmd_Line "..\w32bin\gmake -f cccc.mak CONF=w32vc DEBUG=true"
-# PROP Rebuild_Opt "clean all"
-# PROP Target_File "cccc.exe"
-# PROP Bsc_Name ""
-# PROP Target_Dir ""
-
-!ELSEIF  "$(CFG)" == "cccc - Win32 CBuilder"
-
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "cccc___W"
-# PROP BASE Intermediate_Dir "cccc___W"
-# PROP BASE Cmd_Line "..\w32bin\gmake -f cccc.mak CONF=w32bc DEBUG=true"
-# PROP BASE Rebuild_Opt "clean all"
-# PROP BASE Target_File "cccc.exe"
-# PROP BASE Bsc_Name ""
-# PROP BASE Target_Dir ""
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "cccc___W"
-# PROP Intermediate_Dir "cccc___W"
-# PROP Cmd_Line "..\w32bin\gmake -f cccc.mak CONF=w32bc DEBUG=true"
+# PROP Cmd_Line "nmake -f w32vc.mak DEBUG=true"
 # PROP Rebuild_Opt "clean all"
 # PROP Target_File "cccc.exe"
 # PROP Bsc_Name ""
@@ -89,24 +69,13 @@ CFG=cccc - Win32 CBuilder
 
 # Name "cccc - Win32 Release"
 # Name "cccc - Win32 Debug"
-# Name "cccc - Win32 CBuilder"
 
 !IF  "$(CFG)" == "cccc - Win32 Release"
 
 !ELSEIF  "$(CFG)" == "cccc - Win32 Debug"
 
-!ELSEIF  "$(CFG)" == "cccc - Win32 CBuilder"
-
 !ENDIF 
 
-# Begin Group "makefile"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\cccc.mak
-# End Source File
-# End Group
 # Begin Group "PCCTS grammars"
 
 # PROP Default_Filter "g"
@@ -257,6 +226,38 @@ SOURCE=.\cccc_utl.cc
 # Begin Source File
 
 SOURCE=.\ccccmain.cc
+# End Source File
+# End Group
+# Begin Group "makefiles"
+
+# PROP Default_Filter "*.mak"
+# Begin Source File
+
+SOURCE=.\posixgcc.mak
+# End Source File
+# Begin Source File
+
+SOURCE=.\rules.mak
+# End Source File
+# Begin Source File
+
+SOURCE=.\w32bcb.mak
+# End Source File
+# Begin Source File
+
+SOURCE=.\w32cygnus.mak
+# End Source File
+# Begin Source File
+
+SOURCE=.\w32cygnus_gmake.mak
+# End Source File
+# Begin Source File
+
+SOURCE=.\w32cygnus_nmake.mak
+# End Source File
+# Begin Source File
+
+SOURCE=.\w32vc.mak
 # End Source File
 # End Group
 # End Target
