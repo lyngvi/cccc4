@@ -45,18 +45,12 @@ pccts:
 	echo antlr executable now in $(BINDIR)
 	(cd dlg; make -s)
 	echo dlg executable now in $(BINDIR)
-	(cd sorcerer; make -s)
-	echo sorcerer executable now in $(BINDIR)
-	(cd support/genmk; make -s; mv genmk ../../$(BINDIR))
-	echo genmk executable now in $(BINDIR)
 	echo
 	echo "       PCCTS 1.33MR20 installation complete"
 
 clean:
 	(cd antlr; make -s clean)
 	(cd dlg; make -s clean)
-	(cd sorcerer; make -s clean)
-	(cd support/genmk; make -s clean)
 
 
 manpages:
