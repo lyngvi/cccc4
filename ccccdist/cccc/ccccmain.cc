@@ -2,14 +2,14 @@
 // command line interface implementation for the cccc project
 
 
-#ifndef CCCC_VERSION
-#define CCCC_VERSION "<unnumbered>"
-#endif
 
 #include "cccc.h"
 
+#include "cccc_ver.h"
+
 #include <fstream>
 #include <list>
+#include <iterator>
 
 #ifdef _WIN32
 #include <direct.h>
@@ -63,7 +63,7 @@ int _CRT_glob = 0;
 /*
 ** global variables to hold default values for various things
 */
-string current_filename, current_rule;
+string current_filename, current_rule, parse_language;
 
 // class Main encapsulates the top level of control for the program
 // including command line handling
@@ -322,8 +322,10 @@ int Main::ParseFiles()
   std::list<file_entry>::iterator file_iterator=file_list.begin();
   while(file_iterator!=file_list.end())
     {
-      string filename=file_iterator->first;
-      string file_language=file_iterator->second;
+	  const file_entry &entry=*file_iterator;
+
+      string filename=entry.first;
+      string file_language=entry.second;
       ParseStore ps(filename);
 
       // The following objects are used to assist in the parsing 
@@ -578,7 +580,7 @@ void Main::PrintCredits(ostream& os)
   // the principal purpose of the constructor is to set up the
   // two lots of boilerplate text that this class requires
   string version_string="Version ";
-  version_string+=CCCC_VERSION;
+  version_string.append(CCCC_VERSION);
 
   const char *credit_strings[] =
   {
