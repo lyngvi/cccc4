@@ -2,14 +2,14 @@
 // command line interface implementation for the cccc project
 
 
-#ifndef CCCC_VERSION
-#define CCCC_VERSION "<unnumbered>"
-#endif
 
 #include "cccc.h"
 
+#include "cccc_ver.h"
+
 #include <fstream>
 #include <list>
+#include <iterator>
 
 #ifdef _WIN32
 #include <direct.h>
@@ -25,7 +25,7 @@
 #include "cccc_db.h"
 #include "cccc_utl.h"
 #include "cccc_htm.h"
-
+#include "cccc_xml.h"
 
 // support for languages is now a compile-time option
 #ifdef CC_INCLUDED
@@ -63,7 +63,7 @@ int _CRT_glob = 0;
 /*
 ** global variables to hold default values for various things
 */
-string current_filename, current_rule;
+string current_filename, current_rule, parse_language;
 
 // class Main encapsulates the top level of control for the program
 // including command line handling
@@ -81,6 +81,7 @@ class Main
   string opt_infile;
   string opt_outfile;
   string html_outfile;
+  string xml_outfile;
   string lang;
   int report_mask; 
   int debug_mask;
@@ -107,6 +108,9 @@ public:
   int DumpDatabase();
   int LoadDatabase();
   void GenerateHtml();
+  void GenerateXml();
+  void DescribeOutput();
+
   friend int main(int argc, char** argv);
 };
 
@@ -189,6 +193,11 @@ void Main::HandleArgs(int argc, char **argv)
 		{
 		  html_outfile=next_val;
 		}
+	      else if(next_opt=="--xml_outfile")
+		{
+		  xml_outfile=next_val;
+		}
+
 	      else if(next_opt=="--lang")
 		{
 		  lang=next_val;
@@ -229,6 +238,10 @@ void Main::HandleArgs(int argc, char **argv)
   if(html_outfile=="")
     {
       html_outfile=outdir+"/cccc.html";
+    }
+  if(xml_outfile=="")
+    {
+      xml_outfile=outdir+"/cccc.xml";
     }
   if(opt_outfile=="")
     {
@@ -322,8 +335,10 @@ int Main::ParseFiles()
   std::list<file_entry>::iterator file_iterator=file_list.begin();
   while(file_iterator!=file_list.end())
     {
-      string filename=file_iterator->first;
-      string file_language=file_iterator->second;
+	  const file_entry &entry=*file_iterator;
+
+      string filename=entry.first;
+      string file_language=entry.second;
       ParseStore ps(filename);
 
       // The following objects are used to assist in the parsing 
@@ -457,15 +472,18 @@ int Main::LoadDatabase()
 
 void Main::GenerateHtml()
 {
-  cerr << endl << "Generating reports" << endl;
+  cerr << endl << "Generating HTML reports" << endl;
 
   CCCC_Html_Stream::GenerateReports(prj,report_mask,html_outfile,outdir);
 
-  // make sure the user knows where the real output went
-  cerr << endl 
-       << "Primary HTML output is in " << html_outfile << endl 
-       << "Detailed reports on modules and source are in " << outdir << endl
-       << "Database dump is in " << db_outfile << endl;
+}
+
+void Main::GenerateXml()
+{
+  cerr << endl << "Generating XML reports" << endl;
+
+  CCCC_Xml_Stream::GenerateReports(prj,report_mask,xml_outfile,outdir);
+
 }
 
 void Main::HandleDebugOption(const string& arg) 
@@ -578,7 +596,7 @@ void Main::PrintCredits(ostream& os)
   // the principal purpose of the constructor is to set up the
   // two lots of boilerplate text that this class requires
   string version_string="Version ";
-  version_string+=CCCC_VERSION;
+  version_string.append(CCCC_VERSION);
 
   const char *credit_strings[] =
   {
@@ -610,6 +628,24 @@ void Main::PrintCredits(ostream& os)
 
 }
 
+void Main::DescribeOutput()
+{
+  // make sure the user knows where the real output went
+  // make sure the user knows where the real output went
+  cerr << endl 
+       << "Primary HTML output is in " << html_outfile << endl;
+  if(report_mask & rtSEPARATE_MODULES)
+  { 
+     cerr << "Detailed HTML reports on modules and source are in " << outdir << endl;
+  }
+  cerr << "Primary XML output is in " << xml_outfile << endl ;
+  if(report_mask & rtSEPARATE_MODULES)
+  { 
+     cerr << "Detailed XML reports on modules are in " << outdir << endl;
+  }
+  cerr << "Database dump is in " << db_outfile << endl << endl;
+}
+
 /* 
 ** the usage message is printed on cerr if unexpected options are found,
 ** and on cout if option --help is found.  
@@ -628,11 +664,13 @@ void Main::PrintUsage(ostream& os)
     "meaning of some options.",
     "",
     "Options:",
-    "--help		      * generate this help message",
+    "--help                   * generate this help message",
     "--outdir=<dname>         * directory for generated files",
     "                           (default=.cccc)",
     "--html_outfile=<fname>   * name of primary HTML report generated ",
     "                           (default=<outdir>/cccc.html)",
+    "--xml_outfile=<fname>    * name of primary XML report generated ",
+    "                           (default=<outdir>/cccc.xml)",
     "--db_infile=<fname>      * preload internal database from named file",
     "                           (default=no initial content)",
     "--db_outfile=<fname>     * save internal database to named file",
@@ -687,6 +725,8 @@ int main(int argc, char **argv)
 
   // generate html output
   app->GenerateHtml();
+  app->GenerateXml();
+  app->DescribeOutput();
 
   delete app;
   delete prj;
