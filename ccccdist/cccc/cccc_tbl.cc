@@ -45,10 +45,10 @@ template<class T>
 T* CCCC_Table<T>::find(string name)
 {
   T *retval=NULL;
-  iterator value_iterator=map_t::find(name);
+  typename map_t::iterator value_iterator=map_t::find(name);
   if(value_iterator!=end())
     {
-      retval=value_iterator->second;
+      retval=(*value_iterator).second;
     }
   return retval;
 }
@@ -60,7 +60,7 @@ T* CCCC_Table<T>::find_or_insert(T* new_item_ptr)
   T *retval=find(new_key);
   if(retval==NULL)
     {
-      map_t::value_type new_pair(new_key,new_item_ptr);
+      typename map_t::value_type new_pair(new_key,new_item_ptr);
       insert(new_pair);
       sorted=false;
       retval=new_item_ptr;
@@ -72,7 +72,7 @@ template<class T>
 bool CCCC_Table<T>::remove(T* old_item_ptr)
 {
   bool retval=false; 
-  map_t::iterator value_iterator=map_t::find(old_item_ptr->key());
+  typename map_t::iterator value_iterator=map_t::find(old_item_ptr->key());
   if(value_iterator!=map_t::end())
     {
       erase(value_iterator);
@@ -105,7 +105,7 @@ template <class T> T* CCCC_Table<T>::next_item()
   T* retval=NULL;
   if(iter_!=end())
     {
-      retval=iter_->second;
+      retval=(*iter_).second;
       iter_++;
     }
   return retval;
