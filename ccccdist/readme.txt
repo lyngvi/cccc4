@@ -6,8 +6,8 @@ program exists to analyze and report measurements on source code in C, C++
 and Java.  The languages Ada83 and Ada95, which were supported in previous
 versions are presently not supported, although support for these languages 
 may be restored at some time in the future if there is demonstrable demand.
-The Internet site for CCCC development is: http://cccc.netpedia.net 
-(hosting kindly donated by netpedia.net/netpedia.com to whom I am grateful).
+The Internet site for CCCC development is: http://cccc.sourceforge.net 
+(hosting kindly donated by sourceforge.net to whom I am grateful).
 
 CCCC is a command line tool, originally implemented for Linux and other 
 POSIX-style platforms, but also buildable on the Win32 platform.  
@@ -25,11 +25,7 @@ number of subdirectories, with the following contents:
   Terence Parr and others, now maintained by Tom Moog of Polhode Inc. 
   PCCTS is required to compile CCCC: in the past the distribution has relied
   on the existence of a PCCTS package on the compilation platform, while this
-  distribution chooses to include it in the package.
-* A directory of Win32 binaries to enable POSIX-style parts of the build, test
-  and install process to run similarly on Win32.  Most of the binaries are from
-  the CygWin B20 release of tools, although there is a version of GNU MAKE for
-  Win32 which I obtained from www.mozilla.org.
+  distribution chooses to include it as part of CCCC's own package.
 * The source of a new version of CCCC, which I hope will turn out to be more
   efficient, accurate and useful than previous versions, although it is very
   similar in spirit and interface.
@@ -41,63 +37,23 @@ number of subdirectories, with the following contents:
   files to support building, testing and installing the software under 
   POSIX and Win32.
 
-The pccts and w32bin directories contain software for which I am not the 
-original author.  Each of these directories also contains documentation of 
-the provenance and licensing requirements of these programs.  In the case of
-the pccts directory, the software has been placed in the public domain, with
-the expectation that appropriate credit will be given for use.  In the case
-of the w32bin directory, all software is released under the GNU Public 
-License, implying that it may be freely redistributed under certain conditions
-including the requirement that the redistributor ensures that the recipients
-are at least provided with information on where the source code for the 
-binaries can be obtained from.  As noted above, these binaries are part of 
-the CygWin B20 distribution of GNU POSIX utilities compiled using their port
-of the GNU C compiler to the Win32 platform.  Source for the tools and the 
-compiler may be downloaded from http://sourceware.cygnus.com.
+The pccts directory contains software for which I am not the original 
+author.  The software has been placed in the public domain, with
+the expectation that appropriate credit will be given for use.  
 
-The facilities for building, testing and installing the programs in this 
-distribution are presently somewhat crude and less consistent than I
-would like in the long term.  I have tried to make the two platform families
-(i.e. POSIX and Win32) use the same tools as far as possible, and where this
-is not possible to use differing tools which operate in similar ways.  Hence
-the Win32 build does not use a slick InstallShield-type installation 
-interface, but a rather clunky script implemented in a makefile which installs
-things to a fixed directory.  The primary platform is the POSIX one, and I
-have tried to maintain source and other text files as Unix-style text, but
-I haven't been religious about this, so there may be some stray ctrl-M's in 
-the code.  The only place this seems to make a difference in the interpretation
-of makefiles under the Unix platform, where DOS line termination causes
-ifeq lines etc. to be misinterpreted.
+As of version 3.pre62, the recommended way of building the software is by
+using the BAT and SH scripts in the top directory of the distribution as
+appropriate for your platform.  On Win32, the script build_w32vc.bat 
+builds the software with Microsoft Visual C++ version 5 or 6 (locations
+within the script may need to be modified according to which you have
+and whether it is installed at the default position in the filesystem).
+Thee is also a script to build the software using the Borland command
+line C++ compiler, although the version this builds presently crashes
+during the execution of the unit tests in the distribution (patches to
+fix this would be gratefully received).  On Linux and similar platforms
+the shell script build_posixgcc.sh should work. 
 
-Under POSIX, the recommended way of operating is to simply run 'make' in
-the top level directory of the distribution.  This should first build the
-PCCTS binaries, then the CCCC program itself, then run a sequence of tests.
-Providing the tests pass, the makefile should then attempt to install the
-cccc binary in /usr/local/bin.  I have assumed that this will require root
-privilege, so the top level makefile contains an 'su' command which should
-cause a request for the root password unless the build/test/install process
-is already running as root.  Please feel free to customize this process as
-you see fit, especially if you are attempting to install CCCC in a location
-convenient to you on a machine for which you do not have root privileges.
-
-Under Win32, there is a Microsoft Visual Studio workspace ccccdist.dsw in the 
-top level directory of the distribution.  This will also build the PCCTS 
-binaries, then cccc.exe.  It will then run some tests on cccc.exe.  Providing
-the testing has satisfactory results, the CcccDevStudioAddIn project will be
-built, and the system will attempt to install the binaries cccc.exe and 
-CcccDevStudioAddIn.dll to the directory C:\Program Files\CCCC.  The makefiles 
-used to build cccc.exe and to control the testing and installation are the 
-same ones used under POSIX, interpreted by an Win32 build of GNU make, 
-wrapped in DevStudio .dsp projects (CcccDevStudioAddIn is a Win32 COM project,
-is not compiled under POSIX, and hence uses a 'normal' Visual Studio project).
-
-The DevStudio .dsw and .dsp files were all developed under version 5.0, but 
-should be OK to load into a running instance of version 6.0.  I do not 
-recommend starting DevStudio on these files by activating (double-clicking) 
-them in Explorer, as on the version 6.0 development machine I use this tends 
-to lead to DevStudio crashing as it starts up.
-
-If you wish to use the Visual Studio integration, there are some additional
+If you wish to try the Visual Studio integration, there are some additional
 steps to perform.  Within Visual Studio, select menu option 
 "Tools/Customize", then click on the "Macros and AddIns" tab.  Within this 
 control, click on the "Browse" button, change the file type from "*.dsm" 
@@ -126,6 +82,20 @@ Studio compiler error messages or Find in Files, as conformance to this
 format allows Visual Studio to implement the convenient "jump to source
 line" behaviour.  I have on my list of issues for CCCC to convert the 
 parser syntax error messages to this format, but it hasn't happened yet.
+The add-in is experimental at this stage.  I am aware of some issues 
+with projects in locations with spaces in the path, and I have also found
+that the logic I am using to deduce the home directories of .dsp and .dsw 
+files is not always correct.
+
+As well as the addin, the current version includes a directory which contains
+a script to build a wizard-style installer for the program under Win32.
+Binary releases of the software made using this directory may be released
+in the near future.  The binary release provides Windows start menu access
+to a DOS prompt set up with an environment to enable CCCC to be run 
+easily, and also provides a shortcut to the HTML documentation. The 
+installer can be built from the supplied scripts using the splendid free
+Inno Setup and Extensions packages by Martin Laan (Inno Setup) and Jordan
+Russell (extensions), available from http://www.jrsoftware.org.
 
 Previous versions of CCCC have been released like PCCTS into the public
 domain with no restrictions, other than the pious hope that should anyone
@@ -138,14 +108,14 @@ whether GPL would or would not make CCCC a more likely candidate for
 inclusion in distributions.
 
 CCCC was originally developed as a proof-of-concept tool for some ideas 
-relating to software metrics which I was investigating as an MSc project.  
-My candidature has recently been upgraded to PhD level, and I am hoping to 
-complete and write up my research in the course of year 2000.  The research
-to date and that proposed is described on my academic home page at 
-http://www.fste.ac.cowan.edu.au/~tlittlef.  I plan to develop and distribute
-bug fixes and enhancements to CCCC, but due to family, work and academic
-commitments I am unable to commit to a specific schedule for these activities
-beyond the current release.  
+relating to software metrics which I was investigating as an academic 
+research project.  I have now completed the project and been awarded 
+my PhD.  I am still getting a steady stream of enquiries about CCCC, 
+and I am keen to put out a high quality reference version of the software
+as a way of thanking the people who have assisted me by participating in
+the various stages of my research.  The research project is described at
+http://www-chs.ecu.edu.au/~tlittlef.  This page includes a link to a 
+downloadable PDF version of the PhD thesis.
 
 I am grateful to a number of people for assistance on this project, including
 Terence Parr and his co-workers, and Tom Moog for the development and ongoing
@@ -158,11 +128,11 @@ into maintaining it over the coming months and years.
 
 
 Tim Littlefair (tim_littlefair@hotmail.com)
-January 2000
+updated November 2001
 --------------
 
 This and future distributions of CCCC and related tools should be
-available for the forseeable future from http://cccc.netpedia.net
+available for the forseeable future from http://cccc.sourceforge.net
 
 
 
