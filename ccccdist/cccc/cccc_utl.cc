@@ -298,7 +298,7 @@ insert_extent(CCCC_Item& os, int startLine, int endLine,
 	  // extent.
 	  for(i=0; i<tcLAST; i++)
 	    {	
-	      lexical_counts_for_this_extent[i]+=llcmIter->second[i];
+	      lexical_counts_for_this_extent[i]+=(*llcmIter).second[i];
 	    }
 	}
       // The lexical occurrences mentioned in the records processed 
@@ -428,7 +428,7 @@ static void toktrace(ANTLRAbstractToken *tok)
     }
 }
 
-enum InOrOut { IN, OUT };
+enum InOrOut { IO_IN, IO_OUT };
 
 static void rectrace(const char *rulename, 
 		     const char *dir_indic, 
@@ -513,16 +513,27 @@ void ParseUtility::syn(
       cerr << filename << "(0): syntax error at null token" << endl;
     }
 
-  // ANTLRParser::syn(tok,egroup,eset,etok,k);
+#if 1
+	  // The logic in the other half of this #if section
+	  // generated too much noise for some people's taste.
+	  // It's only really useful to myself (TJL) or anyone
+	  // else with a taste for debugging cccc.g/java.g etc.
+	  int i=stack_depth-1;
+      cerr << filename << '(' << stack_tokenline[i] 
+	   << "): trying to match " << stack_rules[i]
+	   << " at '" << stack_tokentext[i] << "'"
+	   << endl;
+#else
   cerr << "Parser context:" << endl;
   for(int i=stack_depth-1; i>=0; i--)
     {
       cerr << filename << '(' << stack_tokenline[i] 
 	   << "): trying to match " << stack_rules[i]
-	   << " at '" << stack_tokentext[i]
+	   << " at '" << stack_tokentext[i] << "'"
 	   << endl;
     }	
   cerr << endl;
+#endif
 }	
 
 void ParseStore::endOfLine(int line)
