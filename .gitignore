@@ -10,4 +10,10 @@ ccccdist/cccc/cccc.cpp
 ccccdist/cccc/java.cpp
 ccccdist/cccc/parser.dlg
 ccccdist/pccts/bin
+ccccdist/test/prn*.db
+ccccdist/test/prn*.xml
+ccccdist/test/prn*.html
+ccccdist/test/test*.db
+ccccdist/test/test*.xml
+ccccdist/test/test*.html
 
