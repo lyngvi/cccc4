@@ -13,13 +13,13 @@ all : pccts cccc test # install
 pccts :
 	cd pccts && $(MAKE) $(MAKEFLAGS)
 
-cccc : 
+cccc : pccts
 	cd cccc && $(MAKE) $(MAKEFLAGS) -f posixgcc.mak
 
 clean :
 	cd cccc && $(MAKE) $(MAKEFLAGS) -f posixgcc.mak clean
 
-test :
+test : cccc
 	cd test && $(MAKE) $(MAKEFLAGS) -f posix.mak
 
 install : 
