@@ -28,29 +28,52 @@
 #include "cccc_db.h"
 #include "cccc_met.h"
 
-enum ReportType { 
-  rtCONTENTS=0x0001, rtSUMMARY=0x0002, 
+enum ReportType {
+  rtCONTENTS=0x0001, rtSUMMARY=0x0002,
   rtOODESIGN=0x0004,
   rtPROC1=0x0010, rtPROC2=0x0020,
   rtSTRUCT1=0x0040, rtSTRUCT2=0x0080,
-  rtOTHER=0x0100, 
+  rtOTHER=0x0100,
   rtSEPARATE_MODULES=0x0200,
   rtSOURCE=0x0400,
-  rtSHOW_GEN_TIME=0x800, 
+  rtSHOW_GEN_TIME=0x800,
   rtCCCC=0x8000
 };
 
 
 class CCCC_Html_Stream {
-  friend CCCC_Html_Stream& operator <<(CCCC_Html_Stream& os, 
+  friend CCCC_Html_Stream& operator <<(CCCC_Html_Stream& os,
 				       const string& stg);
-  friend CCCC_Html_Stream& operator <<(CCCC_Html_Stream& os, 
+  friend CCCC_Html_Stream& operator <<(CCCC_Html_Stream& os,
 				       const CCCC_Metric& mtc);
+
+  static const char* _Table;
+  static const char* _TableFoot;
+  static const char* _TableHead;
+  static const char* _TableRow;
+  static const char* _TableHeader;
+  static const char* _TableCell;
+  static const char* _Anchor;
+  static const char* _ListItem;
+  static const char* _Div;
+  static const char* _Span;
+  static const char* _HTMLLineBreak;
+  static const char* _HTMLBoilerplateTop;
+  static const char* _HTMLBoilerplateBottom;
+  static const char* _UnorderedList;
 
   ofstream fstr;
   static string libdir;
   static string outdir;
   static CCCC_Project* prjptr;
+  static string HTMLEscapeLiteral(const char* inp);
+  static string JSEscapeStringLiteral(const char* inp);
+  static string HTMLBeginElement(const char* nam, const char* clas = "", int width = -1);
+  static string HTMLEndElement(const char* nam);
+  static string HTMLSingleEntryRow(int columnCount, const char* text = "", int height = -1);
+  static string HTMLTableCell(const char* txt, const char* clasName = "", int width = -1);
+  static string HTMLMultiColumnHeaderCell(const char* text, int columnCount = 1);
+  string HTMLParagraph(const char* txt);
 
   void Table_Of_Contents(int report_mask, bool showGenTime);
   void Project_Summary();
@@ -69,39 +92,40 @@ class CCCC_Html_Stream {
   void Procedural_Detail(CCCC_Module *module_ptr);
   void Structural_Detail(CCCC_Module *module_ptr);
 
-  void Separate_Module_Link(CCCC_Module *module_ptr); 
+  void Separate_Module_Link(CCCC_Module *module_ptr);
 
   void Put_Section_Heading(string section_name,string section_tag,
 			   int section_level);
   void Put_Section_TOC_Entry(string section_name, string section_href,
 			     string section_description);
 
-  void Put_Header_Cell(string label, int width=0);
-  void Put_Label_Cell(string label, int width=0,
-		      string ref_name="", string ref_href="", 
+  void Put_Header_Cell(string label, int width=-1);
+  void Put_Label_Cell(string label, int width=-1,
+		      string ref_name="", string ref_href="",
 		      CCCC_Record *rec_ptr=0);
-  void Put_Metric_Cell(const CCCC_Metric& metric, int width=0);
-  void Put_Metric_Cell(int count, string tag, int width=0);
-  void Put_Metric_Cell(int num, int denom, string tag, int width=0);
+  void Put_Empty_Cell(int width = -1);
+  void Put_Metric_Cell(const CCCC_Metric& metric, int width=-1);
+  void Put_Metric_Cell(int count, string tag, int width=-1);
+  void Put_Metric_Cell(int num, int denom, string tag, int width=-1);
   void Put_Extent_URL(const CCCC_Extent& extent);
-  void Put_Extent_Cell(const CCCC_Extent& extent, int width=0, bool withDescription=false);
+  void Put_Extent_Cell(const CCCC_Extent& extent, int width=-1, bool withDescription=false);
   void Put_Extent_List(CCCC_Record& record,bool withDescription=false);
-  void Put_Structural_Details_Cell(CCCC_Module *mod, 
-				   CCCC_Project *prj, 
-				   int mask, 
+  void Put_Structural_Details_Cell(CCCC_Module *mod,
+				   CCCC_Project *prj,
+				   int mask,
 				   UserelNameLevel nl);
 
-  void Metric_Description(string abbreviation, 
+  void Metric_Description(string abbreviation,
 			  string name,
 			  string description);
 
  public:
-  static void GenerateReports(CCCC_Project* project, int report_mask, 
+  static void GenerateReports(CCCC_Project* project, int report_mask,
 			      const string& outfile, const string& outdir);
 
   // general-purpose constructor with standard preamble
   CCCC_Html_Stream(const string& fname, const string& info);
-    
+
   // destructor with standard trailer
   ~CCCC_Html_Stream();
 };
@@ -136,7 +160,7 @@ class Source_Anchor
   // the default copy constructor, assignment operator and destructor
   // are OK for this class
 };
-   
+
 #endif /* __CCCC_HTM_H */
 
 
