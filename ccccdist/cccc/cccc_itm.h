@@ -22,12 +22,12 @@ private:
 public:
   CCCC_Item(const string& s, char c);
   CCCC_Item(const string& s);
-  CCCC_Item(); 
+  CCCC_Item();
 
-  bool Insert(const string& s); 
-  bool Insert(const char* cptr); 
+  bool Insert(const string& s);
+  bool Insert(const char* cptr);
   bool Extract(string& s);
-  bool Insert(int n); 
+  bool Insert(int n);
   bool Extract(int& n);
   bool Insert(char c);
   bool Extract(char& c);
@@ -37,7 +37,7 @@ public:
   bool ToFile(ofstream& ofstr);
   bool FromFile(ifstream& ifstr);
 };
-  
+
 #endif
 
 
