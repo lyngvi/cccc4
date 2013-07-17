@@ -1,0 +1,13 @@
+*.o
+ccccdist/cccc/CLexer.*
+ccccdist/cccc/CParser.*
+ccccdist/cccc/Ctokens.h
+ccccdist/cccc/JLexer.*
+ccccdist/cccc/JParser.*
+ccccdist/cccc/Jtokens.h
+ccccdist/cccc/cccc
+ccccdist/cccc/cccc.cpp
+ccccdist/cccc/java.cpp
+ccccdist/cccc/parser.dlg
+ccccdist/pccts/bin
+
