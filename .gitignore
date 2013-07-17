@@ -16,4 +16,5 @@ ccccdist/test/prn*.html
 ccccdist/test/test*.db
 ccccdist/test/test*.xml
 ccccdist/test/test*.html
+ccccdist/test/.cccc
 
