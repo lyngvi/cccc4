@@ -35,7 +35,7 @@ CCCC_Project::CCCC_Project(const string& name)
   // we prime the database with knowledge of the builtin base types
   // we also add a record for the anonymous class which we will treat
   // as the parent of all non-member functions
-  char *builtin_type_info[]=
+  const char *builtin_type_info[]=
   {
     "void@builtin@<nofile>@0@builtin definition@d?????@@0@d@",
     "int@builtin@<nofile>@0@builtin definition@d?????@@0@d@",
@@ -45,7 +45,7 @@ CCCC_Project::CCCC_Project(const string& name)
     "double@builtin@<nofile>@0@builtin definition@d?????@@0@d@",
     NULL
   };
-  for(char **ptr=builtin_type_info; *ptr!=NULL; ptr++)
+  for(const char **ptr=builtin_type_info; *ptr!=NULL; ptr++)
     {
       CCCC_Item type_info(*ptr);
       add_module(type_info);
@@ -66,11 +66,11 @@ void CCCC_Project::add_module(CCCC_Item& module_line) {
      )
     {
       CCCC_Module *lookup_module_ptr=module_table.find_or_insert(module_ptr);
-      if(lookup_module_ptr != NULL) 
+      if(lookup_module_ptr != NULL)
 	{
 	  lookup_module_ptr->extent_table.find_or_insert(extent_ptr);
-	
-	  if(lookup_module_ptr!=module_ptr) 
+
+	  if(lookup_module_ptr!=module_ptr)
 	    {
 	      // do some work to transfer knowledge from the new module object
 	      // then delete it
@@ -85,12 +85,12 @@ void CCCC_Project::add_module(CCCC_Item& module_line) {
     }
 }
 
-void CCCC_Project::add_member(CCCC_Item& member_data_line) 
+void CCCC_Project::add_member(CCCC_Item& member_data_line)
 {
   CCCC_Module *new_module_ptr=new CCCC_Module;
   CCCC_Member *new_member_ptr=new CCCC_Member;
   if(
-     member_data_line.Extract(new_module_ptr->module_name) &&  
+     member_data_line.Extract(new_module_ptr->module_name) &&
      member_data_line.Extract(new_member_ptr->member_name) &&
      member_data_line.Extract(new_member_ptr->member_type) &&
      member_data_line.Extract(new_member_ptr->param_list)
@@ -120,14 +120,14 @@ void CCCC_Project::add_member(CCCC_Item& member_data_line)
   // into the database
   delete new_module_ptr;
   delete new_member_ptr;
-}    
+}
 
 void CCCC_Project::add_userel(CCCC_Item& userel_data_line) {
   CCCC_UseRelationship *new_userel_ptr =
     new CCCC_UseRelationship(userel_data_line);
-  CCCC_UseRelationship *lookup_userel_ptr = 
-    userel_table.find_or_insert(new_userel_ptr);  
-  
+  CCCC_UseRelationship *lookup_userel_ptr =
+    userel_table.find_or_insert(new_userel_ptr);
+
   if(lookup_userel_ptr != NULL)
     {
       if(new_userel_ptr != lookup_userel_ptr)
@@ -137,7 +137,7 @@ void CCCC_Project::add_userel(CCCC_Item& userel_data_line) {
       lookup_userel_ptr->add_extent(userel_data_line);
     }
 #if DEBUG_USEREL
-  cerr << "Adding " << lookup_userel_ptr->client << " uses " 
+  cerr << "Adding " << lookup_userel_ptr->client << " uses "
        << lookup_userel_ptr->supplier << endl;
 #endif
 }
@@ -155,13 +155,13 @@ void CCCC_Project::reindex()
     {
       if(member_ptr->parent!=NULL)
 	{
-	  CCCC_Module::member_map_t::value_type 
+	  CCCC_Module::member_map_t::value_type
 	    new_pair(member_ptr->key(),member_ptr);
 	  member_ptr->parent->member_map.insert(new_pair);
 	}
       else
 	{
-	  cerr << "Member " << member_ptr->key() << " has no parent" 
+	  cerr << "Member " << member_ptr->key() << " has no parent"
 	       << endl;
 	}
 
@@ -170,7 +170,7 @@ void CCCC_Project::reindex()
 	{
 	  Visibility extent_visibility=extent_ptr->get_visibility();
 	  Visibility member_visibility=member_ptr->get_visibility();
-	 
+
 	  if(member_ptr->visibility==vDONTKNOW)
 	    {
 	      member_ptr->visibility=extent_visibility;
@@ -216,12 +216,12 @@ void CCCC_Project::reindex()
 	 userel_ptr->supplier=="" ||
 	 userel_ptr->client=="" ||
 	 supplier_ptr->is_trivial() ||
-	 client_ptr->is_trivial() 
+	 client_ptr->is_trivial()
 	 )
 	{
 #if DEBUG_USEREL
 	  cerr << "Removing relationship between "
-	       << userel_ptr->supplier.c_str() 
+	       << userel_ptr->supplier.c_str()
 	       << " and "
 	       << userel_ptr->client.c_str()
 	       << endl;
@@ -236,12 +236,12 @@ void CCCC_Project::reindex()
 #if DEBUG_USEREL
 	  std::cerr << "Creating links for "
 		    << client_ptr->key()
-		    << " (" << client_ptr << ") uses " 
+		    << " (" << client_ptr << ") uses "
 		    << supplier_ptr->key()
 		    << " (" << supplier_ptr << ")" << std::endl;
 #endif
 
-	  CCCC_Module::relationship_map_t::value_type 
+	  CCCC_Module::relationship_map_t::value_type
 	    new_supplier_pair(supplier_ptr->key(), userel_ptr),
 	    new_client_pair(client_ptr->key(), userel_ptr);
 	  client_ptr->supplier_map.insert(new_supplier_pair);
@@ -293,7 +293,7 @@ void CCCC_Project::reindex()
 		  // nothing to do
 		  ;
 		}
-	      
+
 	      extent_ptr=userel_ptr->extent_table.next_item();
 	    }
 	  userel_ptr->visible=visible;
@@ -305,7 +305,7 @@ void CCCC_Project::reindex()
 }
 
 
-int CCCC_Project::get_count(const char* count_tag) 
+int CCCC_Project::get_count(const char* count_tag)
 {
   int retval=0;
   retval+=module_table.get_count(count_tag);
@@ -326,14 +326,14 @@ int CCCC_Project::ToFile(ofstream& ofstr)
       module_ptr->ToFile(ofstr);
       module_ptr=module_table.next_item();
     }
-   
+
   CCCC_Member *member_ptr=member_table.first_item();
   while(member_ptr!=NULL)
     {
       member_ptr->ToFile(ofstr);
       member_ptr=member_table.next_item();
     }
-  
+
   CCCC_UseRelationship *userel_ptr=userel_table.first_item();
   while(userel_ptr!=NULL)
     {
@@ -355,7 +355,7 @@ int CCCC_Project::ToFile(ofstream& ofstr)
   if(ofstr.good())
     {
       retval=TRUE;
-    } 
+    }
 
   return retval;
 }
@@ -366,7 +366,7 @@ int CCCC_Project::FromFile(ifstream& ifstr)
   int retval=FALSE;
 
   set_active_project(this);
-  
+
   while(PeekAtNextLinePrefix(ifstr,MODULE_PREFIX))
     {
       CCCC_Module *new_module=new CCCC_Module;
