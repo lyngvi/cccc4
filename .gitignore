@@ -2,13 +2,14 @@
 ccccdist/cccc/CLexer.*
 ccccdist/cccc/CParser.*
 ccccdist/cccc/Ctokens.h
+ccccdist/cccc/Cparser.dlg
 ccccdist/cccc/JLexer.*
 ccccdist/cccc/JParser.*
 ccccdist/cccc/Jtokens.h
+ccccdist/cccc/Jparser.dlg
 ccccdist/cccc/cccc
 ccccdist/cccc/cccc.cpp
 ccccdist/cccc/java.cpp
-ccccdist/cccc/parser.dlg
 ccccdist/pccts/bin
 ccccdist/test/prn*.db
 ccccdist/test/prn*.xml

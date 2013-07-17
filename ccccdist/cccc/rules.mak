@@ -176,12 +176,12 @@ ATokenBuffer.$(OBJEXT): $(PCCTS_H)$(PATHSEP)ATokenBuffer.cpp
 
 
 $(CCCC_SPAWN) : cccc.g
-	$(ANTLR) $(AFLAGS) -ft Ctokens.h cccc.g
-	$(DLG) $(DFLAGS) -cl CLexer parser.dlg
+	$(ANTLR) $(AFLAGS) -ft Ctokens.h -fl Cparser.dlg cccc.g
+	$(DLG) $(DFLAGS) -cl CLexer Cparser.dlg
 
 $(JAVA_SPAWN) : java.g
-	$(ANTLR) $(AFLAGS) -ft Jtokens.h java.g
-	$(DLG) $(DFLAGS) -cl JLexer parser.dlg
+	$(ANTLR) $(AFLAGS) -ft Jtokens.h -fl Jparser.dlg java.g
+	$(DLG) $(DFLAGS) -cl JLexer Jparser.dlg
 
 ## -ci argument to DLG is because unlike C\C++\Java, Ada is defined as being
 ## case insensitive
