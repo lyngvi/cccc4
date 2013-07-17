@@ -8,13 +8,16 @@
 
 .PHONY : pccts cccc test install
 
-all : pccts cccc test install
+all : pccts cccc test # install
 
 pccts :
 	cd pccts ; make
 
 cccc : 
 	cd cccc ; make -f posixgcc.mak
+
+clean :
+	cd cccc ; make -f posixgcc.mak clean
 
 test :
 	cd test ; make -f posix.mak
