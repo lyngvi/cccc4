@@ -11,17 +11,17 @@
 all : pccts cccc test # install
 
 pccts :
-	cd pccts ; make
+	cd pccts && $(MAKE) $(MAKEFLAGS)
 
 cccc : 
-	cd cccc ; make -f posixgcc.mak
+	cd cccc && $(MAKE) $(MAKEFLAGS) -f posixgcc.mak
 
 clean :
-	cd cccc ; make -f posixgcc.mak clean
+	cd cccc && $(MAKE) $(MAKEFLAGS) -f posixgcc.mak clean
 
 test :
-	cd test ; make -f posix.mak
+	cd test && $(MAKE) $(MAKEFLAGS) -f posix.mak
 
 install : 
-	cd install ; su root -c "make -f install.mak" 
+	cd install && su root -c "make -f install.mak"
 
