@@ -27,7 +27,7 @@
 
 #include "cccc.h"
 
-// before we go into the token header file, the compiler must have seen 
+// before we go into the token header file, the compiler must have seen
 // a definition for enum ANTLRTokenType
 // there are three conflicting 'real' definitions, one in use by each parser
 // if we have seen one of these, we do not need to worry, otherwise we
@@ -68,11 +68,11 @@ class ANTLRToken : public ANTLRCommonToken {
   ANTLRToken(ANTLRToken& copyTok);
   ANTLRToken();
   ANTLRToken& operator=(ANTLRToken& copyTok);
-  
+
   virtual ~ANTLRToken();
 
-  virtual ANTLRAbstractToken *makeToken(ANTLRTokenType tt, 
-					ANTLRChar *txt, 
+  virtual ANTLRAbstractToken *makeToken(ANTLRTokenType tt,
+					ANTLRChar *txt,
 					int line);
 
   static void IncrementNesting() { RunningNesting++; }
@@ -80,7 +80,7 @@ class ANTLRToken : public ANTLRCommonToken {
 
   int getNestingLevel() { return CurrentNesting; }
   void CountToken();
-  char *getTokenTypeName();
+  const char *getTokenTypeName();
 };
 
 #define MY_TOK(t) ((ANTLRToken*)(t))
@@ -91,4 +91,4 @@ extern ANTLRToken currentLexerToken;
 
 #endif
 
- 
+

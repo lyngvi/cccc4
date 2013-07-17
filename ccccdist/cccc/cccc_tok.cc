@@ -33,8 +33,8 @@ int toks_alloc1=0, toks_alloc2=0, toks_alloc3=0, toks_freed=0;
 
 ANTLRToken currentLexerToken;
 
-/* 
-** Token objects are used to count the occurences of states which 
+/*
+** Token objects are used to count the occurences of states which
 ** our analyser is interested in within the text.  Any metric which
 ** can be reduced to lexical counting on the text can be recorded
 ** this way.
@@ -43,38 +43,38 @@ ANTLRToken currentLexerToken;
 **   tokens
 **   comment lines
 **   lines containing at least one token of code
-**  
+**
 ** It also makes a lexical count for the following tokens, each of which
-** is expected to increase McCabe's cyclomatic complexity (Vg) for the 
+** is expected to increase McCabe's cyclomatic complexity (Vg) for the
 ** section of code by one unit:
 **  IF FOR WHILE SWITCH BREAK RETURN ? && ||
 **
-** Note that && and || create additional paths through the code due to C/C++ 
+** Note that && and || create additional paths through the code due to C/C++
 ** short circuit evaluation of logical expressions.
 **
 ** Also note the way SWITCH constructs are counted: the desired increment
-** in Vg is equal to the number of cases provided for, including the 
+** in Vg is equal to the number of cases provided for, including the
 ** default case, whether or not an action is defined for it.  This is acheived
-** by counting the SWITCH at the head of the construct as a surrogate for 
+** by counting the SWITCH at the head of the construct as a surrogate for
 ** the default case, and counting BREAKs as surrogates for the individual
 ** cases.  This approach yields the correct results provided that the
 ** coding style in use ensures the use of BREAK after all non-default
 ** cases, and forbids 'drop through' from one case to another other than
 ** in the case where two or more values of the switch variable require
-** identical actions, and no executable code is defined between the 
+** identical actions, and no executable code is defined between the
 ** case gates (as in the switch statement in ANTLRToken::CountToken() below).
 */
 
 /* default constructor */
-ANTLRToken::ANTLRToken() : ANTLRCommonToken() { 
+ANTLRToken::ANTLRToken() : ANTLRCommonToken() {
   toks_alloc1++;
   CurrentNesting=-99;
 }
 
-/* 
-** constructor used by makeToken below 
+/*
+** constructor used by makeToken below
 */
-ANTLRToken::ANTLRToken(ANTLRTokenType t, ANTLRChar *s) : 
+ANTLRToken::ANTLRToken(ANTLRTokenType t, ANTLRChar *s) :
   ANTLRCommonToken(t,s) {
   setType(t);
   setText(s);
@@ -92,10 +92,10 @@ ANTLRToken::ANTLRToken(ANTLRToken& copyTok) {
   toks_alloc3++;
 }
 
-/* 
-** the virtual pseudo-constructor 
+/*
+** the virtual pseudo-constructor
 ** This is required because the PCCTS support code does not know the
-** exact nature of the token which will be created by the user's code, 
+** exact nature of the token which will be created by the user's code,
 ** and indeed does not forbid the user creating more than one kind of
 ** token, so long as ANTLRToken is defined and all token classes are
 ** subclassed from ANTLRAbstractToken
@@ -103,21 +103,21 @@ ANTLRToken::ANTLRToken(ANTLRToken& copyTok) {
 ANTLRAbstractToken *ANTLRToken::makeToken(
 					  ANTLRTokenType tt, ANTLRChar *txt, int line
 					  ) {
-  
+
   ANTLRToken *new_t = new ANTLRToken(tt,txt);
-  if(new_t==0) { 
+  if(new_t==0) {
     cerr << "Memory overflow in "
-      "ANTLRToken::makeToken(" << static_cast<int>(tt) << "," 
+      "ANTLRToken::makeToken(" << static_cast<int>(tt) << ","
 	 << txt << "," << line << ")" << endl;
     exit(2);
   }
   new_t->setLine(line);
 
   DbgMsg(
-	 LEXER,cerr, 
-	 "makeToken(tt=>" << static_cast<int>(tt) << 
-	 ", txt=>" << txt << 
-	 ",line=>" << line << 
+	 LEXER,cerr,
+	 "makeToken(tt=>" << static_cast<int>(tt) <<
+	 ", txt=>" << txt <<
+	 ",line=>" << line <<
 	 ")" << endl
 	 );
 
@@ -129,7 +129,7 @@ ANTLRToken::~ANTLRToken() {
   toks_freed++;
   DbgMsg(MEMORY,cerr,"freeing token " << getText()
 	 << " on line " << getLine()
-	 << " c1:" << toks_alloc1 << " c2:" << toks_alloc2 
+	 << " c1:" << toks_alloc1 << " c2:" << toks_alloc2
 	 << " c3:" << toks_alloc3 << " freed:" << toks_freed << endl);
 }
 
@@ -144,21 +144,21 @@ ANTLRToken& ANTLRToken::operator=(ANTLRToken& copyTok) {
 
 /*
 ** ANTLRToken::CountToken performs counting of features which are traced
-** back to individual tokens created up by the lexer, i.e. the token count 
+** back to individual tokens created up by the lexer, i.e. the token count
 ** and McCabes VG.  Code lines and comment lines are both identified during
 ** the processing of text which the lexer will (usually) skip, so the code
-** to increment these counts is in the relevant lexer rules in the file 
+** to increment these counts is in the relevant lexer rules in the file
 ** cccc.g
 */
 void ANTLRToken::CountToken()
 {
-  // we have seen a non-skippable pattern => this line counts toward LOC  
+  // we have seen a non-skippable pattern => this line counts toward LOC
   bCodeLine=1;
   CurrentNesting=RunningNesting;
   DbgMsg(COUNTER,cerr,*this);
 }
 
-char *ANTLRToken::getTokenTypeName() { return ""; }
+const char *ANTLRToken::getTokenTypeName() { return ""; }
 
 /*
 ** structured output method for token objects
@@ -166,8 +166,8 @@ char *ANTLRToken::getTokenTypeName() { return ""; }
 ostream& operator << (ostream& out, ANTLRToken& t) {
   int i;
 
-  out << "TOK: " << t.getTokenTypeName() 
-      << " " << t.getText() 
+  out << "TOK: " << t.getTokenTypeName()
+      << " " << t.getText()
       << " " << t.getLine()
       << " " << t.getNestingLevel();
 
