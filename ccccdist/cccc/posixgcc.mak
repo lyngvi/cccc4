@@ -1,4 +1,4 @@
-# posixgcc.mak
+
 ## GNUMakefile to build the CCCC project on the POSIX compliant 
 ## platforms using the GNU C Compiler.
 ## Tested with:
@@ -18,7 +18,7 @@
 
 # support for debugging 
 ifeq "$(DEBUG)" "true"
-CFLAGS_DEBUG=-g
+CFLAGS_DEBUG=-g -O0
 LDFLAGS_DEBUG=-g
 endif
 
