@@ -344,13 +344,15 @@ void  CCCC_Html_Stream::Project_Summary() {
   int if4c=prjptr->get_count("IF4c");  // intermodule complexity (concrete only)
   int rej=prjptr->rejected_extent_table.get_count("LOC");
 
-  fstr << HTMLBeginElement(_Table, "summary") << endl
+  fstr << HTMLBeginElement(_Table, "summary")
+       << HTMLBeginElement(_TableHead) << endl
        << HTMLBeginElement(_TableRow) << endl;
   Put_Header_Cell("Metric",55);
   Put_Header_Cell("Tag",15);
   Put_Header_Cell("Overall",15);
   Put_Header_Cell("Per Module",15);
-  fstr << HTMLEndElement(_TableRow) << endl;
+  fstr << HTMLEndElement(_TableRow) << endl
+       << HTMLEndElement(_TableHead) << endl;
 
   fstr << HTMLBeginElement(_TableRow) << endl;
   Put_Label_Cell("Number of modules");
@@ -601,7 +603,7 @@ void CCCC_Html_Stream::Structural_Summary()
   fstr  << HTMLBeginElement(_Table, "summary") << endl
         << HTMLBeginElement(_TableHead) << endl
 	<< HTMLBeginElement(_TableRow) << endl
-	<< "<th rowspan=\"2\">Module Name</td>" << endl
+	<< "<th rowspan=\"2\" class=\"sortable\"><div>Module Name</div></td>" << endl
 	<< HTMLMultiColumnHeaderCell("Fan-out", 3) << endl
 	<< HTMLMultiColumnHeaderCell("Fan-in", 3) << endl
 	<< HTMLMultiColumnHeaderCell("IF4", 3) << endl
@@ -842,8 +844,8 @@ void CCCC_Html_Stream::Put_Section_TOC_Entry(
 
 void CCCC_Html_Stream::Put_Header_Cell(string label, int width)
 {
-  fstr  << HTMLBeginElement(_TableHeader, "header_cell", width)
-        << HTMLEscapeLiteral(label.c_str())
+  fstr  << HTMLBeginElement(_TableHeader, "header_cell sortable", width)
+        << HTMLBeginElement(_Div) << HTMLEscapeLiteral(label.c_str()) << HTMLEndElement(_Div)
         << HTMLEndElement(_TableHeader) << endl;
 }
 
@@ -1176,12 +1178,14 @@ void CCCC_Html_Stream::Module_Summary(CCCC_Module *module_ptr)
 
   fstr << HTMLBeginElement(_Table, "summary");
 
-  fstr << HTMLBeginElement(_TableRow);
+  fstr << HTMLBeginElement(_TableHead)
+       << HTMLBeginElement(_TableRow) << endl;
   Put_Header_Cell("Metric",70);
   Put_Header_Cell("Tag",10);
   Put_Header_Cell("Overall",10);
   Put_Header_Cell("Per Function",10);
-  fstr << HTMLEndElement(_TableRow);
+  fstr << HTMLEndElement(_TableRow)
+       << HTMLEndElement(_TableHead) << endl;
 
   fstr << HTMLBeginElement(_TableRow);
   Put_Label_Cell("Lines of Code");
@@ -1679,6 +1683,16 @@ const char* CCCC_Html_Stream::_HTMLBoilerplateTop =
         "  <script type=\"text/javascript\">\n"
         "     window.g_Glossary = {}; // list of objects with name, description attributes for use in tooltips\n"
         "\n"
+        "     function GetText(elem) {\n"
+        "         var ret = \"\";\n"
+        "         for (var cld = elem.firstChild; cld != null; cld = cld.nextSibling) {\n"
+        "             switch (cld.nodeType) {\n"
+        "             case 1: ret += GetText(cld); break;\n"
+        "             case 3: ret += cld.nodeValue; break;\n"
+        "             }\n"
+        "         }\n"
+        "         return ret.trim();\n"
+        "     }\n"
         "     function GetElementPosition(elem) {\n"
         "         // return element position in page coords\n"
         "         var ret = { left: 0, top: 0 };\n"
@@ -1703,21 +1717,101 @@ const char* CCCC_Html_Stream::_HTMLBoilerplateTop =
         "             div.style.display = \"none\";\n"
         "         });\n"
         "     }\n"
+        "     // Expect a th here. Assign a callback to it on-click such that it sorts all the rows in the table body\n"
+        "     // according to the th.cellIndex'th element of the row.\n"
+        "     function GetParentWithName(elem, name) {\n"
+        "         var ret = elem;\n"
+        "         while (ret != null && ret.nodeName.match(name) == null)\n"
+        "             ret = ret.parentNode;\n"
+        "         return ret;\n"
+        "     }\n"
+        "     function GetTableRows(elemInTable) {\n"
+        "         var ret = [];\n"
+        "         var tbody = GetParentWithName(elemInTable, /table/i);\n"
+        "         // Sticky head support: Use original table if present\n"
+        "         if (tbody.Original)\n"
+        "             tbody = tbody.Original;\n"
+        "         for (tbody = tbody.firstChild; tbody != null && tbody.nodeName.match(/tbody/i) == null; tbody = tbody.nextSibling);\n"
+        "         for (var tr = tbody.firstChild; tr != null; tr = tr.nextSibling) {\n"
+        "             if (tr.nodeName.match(/tr/i))\n"
+        "                 ret.push(tr);\n"
+        "         }\n"
+        "         return { 'tbody': tbody, 'rows': ret };\n"
+        "     }\n"
+        "     function GetColumn(elem) {\n"
+        "         /* FIXME I think you can still foil this with some pathlogical layouts - like staggering\n"
+        "            multi-row squares in a stair-step pattern. Not intending to do that today, though. */\n"
+        "         var column = 0, rowInd = 1;\n"
+        "         for (var cell = elem.previousSibling; cell != null; cell = cell.previousSibling) {\n"
+        "             if (cell.nodeType == 1)\n"
+        "                 column += cell.colSpan;\n"
+        "         }\n"
+        "         for (var row = elem.parentNode.previousSibling; row != null; row = row.previousSibling) {\n"
+        "             if (row.nodeType != 1)\n"
+        "                 continue;\n"
+        "             var colInd = 0, insertCols = 0;\n"
+        "             for (var cell = row.firstChild; cell != null && colInd <= column; cell = cell.nextSibling) {\n"
+        "                 if (cell.nodeType != 1)\n"
+        "                     continue;\n"
+        "                 if (cell != elem && cell.rowSpan - rowInd > 0 /* this element contributes to this column offset */)\n"
+        "                     insertCols += cell.colSpan;\n"
+        "                 colInd += cell.colSpan;\n"
+        "             }\n"
+        "             column += insertCols;\n"
+        "             rowInd += 1;\n"
+        "         }\n"
+        "         return column;\n"
+        "     }\n"
+        "     function SetupSortColumn(elem) {\n"
+        "         elem.firstChild.addEventListener(\"click\", function(ev) {\n"
+        "             var z = GetTableRows(elem);\n"
+        "             var column = GetColumn(elem);\n"
+        "             elem.SortDescending = (elem.SortDescending ? false : true);\n"
+        "             z.rows.sort(function(a, b) {\n"
+        "                 var ret = 0;\n"
+        "                 var a_text = GetText(a.cells[column]);\n"
+        "                 var b_text = GetText(b.cells[column]);\n"
+        "                 var a_num = parseFloat(a_text);\n"
+        "                 var b_num = parseFloat(b_text);\n"
+        "                 if (isNaN(a_num) && isNaN(b_num))\n"
+        "                     ret = (a_text > b_text) ?  1 :\n"
+        "                           (a_text < b_text) ? -1 :\n"
+        "                           (a_text >= b_text) ? 1 :\n"
+        "                           -1;\n"
+        "                 else if (isNaN(a_num))\n"
+        "                     ret = -1;\n"
+        "                 else if (isNaN(b_num))\n"
+        "                     ret =  1;\n"
+        "                 else\n"
+        "                     ret = a_num - b_num;\n"
+        "                 // tiebreakers\n"
+        "                 return elem.SortDescending ? -ret : ret;\n"
+        "             });\n"
+        "             for (var k = 0; k < z.rows.length; ++k)\n"
+        "                 z.tbody.removeChild(z.rows[k]);\n"
+        "             for (var k = 0; k < z.rows.length; ++k)\n"
+        "                 z.tbody.appendChild(z.rows[k]);\n"
+        "         });\n"
+        "     }\n"
+        "     function GetScrollOffset() {\n"
+        "         return (!isNaN(window.pageYOffset)) ? { 'X': window.pageXOffset,       'Y': window.pageYOffset } :\n"
+        "                                               { 'X': document.body.scrollLeft, 'Y': document.body.scrollTop };\n"
+        "     }\n"
         "     function StickyHead(table, thead) {\n"
-        "         if (table._StickyDuplicate)\n"
+        "         if (table.Original)\n"
         "             return;\n"
         "         var dupl = thead.cloneNode(true);\n"
         "         var div = document.createElement(\"div\");\n"
         "         div.className = \"stickyHead\";\n"
         "         var newTable = table.cloneNode(false);\n"
-        "         newTable._StickyDuplicate = true;\n"
+        "         newTable.Original = table;\n"
         "         div.appendChild(newTable);\n"
         "         newTable.appendChild(dupl);\n"
         "         document.body.appendChild(div);\n"
         "         window.addEventListener(\"scroll\", function() {\n"
         "             var headPos = GetElementPosition(thead);\n"
         "             var bodyPos = GetElementPosition(table);\n"
-        "             var scrolly = document.body.scrollTop;\n"
+        "             var scrolly = GetScrollOffset().Y;\n"
         "             if (headPos.top < scrolly && bodyPos.top + table.scrollHeight > scrolly) {\n"
         "                 div.style.display = \"block\";\n"
         "             } else {\n"
@@ -1730,10 +1824,11 @@ const char* CCCC_Html_Stream::_HTMLBoilerplateTop =
         "         var headerNodes = table.getElementsByTagName(\"th\");\n"
         "         for(var k = 0; k < headerNodes.length; ++k) {\n"
         "             var th = headerNodes[k];\n"
-        "             var possibleAbbr = th.innerText.trim();\n"
-        "             if (!(possibleAbbr in window.g_Glossary))\n"
-        "                 continue;\n"
-        "             SetupTooltip(th, window.g_Glossary[possibleAbbr]);\n"
+        "             var possibleAbbr = GetText(th);\n"
+        "             if (th.className.indexOf(\"sortable\") != -1)\n"
+        "                 SetupSortColumn(th, th);\n"
+        "             if (possibleAbbr in window.g_Glossary)\n"
+        "                 SetupTooltip(th, window.g_Glossary[possibleAbbr]);\n"
         "         }\n"
         // Stickify any theads
         "         headerNodes = table.getElementsByTagName(\"thead\");\n"
