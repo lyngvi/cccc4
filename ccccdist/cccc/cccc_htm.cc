@@ -462,7 +462,7 @@ void CCCC_Html_Stream::OO_Design() {
 
 
   fstr << HTMLBeginElement(_Table, "summary") << endl
-	   << HTMLBeginElement(_TableHead) << endl
+       << HTMLBeginElement(_TableHead) << endl
        << HTMLBeginElement(_TableRow) << endl;
   Put_Header_Cell("Module Name",50);
   Put_Header_Cell("WMC1",10);
@@ -472,7 +472,7 @@ void CCCC_Html_Stream::OO_Design() {
   Put_Header_Cell("CBO",10);
 
   fstr << HTMLEndElement(_TableRow)
-	   << HTMLEndElement(_TableHead) << endl;
+       << HTMLEndElement(_TableHead) << endl;
 
   CCCC_Module* mod_ptr=prjptr->module_table.first_item();
   int i=0;
@@ -520,7 +520,7 @@ void CCCC_Html_Stream::Procedural_Summary() {
 		  "module in question") << endl;
 
   fstr << HTMLBeginElement(_Table, "summary")
-	   << HTMLBeginElement(_TableHead)
+       << HTMLBeginElement(_TableHead)
        << HTMLBeginElement(_TableRow) << endl;
   Put_Header_Cell("Module Name");
   Put_Header_Cell("LOC",8);
@@ -585,23 +585,22 @@ void CCCC_Html_Stream::Structural_Summary()
 		     "Kafura.");
   fstr << HTMLEndElement(_UnorderedList) << endl;
 
-  fstr << "<p>Note that the fan-in and fan-out are calculated by examining the "
+  fstr << HTMLParagraph("Note that the fan-in and fan-out are calculated by examining the "
 		  "interface of each module.  As noted above, three variants of each "
 		  "each of these measures are presented: a count restricted to the "
 		  "part of the interface which is externally visible, a count which "
 		  "only includes relationships which imply the client module needs "
 		  "to be recompiled if the supplier's implementation changes, and an "
-		  "inclusive count</p>" << endl << endl;
+		  "inclusive count") << endl << endl;
 
 
-  fstr << "<p>The label cell for each row in this table provides a link to "
+  fstr << HTMLParagraph("The label cell for each row in this table provides a link to "
 		  "the relationships table in the detailed report for the "
-		  "module in question</p>" << endl << endl;
+		  "module in question") << endl << endl;
 
-  fstr << HTMLBeginElement(_Table, "summary") << endl;
-  fstr
-  	  << HTMLBeginElement(_TableHead) << endl
-  	  << HTMLBeginElement(_TableRow) << endl
+  fstr  << HTMLBeginElement(_Table, "summary") << endl
+        << HTMLBeginElement(_TableHead) << endl
+	<< HTMLBeginElement(_TableRow) << endl
 	<< "<th rowspan=\"2\">Module Name</td>" << endl
 	<< HTMLMultiColumnHeaderCell("Fan-out", 3) << endl
 	<< HTMLMultiColumnHeaderCell("Fan-in", 3) << endl
@@ -803,7 +802,7 @@ void CCCC_Html_Stream::Other_Extents()
   Put_Header_Cell("COM",10);
   Put_Header_Cell("MVG",10);
   fstr << HTMLEndElement(_TableRow) << endl
-	   << HTMLEndElement(_TableHead) << endl;
+       << HTMLEndElement(_TableHead) << endl;
 
   if(prjptr->rejected_extent_table.records() == 0)
     {
@@ -844,8 +843,8 @@ void CCCC_Html_Stream::Put_Section_TOC_Entry(
 void CCCC_Html_Stream::Put_Header_Cell(string label, int width)
 {
   fstr  << HTMLBeginElement(_TableHeader, "header_cell", width)
-  	    << HTMLEscapeLiteral(label.c_str())
-  		<< HTMLEndElement(_TableHeader) << endl;
+        << HTMLEscapeLiteral(label.c_str())
+        << HTMLEndElement(_TableHeader) << endl;
 }
 
 void CCCC_Html_Stream::Put_Label_Cell(
@@ -853,7 +852,7 @@ void CCCC_Html_Stream::Put_Label_Cell(
 				      string ref_name, string ref_href,
 				      CCCC_Record *rec_ptr)
 {
-	fstr << HTMLBeginElement(_TableCell, "label", width);
+  fstr << HTMLBeginElement(_TableCell, "label", width);
 
   if(ref_name.size() > 0)
     {
@@ -904,15 +903,15 @@ void CCCC_Html_Stream::Put_Metric_Cell(
 
 void  CCCC_Html_Stream::Put_Metric_Cell(const CCCC_Metric& metric, int width)
 {
-	const char* clasName = "metric";
-	switch(metric.emphasis_level()) {
-	case elLOW: 	clasName = "metric_low"; break;
+    const char* clasName = "metric";
+    switch(metric.emphasis_level()) {
+    case elLOW: 	clasName = "metric_low"; break;
     case elMEDIUM: 	clasName = "metric_medium"; break;
     case elHIGH: 	clasName = "metric_high"; break;
     }
-	fstr << HTMLBeginElement(_TableCell, clasName, width);
-	*this << metric;
-	fstr << HTMLEndElement(_TableCell);
+    fstr << HTMLBeginElement(_TableCell, clasName, width);
+    *this << metric;
+    fstr << HTMLEndElement(_TableCell);
 }
 
 void CCCC_Html_Stream::Put_Extent_URL(const CCCC_Extent& extent)
@@ -931,12 +930,13 @@ void CCCC_Html_Stream::Put_Extent_URL(const CCCC_Extent& extent)
 	<< _HTMLLineBreak << endl;
 }
 
-void CCCC_Html_Stream::Put_Extent_Cell(const CCCC_Extent& extent, int width, bool withDescription) {
-	fstr << HTMLBeginElement(_TableCell, "extent", width);
-	if(withDescription)
-		fstr << extent.name(nlDESCRIPTION) << " &nbsp;" << endl;
-	Put_Extent_URL(extent);
-	fstr << HTMLEndElement(_TableCell) << endl;
+void CCCC_Html_Stream::Put_Extent_Cell(const CCCC_Extent& extent, int width, bool withDescription)
+{
+    fstr << HTMLBeginElement(_TableCell, "extent", width);
+    if(withDescription)
+        fstr << extent.name(nlDESCRIPTION) << " &nbsp;" << endl;
+    Put_Extent_URL(extent);
+    fstr << HTMLEndElement(_TableCell) << endl;
 }
 
 void CCCC_Html_Stream::Put_Extent_List(CCCC_Record& record, bool withDescription)
@@ -944,10 +944,10 @@ void CCCC_Html_Stream::Put_Extent_List(CCCC_Record& record, bool withDescription
   CCCC_Extent *ext_ptr=record.extent_table.first_item();
   while(ext_ptr!=NULL)
     {
-	  if(withDescription)
-		{
-		  fstr << ext_ptr->name(nlDESCRIPTION) << " &nbsp;" << endl;
-		}
+      if(withDescription)
+      {
+          fstr << ext_ptr->name(nlDESCRIPTION) << " &nbsp;" << endl;
+      }
       Put_Extent_URL(*ext_ptr);
       ext_ptr=record.extent_table.next_item();
     }
@@ -1024,7 +1024,7 @@ void CCCC_Html_Stream::Separate_Modules()
 	  module_html_str.fstr << HTMLEndElement(_TableRow)
 						   << HTMLEndElement(_TableHead) << endl;
 	  module_html_str.Procedural_Detail(mod_ptr);
-      module_html_str.fstr << HTMLEndElement(_Table);
+	  module_html_str.fstr << HTMLEndElement(_Table);
 
 	  module_html_str.Put_Section_Heading("Relationships","structdet",2);
 	  module_html_str.fstr << HTMLBeginElement(_Table, "summary")
@@ -1072,7 +1072,7 @@ void CCCC_Html_Stream::Module_Detail(CCCC_Module *module_ptr)
   else
     {
       while(eIter!=module_ptr->extent_table.end())
-		{
+	{
 	  CCCC_Extent *ext_ptr=(*eIter).second;
 	  fstr << HTMLBeginElement(_TableRow) << endl;
 	  Put_Extent_Cell(*ext_ptr,0,true);
@@ -1088,8 +1088,8 @@ void CCCC_Html_Stream::Module_Detail(CCCC_Module *module_ptr)
 	  fstr << HTMLEndElement(_TableRow) << endl;
 
 	  eIter++;
-		}
 	}
+    }
 }
 
 void CCCC_Html_Stream::Procedural_Detail(CCCC_Module *module_ptr)
@@ -1452,97 +1452,97 @@ void Source_Anchor::Emit_SPACE(ofstream& fstr)
  */
 string CCCC_Html_Stream::HTMLSingleEntryRow(int columnCount, const char* txt, int height)
 {
-	stringstream buf;
-	buf << "<tr";
-	if (height >= 0)
-		buf << " style=\"height: \"" << height << "px;\"";
-	buf << "><td colspan=\"" << columnCount << "\">" << txt << "</td></tr>";
-	return buf.str();
+    stringstream buf;
+    buf << "<tr";
+    if (height >= 0)
+        buf << " style=\"height: \"" << height << "px;\"";
+    buf << "><td colspan=\"" << columnCount << "\">" << txt << "</td></tr>";
+    return buf.str();
 }
 
 string CCCC_Html_Stream::HTMLMultiColumnHeaderCell(const char* text, int columnCount)
 {
-	stringstream buf;
-	buf << "<th";
-	if (columnCount > 1)
-		buf << " colspan=\"" << columnCount << "\"";
-	buf << ">" << text << "</th>";
-	return buf.str();
+    stringstream buf;
+    buf << "<th";
+    if (columnCount > 1)
+        buf << " colspan=\"" << columnCount << "\"";
+    buf << ">" << text << "</th>";
+    return buf.str();
 }
 
 string CCCC_Html_Stream::HTMLBeginElement(const char* nam, const char* clas, int width)
 {
-	stringstream buf;
-	buf << "<" << nam;
-	if (clas[0] != 0)
-		buf << " class=\"" << clas << "\"";
-	if (width >= 0)
-		buf << " style=\"width: " << width << "%;\"";
-	buf << ">";
-	return buf.str();
+    stringstream buf;
+    buf << "<" << nam;
+    if (clas[0] != 0)
+        buf << " class=\"" << clas << "\"";
+    if (width >= 0)
+        buf << " style=\"width: " << width << "%;\"";
+    buf << ">";
+    return buf.str();
 }
 
 string CCCC_Html_Stream::HTMLTableCell(const char* txt, const char* clasName, int width)
 {
-	stringstream buf;
-	buf << HTMLBeginElement(_TableCell, clasName, width)
-		<< txt
-		<< HTMLEndElement(_TableCell);
-	return buf.str();
+    stringstream buf;
+    buf << HTMLBeginElement(_TableCell, clasName, width)
+	        << txt
+	        << HTMLEndElement(_TableCell);
+    return buf.str();
 }
 
 string CCCC_Html_Stream::HTMLParagraph(const char* txt)
 {
-	stringstream buf;
-	buf << "<p>" << txt << "</p>";
-	return buf.str();
+    stringstream buf;
+    buf << "<p>" << txt << "</p>";
+    return buf.str();
 }
 
 string CCCC_Html_Stream::HTMLEndElement(const char* nam)
 {
-	stringstream buf;
-	buf << "</" << nam << ">";
-	return buf.str();
+    stringstream buf;
+    buf << "</" << nam << ">";
+    return buf.str();
 }
 
 string CCCC_Html_Stream::JSEscapeStringLiteral(const char* inp)
 {
-	stringstream ret;
-	for (const char* p = inp; *p != 0; ++p) {
-		switch (*p) {
-		case '\'': ret << "\\'"; break;
-		case '\\': ret << "\\\\"; break;
-		case '\r': break;
-		case '\n': ret << "\\n\\\n"; break;
-		default: ret << *p; break;
-		}
-	}
-	return ret.str();
+    stringstream ret;
+    for (const char* p = inp; *p != 0; ++p) {
+        switch (*p) {
+        case '\'': ret << "\\'"; break;
+        case '\\': ret << "\\\\"; break;
+        case '\r': break;
+        case '\n': ret << "\\n\\\n"; break;
+        default: ret << *p; break;
+        }
+    }
+    return ret.str();
 }
 
 string CCCC_Html_Stream::HTMLEscapeLiteral(const char* inp)
 {
-	stringstream buf;
-	for (const char* cptr = inp; *cptr != 0; ++cptr) {
-	    // the purpose of this is to filter out the characters which
-	    // must be escaped in HTML
-	    switch(*cptr) {
-	    case '>': buf << "&gt;" ; break;
-	    case '<': buf << "&lt;" ; break;
-	    case '&': buf << "&amp;"; break;
-	      // commas and parentheses do not need to be escaped, but
-	      // we want to allow line breaking just inside
-	      // parameter lists and after commas
-	      // we insert a non-breaking space to guarantee a small indent
-	      // on the new line, and one before the right parenthesis for
-	      // symmetry
-	    case ',': buf << ", &nbsp;" ; break;
-	    case '(': buf << "( &nbsp;" ; break;
-	    case ')': buf << "&nbsp;)" ; break;
-	    default : buf << (*cptr);
-	    }
-	}
-	return buf.str();
+    stringstream buf;
+    for (const char* cptr = inp; *cptr != 0; ++cptr) {
+        // the purpose of this is to filter out the characters which
+        // must be escaped in HTML
+        switch(*cptr) {
+        case '>': buf << "&gt;" ; break;
+        case '<': buf << "&lt;" ; break;
+        case '&': buf << "&amp;"; break;
+        // commas and parentheses do not need to be escaped, but
+        // we want to allow line breaking just inside
+        // parameter lists and after commas
+        // we insert a non-breaking space to guarantee a small indent
+        // on the new line, and one before the right parenthesis for
+        // symmetry
+        case ',': buf << ", &nbsp;" ; break;
+        case '(': buf << "( &nbsp;" ; break;
+        case ')': buf << "&nbsp;)" ; break;
+        default : buf << (*cptr);
+        }
+    }
+    return buf.str();
 }
 
 const char* CCCC_Html_Stream::_Table = "table";
@@ -1559,203 +1559,203 @@ const char* CCCC_Html_Stream::_UnorderedList = "ul";
 const char* CCCC_Html_Stream::_HTMLLineBreak = "<br />";
 
 const char* CCCC_Html_Stream::_HTMLBoilerplateTop =
-		"<!DOCTYPE html>\n"
-		"<html>\n"
-		"  <head>\n"
-		"    <title>${TITLE}</title>\n"
-		"  </head>\n"
-		"  <style type=\"text/css\">\n"
-		"      body {\n"
-		"          font-family: sans-serif;\n"
-		"          margin-left: 8pt;\n"
-		"          margin-right: 8pt;\n"
-		"          width: 98%;\n"
-		"          position: relative;\n"
-		"      }\n"
-		"      p {\n"
-		"          margin-top: 8pt;\n"
-		"      }\n"
-		"      table {\n"
-		"           width: 100%;\n"
-		"           border-top: 1px solid black;\n"
-		"           border-spacing: 0;\n"
-		"           border-collapse: collapse;\n"
-		"           border-left: 1px solid black;\n"
-		"      }\n"
-		"      table.toc th {\n"
-		"           background-color: aqua;\n"
-		"           padding: 3pt;\n"
-		"      }\n"
-		"      table.toc td {\n"
-		"           padding: 2pt;\n"
-		"      }\n"
-		"      table td, table th {\n"
-		"           border-bottom: 1px solid black;\n"
-		"           border-right: 1px solid black;\n"
-		"      }\n"
-		"      td.toc_entry_name {\n"
-		"           text-align: left;\n"
-		"      }\n"
-		"      table.summary th {\n"
-		"           background-color: aqua;\n"
-		"      }\n"
-		"      table.summary td {\n"
-		"           font-family: monospace;\n"
-		"      }\n"
-		"      *.code {\n"
-		"           font-family: monospace;\n"
-		"           white-space: pre;\n"
-		"      }\n"
-		"      span.metric_low {\n"
-		"      }\n"
-		"      span.metric_medium {\n"
-		"           font-style: italic;\n"
-		"      }\n"
-		"      span.metric_high {\n"
-		"           font-weight: bold;\n"
-		"      }\n"
-		"      td.metric_low, td.metric_medium, td.metric_high {\n"
-		"           text-align: right;\n"
-		"      }\n"
-		"      td.metric_low {\n"
-		"      }\n"
-		"      td.metric_medium {\n"
-		"          background-color: yellow;\n"
-		"      }\n"
-		"      td.metric_high {\n"
-		"          background-color: red;\n"
-		"      }\n"
-		"      a {\n"
-		"          text-decoration: none;\n"
-		"      }\n"
-		"      a:visited {\n"
-		"          color: purple;\n"
-		"      }\n"
-		"      a:hover {\n"
-		"          color: red;\n"
-		"      }\n"
-		"      *.label {\n"
-		"          background-color: #eee;\n"
-		"      }\n"
-		"      li p {\n"
-		"          margin-top: 2pt;\n"
-		"          margin-bottom: 4pt;\n"
-		"          padding-left: 10pt;\n"
-		"      }\n"
-		"      div.tooltip {\n"
-		"          display: none;\n"
-		"          position: fixed;\n"
-		"          border: 1px solid black;\n"
-		"          background-color: #ddffdd;\n"
-		"          width: 300px;\n"
-		"          z-index: 2;\n"
-		"          font-size: smaller;\n"
-		"          padding: 5pt;\n"
-		"          text-align: justify;\n"
-		"      }\n"
-		"      div.stickyHead {\n"
-		"         display: none;\n"
-		"         width: 98%;\n"
-		"         position: fixed;\n"
-		"         top: 0pt;\n"
-		"         z-index: 1;\n"
-		"      }\n"
-		"      div.ttname {\n"
-		"          font-weight: bold;\n"
-		"          margin-bottom: 5pt;\n"
-		"      }\n"
-		"      #debug {\n"
-		"          border: 1px solid black;\n"
-		"          background-color: red;\n"
-		"          position: fixed;\n"
-		"          top: 100pt;\n"
-		"          padding: 8pt;\n"
-		"          width: 80%;\n"
-		"          display: none;\n"
-		"      }\n"
-		"  </style>\n"
-		"  <body>\n"
-		"  <div id=\"debug\"></div>\n"
-		"  <script type=\"text/javascript\">\n"
-		"     window.g_Glossary = {}; // list of objects with name, description attributes for use in tooltips\n"
-		"\n"
-		"     function GetElementPosition(elem) {\n"
-		"         // return element position in page coords\n"
-		"         var ret = { left: 0, top: 0 };\n"
-		"         while (elem != null && elem != undefined) {\n"
-		"             ret.left += elem.offsetLeft;\n"
-		"             ret.top  += elem.offsetTop;\n"
-		"             elem = elem.offsetParent;\n"
-		"         }\n"
-		"         return ret;\n"
-		"     }\n"
-		"     function SetupTooltip(elem, description) {\n"
-		"         var div = document.createElement(\"div\");\n"
-		"         div.className = \"tooltip\";\n"
-		"         div.innerHTML = \"<div class=\\\"ttname\\\">\" + description.name + \"</div>\\n<div class=\\\"ttdescr\\\">\" + description.description + \"</div>\";\n"
-		"         document.body.appendChild(div);\n"
-		"         elem.addEventListener(\"mousemove\", function(ev) {\n"
-		"             div.style.display = \"block\";\n"
-		"             div.style.top = (ev.clientY + 5) + \"px\";\n"
-		"             div.style.left = (ev.clientX - 305) + \"px\";\n"
-		"         });\n"
-		"         elem.addEventListener(\"mouseout\", function(ev) {\n"
-		"             div.style.display = \"none\";\n"
-		"         });\n"
-		"     }\n"
-		"     function StickyHead(table, thead) {\n"
-		"         if (table._StickyDuplicate)\n"
-		"             return;\n"
-		"         var dupl = thead.cloneNode(true);\n"
-		"         var div = document.createElement(\"div\");\n"
-		"         div.className = \"stickyHead\";\n"
-		"         var newTable = table.cloneNode(false);\n"
-		"         newTable._StickyDuplicate = true;\n"
-		"         div.appendChild(newTable);\n"
-		"         newTable.appendChild(dupl);\n"
-		"         document.body.appendChild(div);\n"
-		"         window.addEventListener(\"scroll\", function() {\n"
-		"             var headPos = GetElementPosition(thead);\n"
-		"             var bodyPos = GetElementPosition(table);\n"
-		"             var scrolly = document.body.scrollTop;\n"
-		"             if (headPos.top < scrolly && bodyPos.top + table.scrollHeight > scrolly) {\n"
-		"                 div.style.display = \"block\";\n"
-		"             } else {\n"
-		"                 div.style.display = \"none\";\n"
-		"             }\n"
-		"         });\n"
-		"     }\n"
-		// Add tooltips from the glossary, sort capabilities
-		"     function EnhanceTable(table) {\n"
-		"         var headerNodes = table.getElementsByTagName(\"th\");\n"
-		"         for(var k = 0; k < headerNodes.length; ++k) {\n"
-		"             var th = headerNodes[k];\n"
-		"             var possibleAbbr = th.innerText.trim();\n"
-		"             if (!(possibleAbbr in window.g_Glossary))\n"
-		"                 continue;\n"
-		"             SetupTooltip(th, window.g_Glossary[possibleAbbr]);\n"
-		"         }\n"
-		// Stickify any theads
-		"         headerNodes = table.getElementsByTagName(\"thead\");\n"
-		"         for (var k = 0; k < headerNodes.length; ++k) {\n"
-		"             var thead = headerNodes[k];\n"
-		"             StickyHead(table, thead);\n"
-		"         }\n"
-		"     }\n"
-		"\n"
-		"     window.addEventListener(\"load\", function() {\n"
-		"         var tables = document.getElementsByTagName(\"table\");\n"
-		"         for (var k = 0; k < tables.length; ++k) {\n"
-		"             var table = tables[k];\n"
-		"             if (table.className.indexOf(\"summary\") != -1)\n"
-		"                 EnhanceTable(table);\n"
-		"         }\n"
-		"     });\n"
-		"  </script>\n";
+        "<!DOCTYPE html>\n"
+        "<html>\n"
+        "  <head>\n"
+        "    <title>${TITLE}</title>\n"
+        "  </head>\n"
+        "  <style type=\"text/css\">\n"
+        "      body {\n"
+        "          font-family: sans-serif;\n"
+        "          margin-left: 8pt;\n"
+        "          margin-right: 8pt;\n"
+        "          width: 98%;\n"
+        "          position: relative;\n"
+        "      }\n"
+        "      p {\n"
+        "          margin-top: 8pt;\n"
+        "      }\n"
+        "      table {\n"
+        "           width: 100%;\n"
+        "           border-top: 1px solid black;\n"
+        "           border-spacing: 0;\n"
+        "           border-collapse: collapse;\n"
+        "           border-left: 1px solid black;\n"
+        "      }\n"
+        "      table.toc th {\n"
+        "           background-color: aqua;\n"
+        "           padding: 3pt;\n"
+        "      }\n"
+        "      table.toc td {\n"
+        "           padding: 2pt;\n"
+        "      }\n"
+        "      table td, table th {\n"
+        "           border-bottom: 1px solid black;\n"
+        "           border-right: 1px solid black;\n"
+        "      }\n"
+        "      td.toc_entry_name {\n"
+        "           text-align: left;\n"
+        "      }\n"
+        "      table.summary th {\n"
+        "           background-color: aqua;\n"
+        "      }\n"
+        "      table.summary td {\n"
+        "           font-family: monospace;\n"
+        "      }\n"
+        "      *.code {\n"
+        "           font-family: monospace;\n"
+        "           white-space: pre;\n"
+        "      }\n"
+        "      span.metric_low {\n"
+        "      }\n"
+        "      span.metric_medium {\n"
+        "           font-style: italic;\n"
+        "      }\n"
+        "      span.metric_high {\n"
+        "           font-weight: bold;\n"
+        "      }\n"
+        "      td.metric_low, td.metric_medium, td.metric_high {\n"
+        "           text-align: right;\n"
+        "      }\n"
+        "      td.metric_low {\n"
+        "      }\n"
+        "      td.metric_medium {\n"
+        "          background-color: yellow;\n"
+        "      }\n"
+        "      td.metric_high {\n"
+        "          background-color: red;\n"
+        "      }\n"
+        "      a {\n"
+        "          text-decoration: none;\n"
+        "      }\n"
+        "      a:visited {\n"
+        "          color: purple;\n"
+        "      }\n"
+        "      a:hover {\n"
+        "          color: red;\n"
+        "      }\n"
+        "      *.label {\n"
+        "          background-color: #eee;\n"
+        "      }\n"
+        "      li p {\n"
+        "          margin-top: 2pt;\n"
+        "          margin-bottom: 4pt;\n"
+        "          padding-left: 10pt;\n"
+        "      }\n"
+        "      div.tooltip {\n"
+        "          display: none;\n"
+        "          position: fixed;\n"
+        "          border: 1px solid black;\n"
+        "          background-color: #ddffdd;\n"
+        "          width: 300px;\n"
+        "          z-index: 2;\n"
+        "          font-size: smaller;\n"
+        "          padding: 5pt;\n"
+        "          text-align: justify;\n"
+        "      }\n"
+        "      div.stickyHead {\n"
+        "         display: none;\n"
+        "         width: 98%;\n"
+        "         position: fixed;\n"
+        "         top: 0pt;\n"
+        "         z-index: 1;\n"
+        "      }\n"
+        "      div.ttname {\n"
+        "          font-weight: bold;\n"
+        "          margin-bottom: 5pt;\n"
+        "      }\n"
+        "      #debug {\n"
+        "          border: 1px solid black;\n"
+        "          background-color: red;\n"
+        "          position: fixed;\n"
+        "          top: 100pt;\n"
+        "          padding: 8pt;\n"
+        "          width: 80%;\n"
+        "          display: none;\n"
+        "      }\n"
+        "  </style>\n"
+        "  <body>\n"
+        "  <div id=\"debug\"></div>\n"
+        "  <script type=\"text/javascript\">\n"
+        "     window.g_Glossary = {}; // list of objects with name, description attributes for use in tooltips\n"
+        "\n"
+        "     function GetElementPosition(elem) {\n"
+        "         // return element position in page coords\n"
+        "         var ret = { left: 0, top: 0 };\n"
+        "         while (elem != null && elem != undefined) {\n"
+        "             ret.left += elem.offsetLeft;\n"
+        "             ret.top  += elem.offsetTop;\n"
+        "             elem = elem.offsetParent;\n"
+        "         }\n"
+        "         return ret;\n"
+        "     }\n"
+        "     function SetupTooltip(elem, description) {\n"
+        "         var div = document.createElement(\"div\");\n"
+        "         div.className = \"tooltip\";\n"
+        "         div.innerHTML = \"<div class=\\\"ttname\\\">\" + description.name + \"</div>\\n<div class=\\\"ttdescr\\\">\" + description.description + \"</div>\";\n"
+        "         document.body.appendChild(div);\n"
+        "         elem.addEventListener(\"mousemove\", function(ev) {\n"
+        "             div.style.display = \"block\";\n"
+        "             div.style.top = (ev.clientY + 5) + \"px\";\n"
+        "             div.style.left = (ev.clientX - 305) + \"px\";\n"
+        "         });\n"
+        "         elem.addEventListener(\"mouseout\", function(ev) {\n"
+        "             div.style.display = \"none\";\n"
+        "         });\n"
+        "     }\n"
+        "     function StickyHead(table, thead) {\n"
+        "         if (table._StickyDuplicate)\n"
+        "             return;\n"
+        "         var dupl = thead.cloneNode(true);\n"
+        "         var div = document.createElement(\"div\");\n"
+        "         div.className = \"stickyHead\";\n"
+        "         var newTable = table.cloneNode(false);\n"
+        "         newTable._StickyDuplicate = true;\n"
+        "         div.appendChild(newTable);\n"
+        "         newTable.appendChild(dupl);\n"
+        "         document.body.appendChild(div);\n"
+        "         window.addEventListener(\"scroll\", function() {\n"
+        "             var headPos = GetElementPosition(thead);\n"
+        "             var bodyPos = GetElementPosition(table);\n"
+        "             var scrolly = document.body.scrollTop;\n"
+        "             if (headPos.top < scrolly && bodyPos.top + table.scrollHeight > scrolly) {\n"
+        "                 div.style.display = \"block\";\n"
+        "             } else {\n"
+        "                 div.style.display = \"none\";\n"
+        "             }\n"
+        "         });\n"
+        "     }\n"
+        // Add tooltips from the glossary, sort capabilities
+        "     function EnhanceTable(table) {\n"
+        "         var headerNodes = table.getElementsByTagName(\"th\");\n"
+        "         for(var k = 0; k < headerNodes.length; ++k) {\n"
+        "             var th = headerNodes[k];\n"
+        "             var possibleAbbr = th.innerText.trim();\n"
+        "             if (!(possibleAbbr in window.g_Glossary))\n"
+        "                 continue;\n"
+        "             SetupTooltip(th, window.g_Glossary[possibleAbbr]);\n"
+        "         }\n"
+        // Stickify any theads
+        "         headerNodes = table.getElementsByTagName(\"thead\");\n"
+        "         for (var k = 0; k < headerNodes.length; ++k) {\n"
+        "             var thead = headerNodes[k];\n"
+        "             StickyHead(table, thead);\n"
+        "         }\n"
+        "     }\n"
+        "\n"
+        "     window.addEventListener(\"load\", function() {\n"
+        "         var tables = document.getElementsByTagName(\"table\");\n"
+        "         for (var k = 0; k < tables.length; ++k) {\n"
+        "             var table = tables[k];\n"
+        "             if (table.className.indexOf(\"summary\") != -1)\n"
+        "                 EnhanceTable(table);\n"
+        "         }\n"
+        "     });\n"
+        "  </script>\n";
 
 const char* CCCC_Html_Stream::_HTMLBoilerplateBottom =
-	"  </body>\n"
-	"</html>";
+        "  </body>\n"
+        "</html>";
 
 #ifdef UNIT_TEST
 int main()
