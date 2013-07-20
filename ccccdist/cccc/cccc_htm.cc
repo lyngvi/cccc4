@@ -42,6 +42,9 @@
 #include <sys/stat.h>
 #include "cccc_utl.h"
 
+#ifndef COUNTOF
+#  define COUNTOF(x) (sizeof(x)/sizeof(*(x)))
+#endif
 
 typedef std::map<string,Source_Anchor> source_anchor_map_t;
 source_anchor_map_t source_anchor_map;
@@ -51,6 +54,95 @@ source_anchor_map_t source_anchor_map;
 CCCC_Project* CCCC_Html_Stream::prjptr;
 string CCCC_Html_Stream::outdir;
 string CCCC_Html_Stream::libdir;
+
+struct metric_description_t {
+    const char* abbreviation;
+    const char* name;
+    const char* description;
+};
+
+static metric_description_t ProjectSummaryMetrics[] = {
+        { COUNT_TAG_NUMBER_OF_MODULES, "Number of modules",
+                "Number of non-trivial modules identified by the "
+                "analyser.  Non-trivial modules include all classes, "
+                "and any other module for which member functions are "
+                "identified." },
+        { COUNT_TAG_LINES_OF_CODE, "Lines of Code",
+                "Number of non-blank, non-comment lines of source code "
+                "counted by the analyser." },
+        { COUNT_TAG_LINES_OF_COMMENT, "Lines of Comments",
+                "Number of lines of comment identified by the analyser" },
+        { COUNT_TAG_CYCLOMATIC_NUMBER, "McCabe's Cyclomatic Complexity",
+                "A measure of the decision complexity of the functions "
+                "which make up the program."
+                "The strict definition of this measure is that it is "
+                "the number of linearly independent routes through "
+                "a directed acyclic graph which maps the flow of control "
+                "of a subprogram.  The analyser counts this by recording "
+                "the number of distinct decision outcomes contained "
+                "within each function, which yields a good approximation "
+                "to the formally defined version of the measure." },
+        { "L_C","Lines of code per line of comment",
+                "Indicates density of comments with respect to textual "
+                "size of program" },
+        { "M_C","Cyclomatic Complexity per line of comment",
+                "Indicates density of comments with respect to logical "
+                "complexity of program" },
+        { COUNT_TAG_INTERMODULE_COMPLEXITY4, "Information Flow measure",
+                "Measure of information flow between modules suggested "
+                "by Henry and Kafura. The analyser makes an approximate "
+                "count of this by counting inter-module couplings "
+                "identified in the module interfaces." },
+        { "LOCpM", "Lines of Code per Method",
+                "The average number of lines of code per method. "
+                "High LoC count may indicate poor functional isolation. "
+                "Note that this measure may be weighted low by large numbers of small accessor methods." },
+        { "MLOCpM", "Max Lines of Code per Method",
+                "The largest number of lines of code in a single method. "
+                "High LoC count may indicate poor functional isolation." },
+};
+
+#define _WMC_DESCRIPTION_START "The sum of a weighting function over the functions of the module. "
+#define _WMC_NAME_START "Weighted methods per class"
+static metric_description_t OODesignMetrics[] = {
+        { COUNT_TAG_WEIGHTED_METHODS_PER_CLASS_UNITY, _WMC_NAME_START " (all)",
+                _WMC_DESCRIPTION_START "WMC1 uses the nominal weight of 1 for each "
+                "function, and hence measures the number of functions." },
+        { COUNT_TAG_WEIGHTED_METHODS_PER_CLASS COUNT_TAG_VISIBLE_SUFFIX, _WMC_NAME_START " (visible)",
+                _WMC_DESCRIPTION_START "WMCv uses a weighting function which is 1 for functions "
+                "accessible to other modules, 0 for private functions."},
+        { COUNT_TAG_INHERITANCE_TREE_DEPTH, "Depth of inheritance tree",
+                "The length of the longest path of inheritance ending at "
+                "the current module.  The deeper the inheritance tree "
+                "for a module, the harder it may be to predict its "
+                "behaviour.  On the other hand, increasing depth gives "
+                "the potential of greater reuse by the current module "
+                "of behaviour defined for ancestor classes." },
+        { COUNT_TAG_NUMBER_OF_CHILDREN, "Number of children",
+                "The number of modules which inherit directly from the "
+                "current module.  Moderate values of this measure "
+                "indicate scope for reuse, however high values may "
+                "indicate an inappropriate abstraction in the design." },
+        { COUNT_TAG_COUPLING_BETWEEN_OBJECTS, "Coupling between objects",
+                "The number of other modules which are coupled to the "
+                "current module either as a client or a supplier. "
+                "Excessive coupling indicates weakness of module "
+                "encapsulation and may inhibit reuse." }
+};
+
+static metric_description_t StructuralSummaryMetrics[] = {
+        { "Fan-in", "",
+                   "The number of other modules which pass information "
+                   "into the current module." },
+        { "Fan-out", "",
+                   "The number of other modules into which the current "
+                   "module passes information"},
+        { "IF4","Information Flow measure",
+                   "A composite measure of structural complexity, "
+                   "calculated as the square of the product of the fan-in "
+                   "and fan-out of a single module.  Proposed by Henry and "
+                   "Kafura."}
+};
 
 void CCCC_Html_Stream::GenerateReports(CCCC_Project* prj,
 				       int report_mask,
@@ -292,44 +384,8 @@ void  CCCC_Html_Stream::Project_Summary() {
   fstr << "<p>This table shows measures over the project as a whole.</p>" << endl;
 
   fstr << HTMLBeginElement(_UnorderedList, "Project_Summary") << endl;
-  Metric_Description(COUNT_TAG_NUMBER_OF_MODULES, "Number of modules",
-		     "Number of non-trivial modules identified by the "
-		     "analyser.  Non-trivial modules include all classes, "
-		     "and any other module for which member functions are "
-		     "identified.");
-  Metric_Description(COUNT_TAG_LINES_OF_CODE, "Lines of Code",
-		     "Number of non-blank, non-comment lines of source code "
-		     "counted by the analyser.");
-  Metric_Description(COUNT_TAG_LINES_OF_COMMENT,"Lines of Comments",
-		     "Number of lines of comment identified by the analyser");
-  Metric_Description(COUNT_TAG_CYCLOMATIC_NUMBER, "McCabe's Cyclomatic Complexity",
-		     "A measure of the decision complexity of the functions "
-		     "which make up the program."
-		     "The strict definition of this measure is that it is "
-		     "the number of linearly independent routes through "
-		     "a directed acyclic graph which maps the flow of control "
-		     "of a subprogram.  The analyser counts this by recording "
-		     "the number of distinct decision outcomes contained "
-		     "within each function, which yields a good approximation "
-		     "to the formally defined version of the measure.");
-  Metric_Description("L_C","Lines of code per line of comment",
-		     "Indicates density of comments with respect to textual "
-		     "size of program");
-  Metric_Description("M_C","Cyclomatic Complexity per line of comment",
-		     "Indicates density of comments with respect to logical "
-		     "complexity of program");
-  Metric_Description(COUNT_TAG_INTERMODULE_COMPLEXITY4, "Information Flow measure",
-		     "Measure of information flow between modules suggested "
-		     "by Henry and Kafura. The analyser makes an approximate "
-		     "count of this by counting inter-module couplings "
-		     "identified in the module interfaces.");
-  Metric_Description("LOCpM", "Lines of Code per Method",
-          "The average number of lines of code per method. "
-          "High LoC count may indicate poor functional isolation. "
-          "Note that this measure may be weighted low by large numbers of small accessor methods.");
-  Metric_Description("MLOCpM", "Max Lines of Code per Method",
-          "The largest number of lines of code in a single method. "
-          "High LoC count may indicate poor functional isolation.");
+  for (int k = 0; k < COUNTOF(ProjectSummaryMetrics); ++k)
+      Metric_Description(ProjectSummaryMetrics[k].abbreviation, ProjectSummaryMetrics[k].name, ProjectSummaryMetrics[k].description);
   fstr << HTMLEndElement(_UnorderedList) << endl
        << HTMLParagraph(
     	  "Two variants on the information flow measure IF4 are also "
@@ -435,43 +491,11 @@ void  CCCC_Html_Stream::Project_Summary() {
 
 void CCCC_Html_Stream::OO_Design() {
   Put_Section_Heading("Object Oriented Design","oodesign",1);
-
-  const char* wmcDescription = "The sum of a weighting function over the functions of the module. ";
-  const char* wmcName = "Weighted methods per class";
-  struct {
-      string abbreviation;
-      string name;
-      string description;
-  } metric_tags[] = {
-      { COUNT_TAG_WEIGHTED_METHODS_PER_CLASS_UNITY, wmcName, string(wmcDescription) +
-              "WMC1 uses the nominal weight of 1 for each "
-              "function, and hence measures the number of functions." },
-      { COUNT_TAG_WEIGHTED_METHODS_PER_CLASS COUNT_TAG_VISIBLE_SUFFIX, wmcName, string(wmcDescription) +
-              "WMCv uses a weighting function which is 1 for functions "
-              "accessible to other modules, 0 for private functions."},
-      { COUNT_TAG_INHERITANCE_TREE_DEPTH, "Depth of inheritance tree",
-              "The length of the longest path of inheritance ending at "
-              "the current module.  The deeper the inheritance tree "
-              "for a module, the harder it may be to predict its "
-              "behaviour.  On the other hand, increasing depth gives "
-              "the potential of greater reuse by the current module "
-              "of behaviour defined for ancestor classes." },
-      { COUNT_TAG_NUMBER_OF_CHILDREN, "Number of children",
-              "The number of modules which inherit directly from the "
-              "current module.  Moderate values of this measure "
-              "indicate scope for reuse, however high values may "
-              "indicate an inappropriate abstraction in the design." },
-      { COUNT_TAG_COUPLING_BETWEEN_OBJECTS, "Coupling between objects",
-              "The number of other modules which are coupled to the "
-              "current module either as a client or a supplier. "
-              "Excessive coupling indicates weakness of module "
-              "encapsulation and may inhibit reuse." }
-  };
-  int metric_tag_count = sizeof(metric_tags) / sizeof(metric_tags[0]);
+  int metric_tag_count = COUNTOF(OODesignMetrics);
 
   fstr << HTMLBeginElement(_UnorderedList) << endl;
   for (size_t k = 0; k < metric_tag_count; ++k)
-      Metric_Description(metric_tags[k].abbreviation, metric_tags[k].name, metric_tags[k].description);
+      Metric_Description(OODesignMetrics[k].abbreviation, OODesignMetrics[k].name, OODesignMetrics[k].description);
   fstr << HTMLEndElement(_UnorderedList) << endl << endl;
 
   fstr << HTMLParagraph(
@@ -486,7 +510,7 @@ void CCCC_Html_Stream::OO_Design() {
 
   Put_Header_Cell("Module Name", 100 - 10 * metric_tag_count);
   for (size_t k = 0; k < metric_tag_count; ++k)
-      Put_Header_Cell(metric_tags[k].abbreviation, 10);
+      Put_Header_Cell(OODesignMetrics[k].abbreviation, 10);
 
   fstr << HTMLEndElement(_TableRow)
        << HTMLEndElement(_TableHead) << endl;
@@ -506,8 +530,7 @@ void CCCC_Html_Stream::OO_Design() {
 
 	  for(size_t j=0; j < metric_tag_count; j++)
 	    {
-	      CCCC_Metric metric_value(mod_ptr->get_count(metric_tags[j].abbreviation.c_str()),
-				       metric_tags[j].abbreviation.c_str());
+	      CCCC_Metric metric_value(mod_ptr->get_count(OODesignMetrics[j].abbreviation), OODesignMetrics[j].abbreviation);
 	      Put_Metric_Cell(metric_value);
 	    }
 	  fstr << HTMLEndElement(_TableRow) << endl;
@@ -585,17 +608,8 @@ void CCCC_Html_Stream::Structural_Summary()
   Put_Section_Heading("Structural Metrics Summary","structsum",1);
 
   fstr << HTMLBeginElement(_UnorderedList) << endl;
-  Metric_Description("Fan-in", string(),
-		     "The number of other modules which pass information "
-		     "into the current module.");
-  Metric_Description("Fan-out", string(),
-		     "The number of other modules into which the current "
-		     "module passes information");
-  Metric_Description("IF4","Information Flow measure",
-		     "A composite measure of structural complexity, "
-		     "calculated as the square of the product of the fan-in "
-		     "and fan-out of a single module.  Proposed by Henry and "
-		     "Kafura.");
+  for (int k = 0; k < COUNTOF(StructuralSummaryMetrics); ++k)
+      Metric_Description(StructuralSummaryMetrics[k].abbreviation, StructuralSummaryMetrics[k].name, StructuralSummaryMetrics[k].description);
   fstr << HTMLEndElement(_UnorderedList) << endl;
 
   fstr << HTMLParagraph("Note that the fan-in and fan-out are calculated by examining the "
@@ -1157,10 +1171,6 @@ void CCCC_Html_Stream::Metric_Description(
       fstr  << " = " << name;
   fstr << HTMLParagraph(description.c_str()) << endl
        << HTMLEndElement(_ListItem) << endl;
-  fstr << "<script type=\"text/javascript\">window.g_Glossary['"
-		  << JSEscapeStringLiteral(abbreviation.c_str()) << "'] = {"
-		  "  name: '" << JSEscapeStringLiteral(name.empty() ? abbreviation.c_str() : name.c_str()) << "', "
-		  "  description: '" << JSEscapeStringLiteral(description.c_str()) << "' };</script>\n";
 }
 
 void CCCC_Html_Stream::Structural_Detail(CCCC_Module *module_ptr)
@@ -1314,6 +1324,7 @@ CCCC_Html_Stream::CCCC_Html_Stream(const string& fname, const string& info)
   for (size_t s = 0; (s = top.find("${TITLE}", s)) != string::npos; s += info.size())
 	  top.replace(s, 8, info);
   fstr << top;
+  PopulateJSTooltipMap();
 }
 
 int setup_anchor_data()
@@ -1555,6 +1566,21 @@ string CCCC_Html_Stream::HTMLEscapeLiteral(const char* inp)
         }
     }
     return buf.str();
+}
+
+void CCCC_Html_Stream::PopulateJSTooltipMap()
+{
+    const metric_description_t* ptrs[] = { &ProjectSummaryMetrics[0], &OODesignMetrics[0], &StructuralSummaryMetrics[0] };
+    int counts[] = { COUNTOF(ProjectSummaryMetrics), COUNTOF(OODesignMetrics), COUNTOF(StructuralSummaryMetrics) };
+    fstr << "<script type=\"text/javascript\">";
+    for (int k = 0; k < COUNTOF(ptrs); ++k) {
+        for (int j = 0; j < counts[k]; ++j)
+            fstr << "  window.g_Glossary['"
+                 << JSEscapeStringLiteral(ptrs[k][j].abbreviation) << "'] = {"
+                    "  name: '" << JSEscapeStringLiteral((strlen(ptrs[k][j].name) == 0) ? ptrs[k][j].abbreviation : ptrs[k][j].name) << "', "
+                    "  description: '" << JSEscapeStringLiteral(ptrs[k][j].description) << "' };\n";
+    }
+    fstr << "</script>" << endl;
 }
 
 const char* CCCC_Html_Stream::_Table = "table";

@@ -85,6 +85,7 @@ class CCCC_Html_Stream {
   void Other_Extents();
   void Separate_Modules();
   void Source_Listing();
+  void PopulateJSTooltipMap();
 
 
   void Module_Summary(CCCC_Module *module_ptr);
