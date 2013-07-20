@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Detailed report on module ANTLRChar</title>
+  </head>
+  <style type="text/css">
+      body {
+          font-family: sans-serif;
+          margin-left: 8pt;
+          margin-right: 8pt;
+          width: 98%;
+          position: relative;
+      }
+      p {
+          margin-top: 8pt;
+      }
+      table {
+           width: 100%;
+           border-top: 1px solid black;
+           border-spacing: 0;
+           border-collapse: collapse;
+           border-left: 1px solid black;
+      }
+      table.toc th {
+           background-color: aqua;
+           padding: 3pt;
+      }
+      table.toc td {
+           padding: 2pt;
+      }
+      table td, table th {
+           border-bottom: 1px solid black;
+           border-right: 1px solid black;
+      }
+      td.toc_entry_name {
+           text-align: left;
+      }
+      table.summary th {
+           background-color: aqua;
+      }
+      table.summary td {
+           font-family: monospace;
+      }
+      *.code {
+           font-family: monospace;
+           white-space: pre;
+      }
+      span.metric_low {
+      }
+      span.metric_medium {
+           font-style: italic;
+      }
+      span.metric_high {
+           font-weight: bold;
+      }
+      td.metric_low, td.metric_medium, td.metric_high {
+           text-align: right;
+      }
+      td.metric_low {
+      }
+      td.metric_medium {
+          background-color: yellow;
+      }
+      td.metric_high {
+          background-color: red;
+      }
+      a {
+          text-decoration: none;
+      }
+      a:visited {
+          color: purple;
+      }
+      a:hover {
+          color: red;
+      }
+      *.label {
+          background-color: #eee;
+      }
+      li p {
+          margin-top: 2pt;
+          margin-bottom: 4pt;
+          padding-left: 10pt;
+      }
+      div.tooltip {
+          display: none;
+          position: fixed;
+          border: 1px solid black;
+          background-color: #ddffdd;
+          width: 300px;
+          z-index: 2;
+          font-size: smaller;
+          padding: 5pt;
+          text-align: justify;
+      }
+      div.stickyHead {
+         display: none;
+         width: 98%;
+         position: fixed;
+         top: 0pt;
+         z-index: 1;
+      }
+      div.ttname {
+          font-weight: bold;
+          margin-bottom: 5pt;
+      }
+      #debug {
+          border: 1px solid black;
+          background-color: red;
+          position: fixed;
+          top: 100pt;
+          padding: 8pt;
+          width: 80%;
+          display: none;
+      }
+  </style>
+  <body>
+  <div id="debug"></div>
+  <script type="text/javascript">
+     window.g_Glossary = {}; // list of objects with name, description attributes for use in tooltips
+
+     function GetText(elem) {
+         var ret = "";
+         for (var cld = elem.firstChild; cld != null; cld = cld.nextSibling) {
+             switch (cld.nodeType) {
+             case 1: ret += GetText(cld); break;
+             case 3: ret += cld.nodeValue; break;
+             }
+         }
+         return ret.trim();
+     }
+     function GetElementPosition(elem) {
+         // return element position in page coords
+         var ret = { left: 0, top: 0 };
+         while (elem != null && elem != undefined) {
+             ret.left += elem.offsetLeft;
+             ret.top  += elem.offsetTop;
+             elem = elem.offsetParent;
+         }
+         return ret;
+     }
+     function SetupTooltip(elem, description) {
+         var div = document.createElement("div");
+         div.className = "tooltip";
+         div.innerHTML = "<div class=\"ttname\">" + description.name + "</div>\n<div class=\"ttdescr\">" + description.description + "</div>";
+         document.body.appendChild(div);
+         elem.addEventListener("mousemove", function(ev) {
+             div.style.display = "block";
+             div.style.top = (ev.clientY + 5) + "px";
+             div.style.left = (ev.clientX - 305) + "px";
+         });
+         elem.addEventListener("mouseout", function(ev) {
+             div.style.display = "none";
+         });
+     }
+     // Expect a th here. Assign a callback to it on-click such that it sorts all the rows in the table body
+     // according to the th.cellIndex'th element of the row.
+     function GetParentWithName(elem, name) {
+         var ret = elem;
+         while (ret != null && ret.nodeName.match(name) == null)
+             ret = ret.parentNode;
+         return ret;
+     }
+     function GetTableRows(elemInTable) {
+         var ret = [];
+         var tbody = GetParentWithName(elemInTable, /table/i);
+         // Sticky head support: Use original table if present
+         if (tbody.Original)
+             tbody = tbody.Original;
+         for (tbody = tbody.firstChild; tbody != null && tbody.nodeName.match(/tbody/i) == null; tbody = tbody.nextSibling);
+         for (var tr = tbody.firstChild; tr != null; tr = tr.nextSibling) {
+             if (tr.nodeName.match(/tr/i))
+                 ret.push(tr);
+         }
+         return { 'tbody': tbody, 'rows': ret };
+     }
+     function GetColumn(elem) {
+         /* FIXME I think you can still foil this with some pathlogical layouts - like staggering
+            multi-row squares in a stair-step pattern. Not intending to do that today, though. */
+         var column = 0, rowInd = 1;
+         for (var cell = elem.previousSibling; cell != null; cell = cell.previousSibling) {
+             if (cell.nodeType == 1)
+                 column += cell.colSpan;
+         }
+         for (var row = elem.parentNode.previousSibling; row != null; row = row.previousSibling) {
+             if (row.nodeType != 1)
+                 continue;
+             var colInd = 0, insertCols = 0;
+             for (var cell = row.firstChild; cell != null && colInd <= column; cell = cell.nextSibling) {
+                 if (cell.nodeType != 1)
+                     continue;
+                 if (cell != elem && cell.rowSpan - rowInd > 0 /* this element contributes to this column offset */)
+                     insertCols += cell.colSpan;
+                 colInd += cell.colSpan;
+             }
+             column += insertCols;
+             rowInd += 1;
+         }
+         return column;
+     }
+     function SetupSortColumn(elem) {
+         elem.firstChild.addEventListener("click", function(ev) {
+             var z = GetTableRows(elem);
+             var column = GetColumn(elem);
+             elem.SortDescending = (elem.SortDescending ? false : true);
+             z.rows.sort(function(a, b) {
+                 var ret = 0;
+                 var a_text = GetText(a.cells[column]);
+                 var b_text = GetText(b.cells[column]);
+                 var a_num = parseFloat(a_text);
+                 var b_num = parseFloat(b_text);
+                 if (isNaN(a_num) && isNaN(b_num))
+                     ret = (a_text > b_text) ?  1 :
+                           (a_text < b_text) ? -1 :
+                           (a_text >= b_text) ? 1 :
+                           -1;
+                 else if (isNaN(a_num))
+                     ret = -1;
+                 else if (isNaN(b_num))
+                     ret =  1;
+                 else
+                     ret = a_num - b_num;
+                 // tiebreakers
+                 return elem.SortDescending ? -ret : ret;
+             });
+             for (var k = 0; k < z.rows.length; ++k)
+                 z.tbody.removeChild(z.rows[k]);
+             for (var k = 0; k < z.rows.length; ++k)
+                 z.tbody.appendChild(z.rows[k]);
+         });
+     }
+     function GetScrollOffset() {
+         return (!isNaN(window.pageYOffset)) ? { 'X': window.pageXOffset,       'Y': window.pageYOffset } :
+                                               { 'X': document.body.scrollLeft, 'Y': document.body.scrollTop };
+     }
+     function StickyHead(table, thead) {
+         if (table.Original)
+             return;
+         var dupl = thead.cloneNode(true);
+         var div = document.createElement("div");
+         div.className = "stickyHead";
+         var newTable = table.cloneNode(false);
+         newTable.Original = table;
+         div.appendChild(newTable);
+         newTable.appendChild(dupl);
+         document.body.appendChild(div);
+         window.addEventListener("scroll", function() {
+             var headPos = GetElementPosition(thead);
+             var bodyPos = GetElementPosition(table);
+             var scrolly = GetScrollOffset().Y;
+             if (headPos.top < scrolly && bodyPos.top + table.scrollHeight > scrolly) {
+                 div.style.display = "block";
+             } else {
+                 div.style.display = "none";
+             }
+         });
+     }
+     function EnhanceTable(table) {
+         var headerNodes = table.getElementsByTagName("th");
+         for(var k = 0; k < headerNodes.length; ++k) {
+             var th = headerNodes[k];
+             var possibleAbbr = GetText(th);
+             if (th.className.indexOf("sortable") != -1)
+                 SetupSortColumn(th, th);
+             if (possibleAbbr in window.g_Glossary)
+                 SetupTooltip(th, window.g_Glossary[possibleAbbr]);
+         }
+         headerNodes = table.getElementsByTagName("thead");
+         for (var k = 0; k < headerNodes.length; ++k) {
+             var thead = headerNodes[k];
+             StickyHead(table, thead);
+         }
+     }
+
+     window.addEventListener("load", function() {
+         var tables = document.getElementsByTagName("table");
+         for (var k = 0; k < tables.length; ++k) {
+             var table = tables[k];
+             if (table.className.indexOf("summary") != -1)
+                 EnhanceTable(table);
+         }
+     });
+  </script>
+<script type="text/javascript">  window.g_Glossary['NOM'] = {  name: 'Number of modules',   description: 'Number of non-trivial modules identified by the analyser.  Non-trivial modules include all classes, and any other module for which member functions are identified.' };
+  window.g_Glossary['LOC'] = {  name: 'Lines of Code',   description: 'Number of non-blank, non-comment lines of source code counted by the analyser.' };
+  window.g_Glossary['COM'] = {  name: 'Lines of Comments',   description: 'Number of lines of comment identified by the analyser' };
+  window.g_Glossary['MVG'] = {  name: 'McCabe\'s Cyclomatic Complexity',   description: 'A measure of the decision complexity of the functions which make up the program.The strict definition of this measure is that it is the number of linearly independent routes through a directed acyclic graph which maps the flow of control of a subprogram.  The analyser counts this by recording the number of distinct decision outcomes contained within each function, which yields a good approximation to the formally defined version of the measure.' };
+  window.g_Glossary['L_C'] = {  name: 'Lines of code per line of comment',   description: 'Indicates density of comments with respect to textual size of program' };
+  window.g_Glossary['M_C'] = {  name: 'Cyclomatic Complexity per line of comment',   description: 'Indicates density of comments with respect to logical complexity of program' };
+  window.g_Glossary['IF4'] = {  name: 'Information Flow measure',   description: 'Measure of information flow between modules suggested by Henry and Kafura. The analyser makes an approximate count of this by counting inter-module couplings identified in the module interfaces.' };
+  window.g_Glossary['LOCpM'] = {  name: 'Lines of Code per Method',   description: 'The average number of lines of code per method. High LoC count may indicate poor functional isolation. Note that this measure may be weighted low by large numbers of small accessor methods.' };
+  window.g_Glossary['MLOCpM'] = {  name: 'Max Lines of Code per Method',   description: 'The largest number of lines of code in a single method. High LoC count may indicate poor functional isolation.' };
+  window.g_Glossary['WMC1'] = {  name: 'Weighted methods per class (all)',   description: 'The sum of a weighting function over the functions of the module. WMC1 uses the nominal weight of 1 for each function, and hence measures the number of functions.' };
+  window.g_Glossary['WMCv'] = {  name: 'Weighted methods per class (visible)',   description: 'The sum of a weighting function over the functions of the module. WMCv uses a weighting function which is 1 for functions accessible to other modules, 0 for private functions.' };
+  window.g_Glossary['DIT'] = {  name: 'Depth of inheritance tree',   description: 'The length of the longest path of inheritance ending at the current module.  The deeper the inheritance tree for a module, the harder it may be to predict its behaviour.  On the other hand, increasing depth gives the potential of greater reuse by the current module of behaviour defined for ancestor classes.' };
+  window.g_Glossary['NOC'] = {  name: 'Number of children',   description: 'The number of modules which inherit directly from the current module.  Moderate values of this measure indicate scope for reuse, however high values may indicate an inappropriate abstraction in the design.' };
+  window.g_Glossary['CBO'] = {  name: 'Coupling between objects',   description: 'The number of other modules which are coupled to the current module either as a client or a supplier. Excessive coupling indicates weakness of module encapsulation and may inhibit reuse.' };
+  window.g_Glossary['Fan-in'] = {  name: 'Fan-in',   description: 'The number of other modules which pass information into the current module.' };
+  window.g_Glossary['Fan-out'] = {  name: 'Fan-out',   description: 'The number of other modules into which the current module passes information' };
+  window.g_Glossary['IF4'] = {  name: 'Information Flow measure',   description: 'A composite measure of structural complexity, calculated as the square of the product of the fan-in and fan-out of a single module.  Proposed by Henry and Kafura.' };
+</script>
+<a name="summary"></a><h1>Detailed report on module ANTLRChar</h1>
+<table class="summary"><thead><tr>
+<th class="header_cell sortable" style="width: 70%;"><div>Metric</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>Tag</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>Overall</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>Per Function</div></th>
+</tr></thead>
+<tr><td class="label">Lines of Code</td><td class="label">LOC</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">******</span></td></tr><tr><td class="label">McCabe's Cyclomatic Number</td><td class="label">MVG</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">******</span></td></tr><tr><td class="label">Lines of Comment</td><td class="label">COM</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">********</span></td></tr><tr><td class="label">LOC/COM</td><td class="label">L_C</td><td class="metric_low"><span class="metric_low">------</span></td><td>&nbsp;</td></tr><tr><td class="label">MVG/COM</td><td class="label">M_C</td><td class="metric_low"><span class="metric_low">------</span></td><td>&nbsp;</td></tr><tr><td class="label">Weighted Methods per Class (weighting = unity)</td><td class="label">WMC1</td><td class="metric_low"><span class="metric_low">     0</span></td><td>&nbsp;</td></tr><tr><td class="label">Weighted Methods per Class (weighting = visible)</td><td class="label">WMCv</td><td class="metric_low"><span class="metric_low">     0</span></td><td>&nbsp;</td></tr><tr><td class="label">Depth of Inheritance Tree</td><td class="label">DIT</td><td class="metric_low"><span class="metric_low">     0</span></td><td>&nbsp;</td></tr><tr><td class="label">Number of Children</td><td class="label">NOC</td><td class="metric_low"><span class="metric_low">     0</span></td><td>&nbsp;</td></tr><tr><td class="label">Coupling between objects</td><td class="label">CBO</td><td class="metric_low"><span class="metric_low">     2</span></td><td>&nbsp;</td></tr><tr><td class="label">Information Flow measure (inclusive)</td><td class="label">IF4</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">********</span></td></tr><tr><td class="label">Information Flow measure (visible)</td><td class="label">IF4v</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">********</span></td></tr><tr><td class="label">Information Flow measure (concrete)</td><td class="label">IF4c</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">********</span></td></tr></table><a name="modext"></a><h2>Definitions and Declarations</h2>
+<table class="summary"><thead><tr>
+<td class="label" style="width: 50%;">Description</td><th class="header_cell sortable" style="width: 10%;"><div>LOC</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>MVG</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>COM</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>L_C</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>M_C</div></th>
+</tr></thead><tr><td colspan="6">No module extents have been identified for this module</td></tr>
+</table><a name="proc"></a><h2>Functions</h2>
+<table class="summary"><thead><tr>
+<td class="label" style="width: 50%;">Function prototype</td><th class="header_cell sortable" style="width: 10%;"><div>LOC</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>MVG</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>COM</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>L_C</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>M_C</div></th>
+</tr></thead>
+<tr><td colspan="6">No member functions have been identified for this module</td></tr>
+</table><a name="structdet"></a><h2>Relationships</h2>
+<table class="summary"><thead><tr><th style="width: 50%;">Clients</th><th style="width: 50%;">Suppliers</th></tr>
+</thead>
+<tr>
+<td style="width: 50%;">
+ANTLRToken [V] <br />
+pass by reference &nbsp;
+<a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_tok.cc:00000077">./cccc/cccc_tok.cc:77</a><br />
+pass by reference &nbsp;
+<a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_tok.cc:00000104">./cccc/cccc_tok.cc:104</a><br />
+<br />
+<br />
+ParseUtility [V] <br />
+pass by reference &nbsp;
+<a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_utl.cc:00000550">./cccc/cccc_utl.cc:550</a><br />
+<br />
+<br />
+&nbsp;
+</td>
+<td style="width: 50%;">
+&nbsp;
+</td>
+</tr></table>
+</BODY></HTML>

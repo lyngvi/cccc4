@@ -1,0 +1,933 @@
+CCCC_Module@A@class@
+CCCC_ModExt@A@class@./test/prn10.cc@10@definition@?T??2@LOC:5 COM:0 MVG:0@2@d@
+CCCC_ModExt@A@class@./test/prn9.cc@7@definition@????2@LOC:3 COM:4 MVG:0@2@d@
+CCCC_ModExt@A@class@./test/prn3.cc@93@definition@FT??0@LOC:9 COM:6 MVG:0@0@d@
+CCCC_Module@ANTLRAbstractToken@@
+CCCC_Module@ANTLRChar@@
+CCCC_Module@ANTLRParser@@
+CCCC_Module@ANTLRToken@@
+CCCC_Module@ANTLRTokenPtr@@
+CCCC_Module@ANTLRTokenType@@
+CCCC_Module@B@class@
+CCCC_ModExt@B@class@./test/prn9.cc@11@definition@????0@LOC:3 COM:0 MVG:0@0@d@
+CCCC_Module@C@class@
+CCCC_ModExt@C@class@./test/prn9.cc@15@definition@????0@LOC:3 COM:0 MVG:0@0@d@
+CCCC_ModExt@C@class@./test/prn12.cc@6@definition@F???2@LOC:5 COM:3 MVG:0@2@d@
+CCCC_Module@CCCC_Extent@@
+CCCC_Module@CCCC_Html_Stream@@
+CCCC_Module@CCCC_Item@@
+CCCC_Module@CCCC_Member@@
+CCCC_Module@CCCC_Metric@@
+CCCC_Module@CCCC_Module@@
+CCCC_Module@CCCC_Options@@
+CCCC_Module@CCCC_Project@@
+CCCC_Module@CCCC_Record@@
+CCCC_Module@CCCC_Table@class@
+CCCC_ModExt@CCCC_Table@class@./cccc/cccc_tpl.cc@35@declaration@????2@LOC:1 COM:0 MVG:0@2@D@
+CCCC_ModExt@CCCC_Table@class@./cccc/cccc_tpl.cc@36@declaration@????2@LOC:1 COM:0 MVG:0@2@D@
+CCCC_ModExt@CCCC_Table@class@./cccc/cccc_tpl.cc@37@declaration@????2@LOC:1 COM:0 MVG:0@2@D@
+CCCC_ModExt@CCCC_Table@class@./cccc/cccc_tpl.cc@38@declaration@????2@LOC:1 COM:0 MVG:0@2@D@
+CCCC_Module@CCCC_UseRelationship@@
+CCCC_Module@CCCC_Xml_Stream@@
+CCCC_Module@FP@class@
+CCCC_ModExt@FP@class@./test/prn3.cc@77@definition@FT??2@LOC:5 COM:0 MVG:0@2@d@
+CCCC_Module@Hugo@class@
+CCCC_ModExt@Hugo@class@./test/prn3.cc@156@definition@FT??2@LOC:9 COM:9 MVG:0@2@d@
+CCCC_Module@Hugo_2@class@
+CCCC_ModExt@Hugo_2@class@./test/prn3.cc@134@definition@FT??2@LOC:9 COM:8 MVG:0@2@d@
+CCCC_Module@InOrOut@enum@
+CCCC_ModExt@InOrOut@enum@./cccc/cccc_utl.cc@479@definition@FT???@LOC:0 COM:0 MVG:0@?@d@
+CCCC_Module@InlFunc@class@
+CCCC_ModExt@InlFunc@class@./test/prn3.cc@47@definition@F???2@LOC:4 COM:42 MVG:0@2@d@
+CCCC_Module@Main@class@
+CCCC_ModExt@Main@class@./cccc/ccccmain.cc@71@definition@F???2@LOC:17 COM:9 MVG:0@2@d@
+CCCC_Module@Metric_Treatment@@
+CCCC_Module@MyClass@@
+CCCC_Module@PSFlag@@
+CCCC_Module@ParseStore@@
+CCCC_Module@ParseUtility@@
+CCCC_Module@SetWordType@@
+CCCC_Module@Source_Anchor@@
+CCCC_Module@T@@
+CCCC_Module@Test1@class@
+CCCC_ModExt@Test1@class@./test/test1.cc@16@definition@F???2@LOC:4 COM:4 MVG:0@2@d@
+CCCC_Module@Test2a@class@
+CCCC_ModExt@Test2a@class@./test/test2.cc@18@definition@F???0@LOC:6 COM:0 MVG:0@0@d@
+CCCC_Module@Test2b@@
+CCCC_Module@Test2c@class@
+CCCC_ModExt@Test2c@class@./test/test2.cc@26@definition@F???2@LOC:5 COM:0 MVG:0@2@d@
+CCCC_Module@Test2d@@
+CCCC_Module@Test2e@@
+CCCC_Module@Test3a@class@
+CCCC_ModExt@Test3a@class@./test/test3.cc@10@definition@F???2@LOC:6 COM:0 MVG:0@2@d@
+CCCC_Module@Test3b0@@
+CCCC_Module@Test3b1@class@
+CCCC_ModExt@Test3b1@class@./test/test3.cc@33@definition@F???0@LOC:1 COM:0 MVG:0@0@d@
+CCCC_Module@Test3b2@class@
+CCCC_ModExt@Test3b2@class@./test/test3.cc@34@definition@F???0@LOC:1 COM:0 MVG:0@0@d@
+CCCC_Module@Test3b3@@
+CCCC_Module@Test3b4@class@
+CCCC_ModExt@Test3b4@class@./test/test3.cc@35@definition@F???0@LOC:1 COM:0 MVG:0@0@d@
+CCCC_Module@Test3b5@class@
+CCCC_ModExt@Test3b5@class@./test/test3.cc@36@definition@F???2@LOC:6 COM:0 MVG:0@2@d@
+CCCC_Module@Test4a@class@
+CCCC_ModExt@Test4a@class@./test/test4.cc@21@definition@????2@LOC:11 COM:2 MVG:0@2@d@
+CCCC_Module@UseType@@
+CCCC_Module@UserelNameLevel@@
+CCCC_Module@Visibility@@
+CCCC_Module@_ANTLRTokenPtr@@
+CCCC_Module@anonymous@@
+CCCC_Module@bool@@
+CCCC_Module@char@builtin@
+CCCC_ModExt@char@builtin@<nofile>@0@builtin definition@d?????@@0@d@
+CCCC_Module@double@builtin@
+CCCC_ModExt@double@builtin@<nofile>@0@builtin definition@d?????@@0@d@
+CCCC_Module@float@builtin@
+CCCC_ModExt@float@builtin@<nofile>@0@builtin definition@d?????@@0@d@
+CCCC_Module@ifstream@@
+CCCC_Module@int@builtin@
+CCCC_ModExt@int@builtin@<nofile>@0@builtin definition@d?????@@0@d@
+CCCC_Module@list@@
+CCCC_Module@long@builtin@
+CCCC_ModExt@long@builtin@<nofile>@0@builtin definition@d?????@@0@d@
+CCCC_Module@map@class@
+CCCC_ModExt@map@class@./cccc/cccc_tpl.cc@34@declaration@?????@LOC:1 COM:21 MVG:0@?@D@
+CCCC_Module@metric_description_t@struct@
+CCCC_ModExt@metric_description_t@struct@./cccc/cccc_htm.cc@58@definition@????0@LOC:5 COM:0 MVG:0@0@d@
+CCCC_Module@ofstream@@
+CCCC_Module@ostream@@
+CCCC_Module@string@@
+CCCC_Module@void@builtin@
+CCCC_ModExt@void@builtin@<nofile>@0@builtin definition@d?????@@0@d@
+CCCC_Member@A@b@@(void)@
+CCCC_MemExt@A@b@@(void)@./test/prn11.cc@13@definition@F????@LOC:3 COM:0 MVG:0@?@d@
+CCCC_Member@ANTLRToken@ANTLRToken@@()@
+CCCC_MemExt@ANTLRToken@ANTLRToken@@()@./cccc/cccc_tok.cc@69@definition@F????@LOC:4 COM:32 MVG:0@?@d@
+CCCC_Member@ANTLRToken@ANTLRToken@@(ANTLRToken &)@
+CCCC_MemExt@ANTLRToken@ANTLRToken@@(ANTLRToken &)@./cccc/cccc_tok.cc@87@definition@F????@LOC:7 COM:1 MVG:0@?@d@
+CCCC_Member@ANTLRToken@ANTLRToken@@(ANTLRTokenType,ANTLRChar *)@
+CCCC_MemExt@ANTLRToken@ANTLRToken@@(ANTLRTokenType,ANTLRChar *)@./cccc/cccc_tok.cc@77@definition@F????@LOC:7 COM:3 MVG:0@?@d@
+CCCC_Member@ANTLRToken@CountToken@@()@
+CCCC_MemExt@ANTLRToken@CountToken@@()@./cccc/cccc_tok.cc@153@definition@F????@LOC:6 COM:9 MVG:0@?@d@
+CCCC_Member@ANTLRToken@getTokenTypeName@@()@
+CCCC_MemExt@ANTLRToken@getTokenTypeName@@()@./cccc/cccc_tok.cc@161@definition@F????@LOC:1 COM:0 MVG:1@?@d@
+CCCC_Member@ANTLRToken@makeToken@@(ANTLRTokenType,ANTLRChar *,int)@
+CCCC_MemExt@ANTLRToken@makeToken@@(ANTLRTokenType,ANTLRChar *,int)@./cccc/cccc_tok.cc@103@definition@F????@LOC:20 COM:8 MVG:2@?@d@
+CCCC_Member@ANTLRToken@operator =@@(ANTLRToken &)@
+CCCC_MemExt@ANTLRToken@operator =@@(ANTLRToken &)@./cccc/cccc_tok.cc@137@definition@F????@LOC:7 COM:1 MVG:1@?@d@
+CCCC_Member@ANTLRToken@~ANTLRToken@@()@
+CCCC_MemExt@ANTLRToken@~ANTLRToken@@()@./cccc/cccc_tok.cc@128@definition@F????@LOC:7 COM:1 MVG:0@?@d@
+CCCC_Member@C@C@@(void)@
+CCCC_MemExt@C@C@@(void)@./test/prn12.cc@9@definition@F???2@LOC:1 COM:0 MVG:0@2@d@
+CCCC_Member@CCCC_Extent@AddToItem@@(CCCC_Item &)@
+CCCC_MemExt@CCCC_Extent@AddToItem@@(CCCC_Item &)@./cccc/cccc_ext.cc@64@definition@F????@LOC:17 COM:0 MVG:8@?@d@
+CCCC_Member@CCCC_Extent@CCCC_Extent@@()@
+CCCC_MemExt@CCCC_Extent@CCCC_Extent@@()@./cccc/cccc_ext.cc@30@definition@F????@LOC:6 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Extent@CCCC_Extent@@(CCCC_Item &)@
+CCCC_MemExt@CCCC_Extent@CCCC_Extent@@(CCCC_Item &)@./cccc/cccc_ext.cc@37@definition@F????@LOC:23 COM:2 MVG:7@?@d@
+CCCC_Member@CCCC_Extent@GetFromItem@@(CCCC_Item &)@
+CCCC_MemExt@CCCC_Extent@GetFromItem@@(CCCC_Item &)@./cccc/cccc_ext.cc@84@definition@F????@LOC:20 COM:0 MVG:8@?@d@
+CCCC_Member@CCCC_Extent@get_count@@(const char *)@
+CCCC_MemExt@CCCC_Extent@get_count@@(const char *)@./cccc/cccc_ext.cc@147@definition@F????@LOC:16 COM:0 MVG:3@?@d@
+CCCC_Member@CCCC_Extent@key@@()@
+CCCC_MemExt@CCCC_Extent@key@@()@./cccc/cccc_ext.cc@145@definition@T????@LOC:1 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Extent@name@@(int)@
+CCCC_MemExt@CCCC_Extent@name@@(int)@./cccc/cccc_ext.cc@107@definition@T????@LOC:28 COM:6 MVG:6@?@d@
+CCCC_Member@CCCC_Html_Stream@CCCC_Html_Stream@@(const string &,const string &)@
+CCCC_MemExt@CCCC_Html_Stream@CCCC_Html_Stream@@(const string &,const string &)@./cccc/cccc_htm.cc@1309@definition@FT???@LOC:18 COM:2 MVG:2@?@d@
+CCCC_Member@CCCC_Html_Stream@GenerateReports@@(CCCC_Project *,int,const string &,const string &)@
+CCCC_MemExt@CCCC_Html_Stream@GenerateReports@@(CCCC_Project *,int,const string &,const string &)@./cccc/cccc_htm.cc@147@definition@FT???@LOC:77 COM:4 MVG:12@?@d@
+CCCC_Member@CCCC_Html_Stream@HTMLBeginElement@@(const char *,const char *,int)@
+CCCC_MemExt@CCCC_Html_Stream@HTMLBeginElement@@(const char *,const char *,int)@./cccc/cccc_htm.cc@1497@definition@FT???@LOC:11 COM:0 MVG:3@?@d@
+CCCC_Member@CCCC_Html_Stream@HTMLEndElement@@(const char *)@
+CCCC_MemExt@CCCC_Html_Stream@HTMLEndElement@@(const char *)@./cccc/cccc_htm.cc@1525@definition@FT???@LOC:6 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Html_Stream@HTMLEscapeLiteral@@(const char *)@
+CCCC_MemExt@CCCC_Html_Stream@HTMLEscapeLiteral@@(const char *)@./cccc/cccc_htm.cc@1547@definition@FT???@LOC:16 COM:8 MVG:9@?@d@
+CCCC_Member@CCCC_Html_Stream@HTMLMultiColumnHeaderCell@@(const char *,int)@
+CCCC_MemExt@CCCC_Html_Stream@HTMLMultiColumnHeaderCell@@(const char *,int)@./cccc/cccc_htm.cc@1487@definition@FT???@LOC:9 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Html_Stream@HTMLParagraph@@(const char *)@
+CCCC_MemExt@CCCC_Html_Stream@HTMLParagraph@@(const char *)@./cccc/cccc_htm.cc@1518@definition@FT???@LOC:6 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Html_Stream@HTMLSingleEntryRow@@(int,const char *,int)@
+CCCC_MemExt@CCCC_Html_Stream@HTMLSingleEntryRow@@(int,const char *,int)@./cccc/cccc_htm.cc@1477@definition@FT???@LOC:9 COM:4 MVG:2@?@d@
+CCCC_Member@CCCC_Html_Stream@HTMLTableCell@@(const char *,const char *,int)@
+CCCC_MemExt@CCCC_Html_Stream@HTMLTableCell@@(const char *,const char *,int)@./cccc/cccc_htm.cc@1509@definition@FT???@LOC:8 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Html_Stream@JSEscapeStringLiteral@@(const char *)@
+CCCC_MemExt@CCCC_Html_Stream@JSEscapeStringLiteral@@(const char *)@./cccc/cccc_htm.cc@1532@definition@FT???@LOC:14 COM:0 MVG:8@?@d@
+CCCC_Member@CCCC_Html_Stream@Metric_Description@@(string,string,string)@
+CCCC_MemExt@CCCC_Html_Stream@Metric_Description@@(string,string,string)@./cccc/cccc_htm.cc@1163@definition@FT???@LOC:12 COM:1 MVG:1@?@d@
+CCCC_Member@CCCC_Html_Stream@Module_Detail@@(CCCC_Module *)@
+CCCC_MemExt@CCCC_Html_Stream@Module_Detail@@(CCCC_Module *)@./cccc/cccc_htm.cc@1082@definition@FT???@LOC:27 COM:9 MVG:2@?@d@
+CCCC_Member@CCCC_Html_Stream@Module_Summary@@(CCCC_Module *)@
+CCCC_MemExt@CCCC_Html_Stream@Module_Summary@@(CCCC_Module *)@./cccc/cccc_htm.cc@1183@definition@FT???@LOC:103 COM:4 MVG:0@?@d@
+CCCC_Member@CCCC_Html_Stream@OO_Design@@()@
+CCCC_MemExt@CCCC_Html_Stream@OO_Design@@()@./cccc/cccc_htm.cc@493@definition@FT???@LOC:40 COM:0 MVG:5@?@d@
+CCCC_Member@CCCC_Html_Stream@Other_Extents@@()@
+CCCC_MemExt@CCCC_Html_Stream@Other_Extents@@()@./cccc/cccc_htm.cc@821@definition@FT???@LOC:34 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Html_Stream@PopulateJSTooltipMap@@()@
+CCCC_MemExt@CCCC_Html_Stream@PopulateJSTooltipMap@@()@./cccc/cccc_htm.cc@1572@definition@FT???@LOC:14 COM:0 MVG:3@?@d@
+CCCC_Member@CCCC_Html_Stream@Procedural_Detail@@()@
+CCCC_MemExt@CCCC_Html_Stream@Procedural_Detail@@()@./cccc/cccc_htm.cc@790@definition@FT???@LOC:27 COM:0 MVG:4@?@d@
+CCCC_Member@CCCC_Html_Stream@Procedural_Detail@@(CCCC_Module *)@
+CCCC_MemExt@CCCC_Html_Stream@Procedural_Detail@@(CCCC_Module *)@./cccc/cccc_htm.cc@1123@definition@FT???@LOC:25 COM:9 MVG:2@?@d@
+CCCC_Member@CCCC_Html_Stream@Procedural_Summary@@()@
+CCCC_MemExt@CCCC_Html_Stream@Procedural_Summary@@()@./cccc/cccc_htm.cc@547@definition@FT???@LOC:48 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Html_Stream@Project_Summary@@()@
+CCCC_MemExt@CCCC_Html_Stream@Project_Summary@@()@./cccc/cccc_htm.cc@382@definition@FT???@LOC:94 COM:1 MVG:1@?@d@
+CCCC_Member@CCCC_Html_Stream@Put_Extent_Cell@@(const CCCC_Extent &,int,bool)@
+CCCC_MemExt@CCCC_Html_Stream@Put_Extent_Cell@@(const CCCC_Extent &,int,bool)@./cccc/cccc_htm.cc@961@definition@FT???@LOC:8 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Html_Stream@Put_Extent_List@@(CCCC_Record &,bool)@
+CCCC_MemExt@CCCC_Html_Stream@Put_Extent_List@@(CCCC_Record &,bool)@./cccc/cccc_htm.cc@970@definition@FT???@LOC:14 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Html_Stream@Put_Extent_URL@@(const CCCC_Extent &)@
+CCCC_MemExt@CCCC_Html_Stream@Put_Extent_URL@@(const CCCC_Extent &)@./cccc/cccc_htm.cc@945@definition@FT???@LOC:12 COM:1 MVG:0@?@d@
+CCCC_Member@CCCC_Html_Stream@Put_Header_Cell@@(string,int)@
+CCCC_MemExt@CCCC_Html_Stream@Put_Header_Cell@@(string,int)@./cccc/cccc_htm.cc@871@definition@FT???@LOC:6 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Html_Stream@Put_Label_Cell@@(string,int,string,string,CCCC_Record *)@
+CCCC_MemExt@CCCC_Html_Stream@Put_Label_Cell@@(string,int,string,string,CCCC_Record *)@./cccc/cccc_htm.cc@878@definition@FT???@LOC:26 COM:6 MVG:4@?@d@
+CCCC_Member@CCCC_Html_Stream@Put_Metric_Cell@@(const CCCC_Metric &,int)@
+CCCC_MemExt@CCCC_Html_Stream@Put_Metric_Cell@@(const CCCC_Metric &,int)@./cccc/cccc_htm.cc@932@definition@FT???@LOC:12 COM:0 MVG:4@?@d@
+CCCC_Member@CCCC_Html_Stream@Put_Metric_Cell@@(int,int,string,int)@
+CCCC_MemExt@CCCC_Html_Stream@Put_Metric_Cell@@(int,int,string,int)@./cccc/cccc_htm.cc@925@definition@FT???@LOC:6 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Html_Stream@Put_Metric_Cell@@(int,string,int)@
+CCCC_MemExt@CCCC_Html_Stream@Put_Metric_Cell@@(int,string,int)@./cccc/cccc_htm.cc@918@definition@FT???@LOC:6 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Html_Stream@Put_Section_Heading@@(string,string,int)@
+CCCC_MemExt@CCCC_Html_Stream@Put_Section_Heading@@(string,string,int)@./cccc/cccc_htm.cc@371@definition@FT???@LOC:10 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Html_Stream@Put_Section_TOC_Entry@@(string,string,string)@
+CCCC_MemExt@CCCC_Html_Stream@Put_Section_TOC_Entry@@(string,string,string)@./cccc/cccc_htm.cc@858@definition@FT???@LOC:12 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Html_Stream@Put_Structural_Details_Cell@@(CCCC_Module *,CCCC_Project *,int,UserelNameLevel)@
+CCCC_MemExt@CCCC_Html_Stream@Put_Structural_Details_Cell@@(CCCC_Module *,CCCC_Project *,int,UserelNameLevel)@./cccc/cccc_htm.cc@692@definition@FT???@LOC:56 COM:2 MVG:8@?@d@
+CCCC_Member@CCCC_Html_Stream@Separate_Modules@@()@
+CCCC_MemExt@CCCC_Html_Stream@Separate_Modules@@()@./cccc/cccc_htm.cc@1004@definition@FT???@LOC:65 COM:2 MVG:2@?@d@
+CCCC_Member@CCCC_Html_Stream@Source_Listing@@()@
+CCCC_MemExt@CCCC_Html_Stream@Source_Listing@@()@./cccc/cccc_htm.cc@1348@definition@FT???@LOC:60 COM:9 MVG:8@?@d@
+CCCC_Member@CCCC_Html_Stream@Structural_Detail@@()@
+CCCC_MemExt@CCCC_Html_Stream@Structural_Detail@@()@./cccc/cccc_htm.cc@762@definition@FT???@LOC:25 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Html_Stream@Structural_Detail@@(CCCC_Module *)@
+CCCC_MemExt@CCCC_Html_Stream@Structural_Detail@@(CCCC_Module *)@./cccc/cccc_htm.cc@1177@definition@FT???@LOC:5 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Html_Stream@Structural_Summary@@()@
+CCCC_MemExt@CCCC_Html_Stream@Structural_Summary@@()@./cccc/cccc_htm.cc@607@definition@FT???@LOC:69 COM:2 MVG:3@?@d@
+CCCC_Member@CCCC_Html_Stream@Table_Of_Contents@@(int,bool)@
+CCCC_MemExt@CCCC_Html_Stream@Table_Of_Contents@@(int,bool)@./cccc/cccc_htm.cc@248@definition@FT???@LOC:104 COM:6 MVG:11@?@d@
+CCCC_Member@CCCC_Html_Stream@~CCCC_Html_Stream@@()@
+CCCC_MemExt@CCCC_Html_Stream@~CCCC_Html_Stream@@()@./cccc/cccc_htm.cc@242@definition@FT???@LOC:5 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Item@CCCC_Item@@()@
+CCCC_MemExt@CCCC_Item@CCCC_Item@@()@./cccc/cccc_itm.cc@24@definition@F????@LOC:6 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Item@CCCC_Item@@(const string &)@
+CCCC_MemExt@CCCC_Item@CCCC_Item@@(const string &)@./cccc/cccc_itm.cc@17@definition@F????@LOC:6 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Item@CCCC_Item@@(const string &,char)@
+CCCC_MemExt@CCCC_Item@CCCC_Item@@(const string &,char)@./cccc/cccc_itm.cc@10@definition@F????@LOC:6 COM:1 MVG:0@?@d@
+CCCC_Member@CCCC_Item@Extract@@(char &)@
+CCCC_MemExt@CCCC_Item@Extract@@(char &)@./cccc/cccc_itm.cc@86@definition@F????@LOC:10 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Item@Extract@@(float &)@
+CCCC_MemExt@CCCC_Item@Extract@@(float &)@./cccc/cccc_itm.cc@104@definition@F????@LOC:7 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Item@Extract@@(int &)@
+CCCC_MemExt@CCCC_Item@Extract@@(int &)@./cccc/cccc_itm.cc@71@definition@F????@LOC:7 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Item@Extract@@(string &)@
+CCCC_MemExt@CCCC_Item@Extract@@(string &)@./cccc/cccc_itm.cc@47@definition@F????@LOC:16 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Item@FromFile@@(ifstream &)@
+CCCC_MemExt@CCCC_Item@FromFile@@(ifstream &)@./cccc/cccc_itm.cc@119@definition@F????@LOC:14 COM:0 MVG:4@?@d@
+CCCC_Member@CCCC_Item@Insert@@(char)@
+CCCC_MemExt@CCCC_Item@Insert@@(char)@./cccc/cccc_itm.cc@79@definition@F????@LOC:6 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Item@Insert@@(const char *)@
+CCCC_MemExt@CCCC_Item@Insert@@(const char *)@./cccc/cccc_itm.cc@41@definition@F????@LOC:5 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Item@Insert@@(const string &)@
+CCCC_MemExt@CCCC_Item@Insert@@(const string &)@./cccc/cccc_itm.cc@31@definition@F????@LOC:7 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Item@Insert@@(float)@
+CCCC_MemExt@CCCC_Item@Insert@@(float)@./cccc/cccc_itm.cc@97@definition@F????@LOC:6 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Item@Insert@@(int)@
+CCCC_MemExt@CCCC_Item@Insert@@(int)@./cccc/cccc_itm.cc@64@definition@F????@LOC:6 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Item@ToFile@@(ofstream &)@
+CCCC_MemExt@CCCC_Item@ToFile@@(ofstream &)@./cccc/cccc_itm.cc@112@definition@F????@LOC:6 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Member@CCCC_Member@@()@
+CCCC_MemExt@CCCC_Member@CCCC_Member@@()@./cccc/cccc_mem.cc@29@definition@F????@LOC:5 COM:19 MVG:0@?@d@
+CCCC_Member@CCCC_Member@FromFile@@(ifstream &)@
+CCCC_MemExt@CCCC_Member@FromFile@@(ifstream &)@./cccc/cccc_mem.cc@148@definition@F????@LOC:77 COM:12 MVG:17@?@d@
+CCCC_Member@CCCC_Member@ToFile@@(ofstream &)@
+CCCC_MemExt@CCCC_Member@ToFile@@(ofstream &)@./cccc/cccc_mem.cc@64@definition@F????@LOC:29 COM:0 MVG:3@?@d@
+CCCC_Member@CCCC_Member@get_count@@(const char *)@
+CCCC_MemExt@CCCC_Member@get_count@@(const char *)@./cccc/cccc_mem.cc@35@definition@F????@LOC:25 COM:0 MVG:5@?@d@
+CCCC_Member@CCCC_Member@get_visibility@@()@
+CCCC_MemExt@CCCC_Member@get_visibility@@()@./cccc/cccc_mem.cc@245@definition@F????@LOC:4 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Member@name@@(int)@
+CCCC_MemExt@CCCC_Member@name@@(int)@./cccc/cccc_mem.cc@99@definition@T????@LOC:41 COM:1 MVG:10@?@d@
+CCCC_Member@CCCC_Metric@CCCC_Metric@@()@
+CCCC_MemExt@CCCC_Metric@CCCC_Metric@@()@./cccc/cccc_met.cc@57@definition@F????@LOC:5 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Metric@CCCC_Metric@@(int,const char *)@
+CCCC_MemExt@CCCC_Metric@CCCC_Metric@@(int,const char *)@./cccc/cccc_met.cc@63@definition@F????@LOC:4 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Metric@CCCC_Metric@@(int,int,const char *)@
+CCCC_MemExt@CCCC_Metric@CCCC_Metric@@(int,int,const char *)@./cccc/cccc_met.cc@68@definition@F????@LOC:4 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Metric@code@@()@
+CCCC_MemExt@CCCC_Metric@code@@()@./cccc/cccc_met.cc@100@definition@T????@LOC:6 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Metric@emphasis_level@@()@
+CCCC_MemExt@CCCC_Metric@emphasis_level@@()@./cccc/cccc_met.cc@83@definition@T????@LOC:16 COM:0 MVG:6@?@d@
+CCCC_Member@CCCC_Metric@name@@()@
+CCCC_MemExt@CCCC_Metric@name@@()@./cccc/cccc_met.cc@107@definition@T????@LOC:6 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Metric@set_ratio@@(float,float)@
+CCCC_MemExt@CCCC_Metric@set_ratio@@(float,float)@./cccc/cccc_met.cc@78@definition@F????@LOC:4 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Metric@set_treatment@@(const char *)@
+CCCC_MemExt@CCCC_Metric@set_treatment@@(const char *)@./cccc/cccc_met.cc@73@definition@F????@LOC:4 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Metric@value_string@@()@
+CCCC_MemExt@CCCC_Metric@value_string@@()@./cccc/cccc_met.cc@114@definition@T????@LOC:43 COM:12 MVG:5@?@d@
+CCCC_Member@CCCC_Module@CCCC_Module@@()@
+CCCC_MemExt@CCCC_Module@CCCC_Module@@()@./cccc/cccc_mod.cc@29@definition@F????@LOC:4 COM:19 MVG:0@?@d@
+CCCC_Member@CCCC_Module@FromFile@@(ifstream &)@
+CCCC_MemExt@CCCC_Module@FromFile@@(ifstream &)@./cccc/cccc_mod.cc@237@definition@F????@LOC:62 COM:10 MVG:12@?@d@
+CCCC_Member@CCCC_Module@ToFile@@(ofstream &)@
+CCCC_MemExt@CCCC_Module@ToFile@@(ofstream &)@./cccc/cccc_mod.cc@207@definition@F????@LOC:25 COM:0 MVG:3@?@d@
+CCCC_Member@CCCC_Module@get_count@@(const char *)@
+CCCC_MemExt@CCCC_Module@get_count@@(const char *)@./cccc/cccc_mod.cc@64@definition@F????@LOC:119 COM:3 MVG:23@?@d@
+CCCC_Member@CCCC_Module@is_trivial@@()@
+CCCC_MemExt@CCCC_Module@is_trivial@@()@./cccc/cccc_mod.cc@190@definition@F????@LOC:14 COM:0 MVG:5@?@d@
+CCCC_Member@CCCC_Module@name@@(int)@
+CCCC_MemExt@CCCC_Module@name@@(int)@./cccc/cccc_mod.cc@35@definition@T????@LOC:24 COM:0 MVG:6@?@d@
+CCCC_Member@CCCC_Options@Add_Option@@(CCCC_Item &)@
+CCCC_MemExt@CCCC_Options@Add_Option@@(CCCC_Item &)@./cccc/cccc_opt.cc@90@definition@FT???@LOC:24 COM:1 MVG:4@?@d@
+CCCC_Member@CCCC_Options@Load_Options@@()@
+CCCC_MemExt@CCCC_Options@Load_Options@@()@./cccc/cccc_opt.cc@182@definition@FT???@LOC:32 COM:1 MVG:3@?@d@
+CCCC_Member@CCCC_Options@Load_Options@@(const string &)@
+CCCC_MemExt@CCCC_Options@Load_Options@@(const string &)@./cccc/cccc_opt.cc@164@definition@FT???@LOC:14 COM:0 MVG:3@?@d@
+CCCC_Member@CCCC_Options@Save_Options@@(const string &)@
+CCCC_MemExt@CCCC_Options@Save_Options@@(const string &)@./cccc/cccc_opt.cc@118@definition@FT???@LOC:43 COM:0 MVG:3@?@d@
+CCCC_Member@CCCC_Options@dialectKeywordPolicy@@(const string &,const string &)@
+CCCC_MemExt@CCCC_Options@dialectKeywordPolicy@@(const string &,const string &)@./cccc/cccc_opt.cc@264@definition@FT???@LOC:11 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Options@getFileLanguage@@(const string &)@
+CCCC_MemExt@CCCC_Options@getFileLanguage@@(const string &)@./cccc/cccc_opt.cc@220@definition@FT???@LOC:29 COM:2 MVG:5@?@d@
+CCCC_Member@CCCC_Options@getMetricTreatment@@(const string &)@
+CCCC_MemExt@CCCC_Options@getMetricTreatment@@(const string &)@./cccc/cccc_opt.cc@253@definition@FT???@LOC:10 COM:1 MVG:2@?@d@
+CCCC_Member@CCCC_Project@CCCC_Project@@(const string &)@
+CCCC_MemExt@CCCC_Project@CCCC_Project@@(const string &)@./cccc/cccc_prj.cc@33@definition@F????@LOC:18 COM:24 MVG:1@?@d@
+CCCC_Member@CCCC_Project@FromFile@@(ifstream &)@
+CCCC_MemExt@CCCC_Project@FromFile@@(ifstream &)@./cccc/cccc_prj.cc@364@definition@F????@LOC:40 COM:0 MVG:7@?@d@
+CCCC_Member@CCCC_Project@ToFile@@(ofstream &)@
+CCCC_MemExt@CCCC_Project@ToFile@@(ofstream &)@./cccc/cccc_prj.cc@317@definition@F????@LOC:36 COM:2 MVG:6@?@d@
+CCCC_Member@CCCC_Project@add_member@@(CCCC_Item &)@
+CCCC_MemExt@CCCC_Project@add_member@@(CCCC_Item &)@./cccc/cccc_prj.cc@88@definition@F????@LOC:31 COM:3 MVG:6@?@d@
+CCCC_Member@CCCC_Project@add_module@@(CCCC_Item &)@
+CCCC_MemExt@CCCC_Project@add_module@@(CCCC_Item &)@./cccc/cccc_prj.cc@56@definition@F????@LOC:26 COM:2 MVG:5@?@d@
+CCCC_Member@CCCC_Project@add_rejected_extent@@(CCCC_Item &)@
+CCCC_MemExt@CCCC_Project@add_rejected_extent@@(CCCC_Item &)@./cccc/cccc_prj.cc@145@definition@F????@LOC:5 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Project@add_userel@@(CCCC_Item &)@
+CCCC_MemExt@CCCC_Project@add_userel@@(CCCC_Item &)@./cccc/cccc_prj.cc@125@definition@F????@LOC:16 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Project@get_count@@(const char *)@
+CCCC_MemExt@CCCC_Project@get_count@@(const char *)@./cccc/cccc_prj.cc@308@definition@F????@LOC:7 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Project@name@@(int)@
+CCCC_MemExt@CCCC_Project@name@@(int)@./cccc/cccc_prj.cc@412@definition@T????@LOC:4 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Project@reindex@@()@
+CCCC_MemExt@CCCC_Project@reindex@@()@./cccc/cccc_prj.cc@151@definition@F????@LOC:130 COM:6 MVG:23@?@d@
+CCCC_Member@CCCC_Record@add_extent@@(CCCC_Item &)@
+CCCC_MemExt@CCCC_Record@add_extent@@(CCCC_Item &)@./cccc/cccc_rec.cc@63@definition@F????@LOC:10 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Record@get_active_project@@()@
+CCCC_MemExt@CCCC_Record@get_active_project@@()@./cccc/cccc_rec.cc@28@definition@F????@LOC:1 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Record@key@@()@
+CCCC_MemExt@CCCC_Record@key@@()@./cccc/cccc_rec.cc@76@definition@T????@LOC:1 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Record@merge_flags@@(string &)@
+CCCC_MemExt@CCCC_Record@merge_flags@@(string &)@./cccc/cccc_rec.cc@31@definition@F????@LOC:28 COM:3 MVG:3@?@d@
+CCCC_Member@CCCC_Record@name@@(int)@
+CCCC_MemExt@CCCC_Record@name@@(int)@./cccc/cccc_rec.cc@75@definition@T????@LOC:1 COM:1 MVG:1@?@d@
+CCCC_Member@CCCC_Record@set_active_project@@(CCCC_Project *)@
+CCCC_MemExt@CCCC_Record@set_active_project@@(CCCC_Project *)@./cccc/cccc_rec.cc@29@definition@F????@LOC:1 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Table@CCCC_Table@@()@
+CCCC_MemExt@CCCC_Table@CCCC_Table@@()@./cccc/cccc_tbl.cc@30@definition@F????@LOC:5 COM:18 MVG:0@?@d@
+CCCC_Member@CCCC_Table@find@@(string)@
+CCCC_MemExt@CCCC_Table@find@@(string)@./cccc/cccc_tbl.cc@66@definition@F????@LOC:10 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Table@find_or_insert@@(T *)@
+CCCC_MemExt@CCCC_Table@find_or_insert@@(T *)@./cccc/cccc_tbl.cc@78@definition@F????@LOC:13 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Table@first_item@@()@
+CCCC_MemExt@CCCC_Table@first_item@@()@./cccc/cccc_tbl.cc@118@definition@F????@LOC:5 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Table@get_count@@(const char *)@
+CCCC_MemExt@CCCC_Table@get_count@@(const char *)@./cccc/cccc_tbl.cc@52@definition@F????@LOC:11 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Table@next_item@@()@
+CCCC_MemExt@CCCC_Table@next_item@@()@./cccc/cccc_tbl.cc@124@definition@F????@LOC:10 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Table@records@@()@
+CCCC_MemExt@CCCC_Table@records@@()@./cccc/cccc_tbl.cc@135@definition@F????@LOC:4 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Table@remove@@(T *)@
+CCCC_MemExt@CCCC_Table@remove@@(T *)@./cccc/cccc_tbl.cc@93@definition@F????@LOC:11 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Table@reset_iterator@@()@
+CCCC_MemExt@CCCC_Table@reset_iterator@@()@./cccc/cccc_tbl.cc@113@definition@F????@LOC:4 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Table@sort@@()@
+CCCC_MemExt@CCCC_Table@sort@@()@./cccc/cccc_tbl.cc@105@definition@F????@LOC:7 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Table@~CCCC_Table@@()@
+CCCC_MemExt@CCCC_Table@~CCCC_Table@@()@./cccc/cccc_tbl.cc@36@definition@F????@LOC:9 COM:5 MVG:1@?@d@
+CCCC_Member@CCCC_UseRelationship@CCCC_UseRelationship@@(CCCC_Item &)@
+CCCC_MemExt@CCCC_UseRelationship@CCCC_UseRelationship@@(CCCC_Item &)@./cccc/cccc_use.cc@30@definition@F????@LOC:9 COM:19 MVG:0@?@d@
+CCCC_Member@CCCC_UseRelationship@FromFile@@(ifstream &)@
+CCCC_MemExt@CCCC_UseRelationship@FromFile@@(ifstream &)@./cccc/cccc_use.cc@206@definition@F????@LOC:62 COM:11 MVG:12@?@d@
+CCCC_Member@CCCC_UseRelationship@ToFile@@(ofstream &)@
+CCCC_MemExt@CCCC_UseRelationship@ToFile@@(ofstream &)@./cccc/cccc_use.cc@175@definition@F????@LOC:25 COM:0 MVG:3@?@d@
+CCCC_Member@CCCC_UseRelationship@add_extent@@(CCCC_Item &)@
+CCCC_MemExt@CCCC_UseRelationship@add_extent@@(CCCC_Item &)@./cccc/cccc_use.cc@68@definition@F????@LOC:38 COM:10 MVG:7@?@d@
+CCCC_Member@CCCC_UseRelationship@client_module_ptr@@(CCCC_Project *)@
+CCCC_MemExt@CCCC_UseRelationship@client_module_ptr@@(CCCC_Project *)@./cccc/cccc_use.cc@169@definition@F????@LOC:4 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_UseRelationship@get_count@@(const char *)@
+CCCC_MemExt@CCCC_UseRelationship@get_count@@(const char *)@./cccc/cccc_use.cc@122@definition@F????@LOC:33 COM:0 MVG:9@?@d@
+CCCC_Member@CCCC_UseRelationship@name@@(int)@
+CCCC_MemExt@CCCC_UseRelationship@name@@(int)@./cccc/cccc_use.cc@40@definition@T????@LOC:22 COM:0 MVG:5@?@d@
+CCCC_Member@CCCC_UseRelationship@supplier_module_ptr@@(CCCC_Project *)@
+CCCC_MemExt@CCCC_UseRelationship@supplier_module_ptr@@(CCCC_Project *)@./cccc/cccc_use.cc@164@definition@F????@LOC:4 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Xml_Stream@CCCC_Xml_Stream@@(const string &,const string &)@
+CCCC_MemExt@CCCC_Xml_Stream@CCCC_Xml_Stream@@(const string &,const string &)@./cccc/cccc_xml.cc@207@definition@FT???@LOC:13 COM:1 MVG:1@?@d@
+CCCC_Member@CCCC_Xml_Stream@GenerateReports@@(CCCC_Project *,int,const string &,const string &)@
+CCCC_MemExt@CCCC_Xml_Stream@GenerateReports@@(CCCC_Project *,int,const string &,const string &)@./cccc/cccc_xml.cc@147@definition@FT???@LOC:45 COM:4 MVG:9@?@d@
+CCCC_Member@CCCC_Xml_Stream@Module_Detail@@(CCCC_Module *)@
+CCCC_MemExt@CCCC_Xml_Stream@Module_Detail@@(CCCC_Module *)@./cccc/cccc_xml.cc@698@definition@FT???@LOC:22 COM:9 MVG:1@?@d@
+CCCC_Member@CCCC_Xml_Stream@Module_Summary@@(CCCC_Module *)@
+CCCC_MemExt@CCCC_Xml_Stream@Module_Summary@@(CCCC_Module *)@./cccc/cccc_xml.cc@784@definition@FT???@LOC:36 COM:3 MVG:0@?@d@
+CCCC_Member@CCCC_Xml_Stream@OO_Design@@()@
+CCCC_MemExt@CCCC_Xml_Stream@OO_Design@@()@./cccc/cccc_xml.cc@270@definition@FT???@LOC:28 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Xml_Stream@Other_Extents@@()@
+CCCC_MemExt@CCCC_Xml_Stream@Other_Extents@@()@./cccc/cccc_xml.cc@487@definition@FT???@LOC:17 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Xml_Stream@Procedural_Detail@@()@
+CCCC_MemExt@CCCC_Xml_Stream@Procedural_Detail@@()@./cccc/cccc_xml.cc@463@definition@FT???@LOC:21 COM:0 MVG:4@?@d@
+CCCC_Member@CCCC_Xml_Stream@Procedural_Detail@@(CCCC_Module *)@
+CCCC_MemExt@CCCC_Xml_Stream@Procedural_Detail@@(CCCC_Module *)@./cccc/cccc_xml.cc@734@definition@FT???@LOC:24 COM:9 MVG:1@?@d@
+CCCC_Member@CCCC_Xml_Stream@Procedural_Summary@@()@
+CCCC_MemExt@CCCC_Xml_Stream@Procedural_Summary@@()@./cccc/cccc_xml.cc@304@definition@FT???@LOC:30 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Xml_Stream@Project_Summary@@()@
+CCCC_MemExt@CCCC_Xml_Stream@Project_Summary@@()@./cccc/cccc_xml.cc@238@definition@FT???@LOC:28 COM:1 MVG:0@?@d@
+CCCC_Member@CCCC_Xml_Stream@Put_Extent_List@@(CCCC_Record &,bool)@
+CCCC_MemExt@CCCC_Xml_Stream@Put_Extent_List@@(CCCC_Record &,bool)@./cccc/cccc_xml.cc@592@definition@FT???@LOC:20 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Xml_Stream@Put_Extent_Node@@(const CCCC_Extent &,int,bool)@
+CCCC_MemExt@CCCC_Xml_Stream@Put_Extent_Node@@(const CCCC_Extent &,int,bool)@./cccc/cccc_xml.cc@580@definition@FT???@LOC:11 COM:0 MVG:1@?@d@
+CCCC_Member@CCCC_Xml_Stream@Put_Extent_URL@@(const CCCC_Extent &)@
+CCCC_MemExt@CCCC_Xml_Stream@Put_Extent_URL@@(const CCCC_Extent &)@./cccc/cccc_xml.cc@567@definition@FT???@LOC:12 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Xml_Stream@Put_Label_Node@@(string,string,int,string,string,CCCC_Record *)@
+CCCC_MemExt@CCCC_Xml_Stream@Put_Label_Node@@(string,string,int,string,string,CCCC_Record *)@./cccc/cccc_xml.cc@507@definition@FT???@LOC:19 COM:1 MVG:2@?@d@
+CCCC_Member@CCCC_Xml_Stream@Put_Metric_Node@@(string,const CCCC_Metric &)@
+CCCC_MemExt@CCCC_Xml_Stream@Put_Metric_Node@@(string,const CCCC_Metric &)@./cccc/cccc_xml.cc@544@definition@FT???@LOC:21 COM:0 MVG:4@?@d@
+CCCC_Member@CCCC_Xml_Stream@Put_Metric_Node@@(string,int,int,string)@
+CCCC_MemExt@CCCC_Xml_Stream@Put_Metric_Node@@(string,int,int,string)@./cccc/cccc_xml.cc@537@definition@FT???@LOC:6 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Xml_Stream@Put_Metric_Node@@(string,int,string)@
+CCCC_MemExt@CCCC_Xml_Stream@Put_Metric_Node@@(string,int,string)@./cccc/cccc_xml.cc@530@definition@FT???@LOC:6 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Xml_Stream@Put_Structural_Details_Node@@(CCCC_Module *,CCCC_Project *,int,UserelNameLevel)@
+CCCC_MemExt@CCCC_Xml_Stream@Put_Structural_Details_Node@@(CCCC_Module *,CCCC_Project *,int,UserelNameLevel)@./cccc/cccc_xml.cc@383@definition@FT???@LOC:52 COM:0 MVG:6@?@d@
+CCCC_Member@CCCC_Xml_Stream@Separate_Modules@@()@
+CCCC_MemExt@CCCC_Xml_Stream@Separate_Modules@@()@./cccc/cccc_xml.cc@643@definition@FT???@LOC:44 COM:2 MVG:2@?@d@
+CCCC_Member@CCCC_Xml_Stream@Source_Listing@@()@
+CCCC_MemExt@CCCC_Xml_Stream@Source_Listing@@()@./cccc/cccc_xml.cc@831@definition@FT???@LOC:3 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Xml_Stream@Structural_Detail@@()@
+CCCC_MemExt@CCCC_Xml_Stream@Structural_Detail@@()@./cccc/cccc_xml.cc@448@definition@FT???@LOC:14 COM:0 MVG:2@?@d@
+CCCC_Member@CCCC_Xml_Stream@Structural_Detail@@(CCCC_Module *)@
+CCCC_MemExt@CCCC_Xml_Stream@Structural_Detail@@(CCCC_Module *)@./cccc/cccc_xml.cc@775@definition@FT???@LOC:8 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Xml_Stream@Structural_Summary@@()@
+CCCC_MemExt@CCCC_Xml_Stream@Structural_Summary@@()@./cccc/cccc_xml.cc@340@definition@FT???@LOC:34 COM:2 MVG:2@?@d@
+CCCC_Member@CCCC_Xml_Stream@Timestamp@@()@
+CCCC_MemExt@CCCC_Xml_Stream@Timestamp@@()@./cccc/cccc_xml.cc@229@definition@FT???@LOC:8 COM:0 MVG:0@?@d@
+CCCC_Member@CCCC_Xml_Stream@~CCCC_Xml_Stream@@()@
+CCCC_MemExt@CCCC_Xml_Stream@~CCCC_Xml_Stream@@()@./cccc/cccc_xml.cc@223@definition@FT???@LOC:5 COM:0 MVG:0@?@d@
+CCCC_Member@Hugo@Hugo@@()@
+CCCC_MemExt@Hugo@Hugo@@()@./test/prn3.cc@159@declaration@FT??0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_Member@Hugo@~Hugo@@()@
+CCCC_MemExt@Hugo@~Hugo@@()@./test/prn3.cc@160@declaration@FT??0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_Member@Hugo_2@Hugo_2@@()@
+CCCC_MemExt@Hugo_2@Hugo_2@@()@./test/prn3.cc@137@declaration@FT??0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_Member@Hugo_2@~Hugo_2@@()@
+CCCC_MemExt@Hugo_2@~Hugo_2@@()@./test/prn3.cc@138@declaration@FT??0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_Member@InlFunc@InlFunc@@()@
+CCCC_MemExt@InlFunc@InlFunc@@()@./test/prn3.cc@50@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_Member@InlFunc@getFunc@@()@
+CCCC_MemExt@InlFunc@getFunc@@()@./test/prn3.cc@52@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_Member@InlFunc@~InlFunc@@()@
+CCCC_MemExt@InlFunc@~InlFunc@@()@./test/prn3.cc@51@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_Member@Main@AddFileArgument@@(const string &)@
+CCCC_MemExt@Main@AddFileArgument@@(const string &)@./cccc/ccccmain.cc@99@declaration@F????@LOC:1 COM:2 MVG:0@?@D@
+CCCC_MemExt@Main@AddFileArgument@@(const string &)@./cccc/ccccmain.cc@271@definition@F????@LOC:37 COM:17 MVG:4@?@d@
+CCCC_Member@Main@DescribeOutput@@()@
+CCCC_MemExt@Main@DescribeOutput@@()@./cccc/ccccmain.cc@114@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_MemExt@Main@DescribeOutput@@()@./cccc/ccccmain.cc@642@definition@F????@LOC:22 COM:2 MVG:3@?@d@
+CCCC_Member@Main@DumpDatabase@@()@
+CCCC_MemExt@Main@DumpDatabase@@()@./cccc/ccccmain.cc@110@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_MemExt@Main@DumpDatabase@@()@./cccc/ccccmain.cc@464@definition@F????@LOC:5 COM:0 MVG:1@?@d@
+CCCC_Member@Main@GenerateHtml@@()@
+CCCC_MemExt@Main@GenerateHtml@@()@./cccc/ccccmain.cc@112@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_MemExt@Main@GenerateHtml@@()@./cccc/ccccmain.cc@481@definition@F????@LOC:5 COM:0 MVG:0@?@d@
+CCCC_Member@Main@GenerateXml@@()@
+CCCC_MemExt@Main@GenerateXml@@()@./cccc/ccccmain.cc@113@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_MemExt@Main@GenerateXml@@()@./cccc/ccccmain.cc@489@definition@F????@LOC:5 COM:0 MVG:0@?@d@
+CCCC_Member@Main@HandleArgs@@(int,char **)@
+CCCC_MemExt@Main@HandleArgs@@(int,char **)@./cccc/ccccmain.cc@104@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_MemExt@Main@HandleArgs@@(int,char **)@./cccc/ccccmain.cc@129@definition@F????@LOC:114 COM:19 MVG:22@?@d@
+CCCC_Member@Main@HandleDebugOption@@(const string &)@
+CCCC_MemExt@Main@HandleDebugOption@@(const string &)@./cccc/ccccmain.cc@105@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_MemExt@Main@HandleDebugOption@@(const string &)@./cccc/ccccmain.cc@497@definition@F????@LOC:25 COM:7 MVG:7@?@d@
+CCCC_Member@Main@HandleReportOption@@(const string &)@
+CCCC_MemExt@Main@HandleReportOption@@(const string &)@./cccc/ccccmain.cc@106@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_MemExt@Main@HandleReportOption@@(const string &)@./cccc/ccccmain.cc@534@definition@F????@LOC:47 COM:5 MVG:14@?@d@
+CCCC_Member@Main@LoadDatabase@@()@
+CCCC_MemExt@Main@LoadDatabase@@()@./cccc/ccccmain.cc@111@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_MemExt@Main@LoadDatabase@@()@./cccc/ccccmain.cc@470@definition@F????@LOC:10 COM:0 MVG:2@?@d@
+CCCC_Member@Main@Main@@()@
+CCCC_MemExt@Main@Main@@()@./cccc/ccccmain.cc@103@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_MemExt@Main@Main@@()@./cccc/ccccmain.cc@122@definition@F????@LOC:6 COM:0 MVG:0@?@d@
+CCCC_Member@Main@ParseFiles@@()@
+CCCC_MemExt@Main@ParseFiles@@()@./cccc/ccccmain.cc@109@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_MemExt@Main@ParseFiles@@()@./cccc/ccccmain.cc@336@definition@F????@LOC:83 COM:24 MVG:10@?@d@
+CCCC_Member@Main@PrintCredits@@(ostream &)@
+CCCC_MemExt@Main@PrintCredits@@(ostream &)@./cccc/ccccmain.cc@107@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_MemExt@Main@PrintCredits@@(ostream &)@./cccc/ccccmain.cc@602@definition@F????@LOC:34 COM:5 MVG:1@?@d@
+CCCC_Member@Main@PrintUsage@@(ostream &)@
+CCCC_MemExt@Main@PrintUsage@@(ostream &)@./cccc/ccccmain.cc@108@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_MemExt@Main@PrintUsage@@(ostream &)@./cccc/ccccmain.cc@671@definition@F????@LOC:35 COM:4 MVG:1@?@d@
+CCCC_Member@Main@filesParsed@@()@
+CCCC_MemExt@Main@filesParsed@@()@./cccc/ccccmain.cc@115@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_MemExt@Main@filesParsed@@()@./cccc/ccccmain.cc@707@definition@F????@LOC:4 COM:0 MVG:1@?@d@
+CCCC_Member@Main@main@@(int,char **)@
+CCCC_MemExt@Main@main@@(int,char **)@./cccc/ccccmain.cc@117@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_Member@Metric_Treatment@Metric_Treatment@@(CCCC_Item &)@
+CCCC_MemExt@Metric_Treatment@Metric_Treatment@@(CCCC_Item &)@./cccc/cccc_met.cc@29@definition@F????@LOC:23 COM:2 MVG:7@?@d@
+CCCC_Member@MyClass@someFunction@@(char)@
+CCCC_MemExt@MyClass@someFunction@@(char)@./test/prn5.cc@6@definition@F????@LOC:3 COM:4 MVG:0@?@d@
+CCCC_Member@MyClass@someFunction@@(const string &)@
+CCCC_MemExt@MyClass@someFunction@@(const string &)@./test/prn4.cc@9@definition@F????@LOC:3 COM:6 MVG:0@?@d@
+CCCC_Member@ParseStore@ParseStore@@(const string &)@
+CCCC_MemExt@ParseStore@ParseStore@@(const string &)@./cccc/cccc_utl.cc@234@definition@F????@LOC:9 COM:5 MVG:0@?@d@
+CCCC_Member@ParseStore@endOfLine@@(int)@
+CCCC_MemExt@ParseStore@endOfLine@@(int)@./cccc/cccc_utl.cc@587@definition@FT???@LOC:16 COM:5 MVG:2@?@d@
+CCCC_Member@ParseStore@filename@@()@
+CCCC_MemExt@ParseStore@filename@@()@./cccc/cccc_utl.cc@281@definition@F????@LOC:4 COM:0 MVG:1@?@d@
+CCCC_Member@ParseStore@get_flag@@(PSFlag)@
+CCCC_MemExt@ParseStore@get_flag@@(PSFlag)@./cccc/cccc_utl.cc@261@definition@T????@LOC:3 COM:0 MVG:1@?@d@
+CCCC_Member@ParseStore@get_visibility@@()@
+CCCC_MemExt@ParseStore@get_visibility@@()@./cccc/cccc_utl.cc@276@definition@F????@LOC:4 COM:0 MVG:1@?@d@
+CCCC_Member@ParseStore@insert_extent@@(CCCC_Item &,int,int,const string &,const string &,UseType,bool)@
+CCCC_MemExt@ParseStore@insert_extent@@(CCCC_Item &,int,int,const string &,const string &,UseType,bool)@./cccc/cccc_utl.cc@287@definition@F????@LOC:46 COM:8 MVG:4@?@d@
+CCCC_Member@ParseStore@record_function_extent@@(int,int,const string &,const string &,const string &,const string &,const string &,Visibility,UseType)@
+CCCC_MemExt@ParseStore@record_function_extent@@(int,int,const string &,const string &,const string &,const string &,const string &,Visibility,UseType)@./cccc/cccc_utl.cc@368@definition@F????@LOC:28 COM:5 MVG:2@?@d@
+CCCC_Member@ParseStore@record_module_extent@@(int,int,const string &,const string &,const string &,UseType)@
+CCCC_MemExt@ParseStore@record_module_extent@@(int,int,const string &,const string &,const string &,UseType)@./cccc/cccc_utl.cc@349@definition@F????@LOC:16 COM:2 MVG:1@?@d@
+CCCC_Member@ParseStore@record_other_extent@@(int,int,const string &)@
+CCCC_MemExt@ParseStore@record_other_extent@@(int,int,const string &)@./cccc/cccc_utl.cc@452@definition@F????@LOC:7 COM:0 MVG:0@?@d@
+CCCC_Member@ParseStore@record_userel_extent@@(int,int,const string &,const string &,const string &,const string &,Visibility,UseType)@
+CCCC_MemExt@ParseStore@record_userel_extent@@(int,int,const string &,const string &,const string &,const string &,Visibility,UseType)@./cccc/cccc_utl.cc@405@definition@F????@LOC:31 COM:12 MVG:4@?@d@
+CCCC_Member@ParseStore@set_flag@@(PSFlag,int)@
+CCCC_MemExt@ParseStore@set_flag@@(PSFlag,int)@./cccc/cccc_utl.cc@265@definition@F????@LOC:3 COM:0 MVG:0@?@d@
+CCCC_Member@ParseStore@set_flag@@(Visibility)@
+CCCC_MemExt@ParseStore@set_flag@@(Visibility)@./cccc/cccc_utl.cc@269@definition@F????@LOC:6 COM:0 MVG:0@?@d@
+CCCC_Member@ParseStore@~ParseStore@@()@
+CCCC_MemExt@ParseStore@~ParseStore@@()@./cccc/cccc_utl.cc@249@definition@F????@LOC:7 COM:4 MVG:1@?@d@
+CCCC_Member@ParseUtility@ParseUtility@@(ANTLRParser *)@
+CCCC_MemExt@ParseUtility@ParseUtility@@(ANTLRParser *)@./cccc/cccc_utl.cc@183@definition@F????@LOC:8 COM:5 MVG:0@?@d@
+CCCC_Member@ParseUtility@lookahead_text@@(int)@
+CCCC_MemExt@ParseUtility@lookahead_text@@(int)@./cccc/cccc_utl.cc@99@definition@F????@LOC:15 COM:0 MVG:3@?@d@
+CCCC_Member@ParseUtility@resynchronize@@(int,SetWordType *,ANTLRTokenPtr &)@
+CCCC_MemExt@ParseUtility@resynchronize@@(int,SetWordType *,ANTLRTokenPtr &)@./cccc/cccc_utl.cc@115@definition@F????@LOC:48 COM:13 MVG:5@?@d@
+CCCC_Member@ParseUtility@scopeCombine@@(const string &,const string &)@
+CCCC_MemExt@ParseUtility@scopeCombine@@(const string &,const string &)@./cccc/cccc_utl.cc@207@definition@F????@LOC:18 COM:10 MVG:4@?@d@
+CCCC_Member@ParseUtility@syn@@(_ANTLRTokenPtr,ANTLRChar *,SetWordType *,ANTLRTokenType,int)@
+CCCC_MemExt@ParseUtility@syn@@(_ANTLRTokenPtr,ANTLRChar *,SetWordType *,ANTLRTokenType,int)@./cccc/cccc_utl.cc@549@definition@FT???@LOC:29 COM:4 MVG:2@?@d@
+CCCC_Member@ParseUtility@tracein@@(const char *,int,ANTLRAbstractToken *)@
+CCCC_MemExt@ParseUtility@tracein@@(const char *,int,ANTLRAbstractToken *)@./cccc/cccc_utl.cc@501@definition@FT???@LOC:14 COM:2 MVG:1@?@d@
+CCCC_Member@ParseUtility@traceout@@(const char *,int,ANTLRAbstractToken *)@
+CCCC_MemExt@ParseUtility@traceout@@(const char *,int,ANTLRAbstractToken *)@./cccc/cccc_utl.cc@520@definition@FT???@LOC:26 COM:2 MVG:3@?@d@
+CCCC_Member@ParseUtility@~ParseUtility@@()@
+CCCC_MemExt@ParseUtility@~ParseUtility@@()@./cccc/cccc_utl.cc@199@definition@F????@LOC:4 COM:0 MVG:0@?@d@
+CCCC_Member@Source_Anchor@Emit_HREF@@(ofstream &)@
+CCCC_MemExt@Source_Anchor@Emit_HREF@@(ofstream &)@./cccc/cccc_htm.cc@1447@definition@FT???@LOC:7 COM:0 MVG:0@?@d@
+CCCC_Member@Source_Anchor@Emit_NAME@@(ofstream &)@
+CCCC_MemExt@Source_Anchor@Emit_NAME@@(ofstream &)@./cccc/cccc_htm.cc@1456@definition@FT???@LOC:10 COM:0 MVG:0@?@d@
+CCCC_Member@Source_Anchor@Emit_SPACE@@(ofstream &)@
+CCCC_MemExt@Source_Anchor@Emit_SPACE@@(ofstream &)@./cccc/cccc_htm.cc@1467@definition@FT???@LOC:5 COM:0 MVG:0@?@d@
+CCCC_Member@Source_Anchor@key@@()@
+CCCC_MemExt@Source_Anchor@key@@()@./cccc/cccc_htm.cc@1439@definition@TT???@LOC:6 COM:0 MVG:1@?@d@
+CCCC_Member@Test1@method1@@()@
+CCCC_MemExt@Test1@method1@@()@./test/test1.cc@27@definition@F???0@LOC:13 COM:1 MVG:4@0@d@
+CCCC_Member@Test1@method2@@()@
+CCCC_MemExt@Test1@method2@@()@./test/test1.cc@48@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_MemExt@Test1@method2@@()@./test/test1.cc@55@definition@F????@LOC:6 COM:1 MVG:1@?@d@
+CCCC_Member@Test2a@doSomething@@(Test2b)@
+CCCC_MemExt@Test2a@doSomething@@(Test2b)@./test/test2.cc@23@declaration@F???2@LOC:1 COM:0 MVG:0@2@D@
+CCCC_Member@Test2e@Test2e@@(const Test2a &)@
+CCCC_MemExt@Test2e@Test2e@@(const Test2a &)@./test/test2.cc@39@definition@F????@LOC:3 COM:0 MVG:0@?@d@
+CCCC_Member@Test3a@Test3a@@()@
+CCCC_MemExt@Test3a@Test3a@@()@./test/test3.cc@13@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_Member@Test3a@do_something@@()@
+CCCC_MemExt@Test3a@do_something@@()@./test/test3.cc@26@declaration@F???2@LOC:1 COM:0 MVG:0@2@D@
+CCCC_Member@Test3a@do_something_else@@()@
+CCCC_MemExt@Test3a@do_something_else@@()@./test/test3.cc@27@declaration@F???2@LOC:1 COM:0 MVG:0@2@D@
+CCCC_Member@Test3a@operator !=@@()@
+CCCC_MemExt@Test3a@operator !=@@()@./test/test3.cc@18@declaration@F???1@LOC:1 COM:0 MVG:0@1@D@
+CCCC_Member@Test3a@operator ()@@()@
+CCCC_MemExt@Test3a@operator ()@@()@./test/test3.cc@22@declaration@F???2@LOC:1 COM:0 MVG:0@2@D@
+CCCC_Member@Test3a@operator *@@()@
+CCCC_MemExt@Test3a@operator *@@()@./test/test3.cc@24@declaration@F???2@LOC:1 COM:0 MVG:0@2@D@
+CCCC_Member@Test3a@operator .*@@()@
+CCCC_MemExt@Test3a@operator .*@@()@./test/test3.cc@25@declaration@F???2@LOC:1 COM:0 MVG:0@2@D@
+CCCC_Member@Test3a@operator ==@@()@
+CCCC_MemExt@Test3a@operator ==@@()@./test/test3.cc@21@declaration@F???2@LOC:1 COM:0 MVG:0@2@D@
+CCCC_Member@Test3a@operator []@@()@
+CCCC_MemExt@Test3a@operator []@@()@./test/test3.cc@23@declaration@F???2@LOC:1 COM:0 MVG:0@2@D@
+CCCC_Member@Test3a@operator delete[]@@()@
+CCCC_MemExt@Test3a@operator delete[]@@()@./test/test3.cc@16@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_Member@Test3a@operator int@@()@
+CCCC_MemExt@Test3a@operator int@@()@./test/test3.cc@19@declaration@F???1@LOC:1 COM:0 MVG:0@1@D@
+CCCC_Member@Test3a@operator new@@()@
+CCCC_MemExt@Test3a@operator new@@()@./test/test3.cc@15@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_Member@Test3a@~Test3a@@()@
+CCCC_MemExt@Test3a@~Test3a@@()@./test/test3.cc@14@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_Member@Test3b5@Test3b5@@(Test3b3)@
+CCCC_MemExt@Test3b5@Test3b5@@(Test3b3)@./test/test3.cc@39@declaration@F???0@LOC:1 COM:0 MVG:0@0@D@
+CCCC_Member@anonymous@DisposeOfImportRecord@@(CCCC_Extent *,int)@
+CCCC_MemExt@anonymous@DisposeOfImportRecord@@(CCCC_Extent *,int)@./cccc/cccc_db.cc@127@declaration@FT???@LOC:1 COM:0 MVG:0@?@D@
+CCCC_Member@anonymous@DisposeOfImportRecord@@(CCCC_Member *,int)@
+CCCC_MemExt@anonymous@DisposeOfImportRecord@@(CCCC_Member *,int)@./cccc/cccc_db.cc@119@declaration@FT???@LOC:1 COM:0 MVG:0@?@D@
+CCCC_Member@anonymous@DisposeOfImportRecord@@(CCCC_Module *,int)@
+CCCC_MemExt@anonymous@DisposeOfImportRecord@@(CCCC_Module *,int)@./cccc/cccc_db.cc@115@declaration@FT???@LOC:1 COM:0 MVG:0@?@D@
+CCCC_Member@anonymous@DisposeOfImportRecord@@(CCCC_UseRelationship *,int)@
+CCCC_MemExt@anonymous@DisposeOfImportRecord@@(CCCC_UseRelationship *,int)@./cccc/cccc_db.cc@123@declaration@FT???@LOC:1 COM:0 MVG:0@?@D@
+CCCC_Member@anonymous@DisposeOfImportRecord@@(T *,int)@
+CCCC_MemExt@anonymous@DisposeOfImportRecord@@(T *,int)@./cccc/cccc_db.cc@66@definition@FT???@LOC:17 COM:8 MVG:3@?@d@
+CCCC_Member@anonymous@PeekAtNextLinePrefix@@(ifstream &,string)@
+CCCC_MemExt@anonymous@PeekAtNextLinePrefix@@(ifstream &,string)@./cccc/cccc_db.cc@51@definition@FT???@LOC:13 COM:6 MVG:2@?@d@
+CCCC_Member@anonymous@Resolve_Fields@@(string &,string &)@
+CCCC_MemExt@anonymous@Resolve_Fields@@(string &,string &)@./cccc/cccc_db.cc@105@definition@FT???@LOC:7 COM:11 MVG:1@?@d@
+CCCC_Member@anonymous@add_dialect_keyword@@(CCCC_Item &)@
+CCCC_MemExt@anonymous@add_dialect_keyword@@(CCCC_Item &)@./cccc/cccc_opt.cc@75@definition@FT???@LOC:14 COM:0 MVG:3@?@d@
+CCCC_Member@anonymous@add_file_extension@@(CCCC_Item &)@
+CCCC_MemExt@anonymous@add_file_extension@@(CCCC_Item &)@./cccc/cccc_opt.cc@43@definition@FT???@LOC:12 COM:0 MVG:2@?@d@
+CCCC_Member@anonymous@add_treatment@@(CCCC_Item &)@
+CCCC_MemExt@anonymous@add_treatment@@(CCCC_Item &)@./cccc/cccc_opt.cc@56@definition@FT???@LOC:17 COM:0 MVG:1@?@d@
+CCCC_Member@anonymous@alfPrintSpaces@@(int,FILE *)@
+CCCC_MemExt@anonymous@alfPrintSpaces@@(int,FILE *)@./test/prn2.cc@15@definition@F????@LOC:6 COM:8 MVG:1@?@d@
+CCCC_Member@anonymous@b@@(void)@
+CCCC_MemExt@anonymous@b@@(void)@./test/prn11.cc@10@declaration@F????@LOC:1 COM:0 MVG:0@?@D@
+CCCC_Member@anonymous@extract_enum@@(istream &,int &)@
+CCCC_MemExt@anonymous@extract_enum@@(istream &,int &)@./cccc/cccc_utl.cc@62@definition@F????@LOC:5 COM:0 MVG:0@?@d@
+CCCC_Member@anonymous@getInt@@()@
+CCCC_MemExt@anonymous@getInt@@()@./test/prn3.cc@76@declaration@FT??2@LOC:1 COM:6 MVG:0@2@D@
+CCCC_Member@anonymous@insert_enum@@(ostream &,int)@
+CCCC_MemExt@anonymous@insert_enum@@(ostream &,int)@./cccc/cccc_utl.cc@57@definition@F????@LOC:4 COM:1 MVG:0@?@d@
+CCCC_Member@anonymous@ltrim@@(string)@
+CCCC_MemExt@anonymous@ltrim@@(string)@./cccc/cccc_xml.cc@136@definition@FT???@LOC:10 COM:0 MVG:3@?@d@
+CCCC_Member@anonymous@main@@()@
+CCCC_MemExt@anonymous@main@@()@./cccc/cccc_htm.cc@1891@definition@FT???@LOC:6 COM:0 MVG:1@?@d@
+CCCC_MemExt@anonymous@main@@()@./cccc/cccc_xml.cc@852@definition@FT???@LOC:6 COM:0 MVG:1@?@d@
+CCCC_Member@anonymous@main@@(int,char **)@
+CCCC_MemExt@anonymous@main@@(int,char **)@./cccc/ccccmain.cc@712@definition@F????@LOC:24 COM:3 MVG:2@?@d@
+CCCC_Member@anonymous@operator <<@@(CCCC_Html_Stream &,const CCCC_Metric &)@
+CCCC_MemExt@anonymous@operator <<@@(CCCC_Html_Stream &,const CCCC_Metric &)@./cccc/cccc_htm.cc@991@definition@FT???@LOC:9 COM:4 MVG:1@?@d@
+CCCC_Member@anonymous@operator <<@@(CCCC_Html_Stream &,const string &)@
+CCCC_MemExt@anonymous@operator <<@@(CCCC_Html_Stream &,const string &)@./cccc/cccc_htm.cc@985@definition@FT???@LOC:2 COM:0 MVG:0@?@d@
+CCCC_Member@anonymous@operator <<@@(CCCC_Xml_Stream &,const CCCC_Metric &)@
+CCCC_MemExt@anonymous@operator <<@@(CCCC_Xml_Stream &,const CCCC_Metric &)@./cccc/cccc_xml.cc@635@definition@FT???@LOC:5 COM:2 MVG:1@?@d@
+CCCC_Member@anonymous@operator <<@@(CCCC_Xml_Stream &,const string &)@
+CCCC_MemExt@anonymous@operator <<@@(CCCC_Xml_Stream &,const string &)@./cccc/cccc_xml.cc@615@definition@FT???@LOC:15 COM:5 MVG:6@?@d@
+CCCC_Member@anonymous@operator <<@@(ostream &,ANTLRToken &)@
+CCCC_MemExt@anonymous@operator <<@@(ostream &,ANTLRToken &)@./cccc/cccc_tok.cc@166@definition@F????@LOC:9 COM:3 MVG:1@?@d@
+CCCC_Member@anonymous@operator <<@@(ostream &,AugmentedBool)@
+CCCC_MemExt@anonymous@operator <<@@(ostream &,AugmentedBool)@./cccc/cccc_utl.cc@69@definition@F????@LOC:4 COM:0 MVG:1@?@d@
+CCCC_Member@anonymous@operator <<@@(ostream &,UseType)@
+CCCC_MemExt@anonymous@operator <<@@(ostream &,UseType)@./cccc/cccc_utl.cc@89@definition@F????@LOC:4 COM:0 MVG:1@?@d@
+CCCC_Member@anonymous@operator <<@@(ostream &,Visibility)@
+CCCC_MemExt@anonymous@operator <<@@(ostream &,Visibility)@./cccc/cccc_utl.cc@79@definition@F????@LOC:4 COM:0 MVG:1@?@d@
+CCCC_Member@anonymous@operator >>@@(istream &,AugmentedBool &)@
+CCCC_MemExt@anonymous@operator >>@@(istream &,AugmentedBool &)@./cccc/cccc_utl.cc@74@definition@F????@LOC:4 COM:0 MVG:1@?@d@
+CCCC_Member@anonymous@operator >>@@(istream &,UseType &)@
+CCCC_MemExt@anonymous@operator >>@@(istream &,UseType &)@./cccc/cccc_utl.cc@94@definition@F????@LOC:4 COM:0 MVG:1@?@d@
+CCCC_Member@anonymous@operator >>@@(istream &,Visibility &)@
+CCCC_MemExt@anonymous@operator >>@@(istream &,Visibility &)@./cccc/cccc_utl.cc@84@definition@F????@LOC:4 COM:0 MVG:1@?@d@
+CCCC_Member@anonymous@operator delete@@(void *)@
+CCCC_MemExt@anonymous@operator delete@@(void *)@./cccc/cccc_new.cc@64@definition@F????@LOC:9 COM:0 MVG:1@?@d@
+CCCC_Member@anonymous@operator delete[]@@(void *)@
+CCCC_MemExt@anonymous@operator delete[]@@(void *)@./cccc/cccc_new.cc@75@definition@F????@LOC:9 COM:0 MVG:1@?@d@
+CCCC_Member@anonymous@operator new@@(size_t)@
+CCCC_MemExt@anonymous@operator new@@(size_t)@./cccc/cccc_new.cc@46@definition@F????@LOC:7 COM:0 MVG:1@?@d@
+CCCC_Member@anonymous@operator new[]@@(size_t)@
+CCCC_MemExt@anonymous@operator new[]@@(size_t)@./cccc/cccc_new.cc@55@definition@F????@LOC:7 COM:0 MVG:1@?@d@
+CCCC_Member@anonymous@pad_string@@(int,string,string)@
+CCCC_MemExt@anonymous@pad_string@@(int,string,string)@./cccc/cccc_htm.cc@1426@definition@FT???@LOC:11 COM:0 MVG:2@?@d@
+CCCC_MemExt@anonymous@pad_string@@(int,string,string)@./cccc/cccc_xml.cc@836@definition@FT???@LOC:11 COM:0 MVG:2@?@d@
+CCCC_Member@anonymous@rectrace@@(const char *,const char *,int,ANTLRAbstractToken *)@
+CCCC_MemExt@anonymous@rectrace@@(const char *,const char *,int,ANTLRAbstractToken *)@./cccc/cccc_utl.cc@481@definition@FT???@LOC:19 COM:0 MVG:1@?@d@
+CCCC_Member@anonymous@setup_anchor_data@@()@
+CCCC_MemExt@anonymous@setup_anchor_data@@()@./cccc/cccc_htm.cc@1331@definition@FT???@LOC:15 COM:0 MVG:1@?@d@
+CCCC_Member@anonymous@str@@(...)@
+CCCC_MemExt@anonymous@str@@(...)@./cccc/cccc_new.cc@43@declaration@F????@LOC:1 COM:0 MVG:0@?@D@
+CCCC_Member@anonymous@toktrace@@(ANTLRAbstractToken *)@
+CCCC_MemExt@anonymous@toktrace@@(ANTLRAbstractToken *)@./cccc/cccc_utl.cc@460@definition@FT???@LOC:17 COM:1 MVG:1@?@d@
+CCCC_Member@anonymous@yadda@@(STATIC *,ssim_func_port_handle)@
+CCCC_MemExt@anonymous@yadda@@(STATIC *,ssim_func_port_handle)@./test/prn1.cc@1@definition@F????@LOC:5 COM:1 MVG:2@?@d@
+CCCC_UseRel@ANTLRChar@ANTLRToken@
+CCCC_UseExt@ANTLRChar@ANTLRToken@./cccc/cccc_tok.cc@77@pass by reference@F????@*@?@p@
+CCCC_UseExt@ANTLRChar@ANTLRToken@./cccc/cccc_tok.cc@104@pass by reference@F????@*@?@p@
+CCCC_UseRel@ANTLRTokenType@ANTLRToken@
+CCCC_UseExt@ANTLRTokenType@ANTLRToken@./cccc/cccc_tok.cc@77@pass by value@F????@*@?@P@
+CCCC_UseExt@ANTLRTokenType@ANTLRToken@./cccc/cccc_tok.cc@104@pass by value@F????@*@?@P@
+CCCC_UseRel@A@B@
+CCCC_UseExt@A@B@./test/prn9.cc@11@inheritance@????0@*@0@I@
+CCCC_UseRel@A@C@
+CCCC_UseExt@A@C@./test/prn9.cc@15@inheritance@????0@*@0@I@
+CCCC_UseRel@CCCC_Item@CCCC_Extent@
+CCCC_UseExt@CCCC_Item@CCCC_Extent@./cccc/cccc_ext.cc@37@pass by reference@F????@*@?@p@
+CCCC_UseExt@CCCC_Item@CCCC_Extent@./cccc/cccc_ext.cc@64@pass by reference@F????@*@?@p@
+CCCC_UseExt@CCCC_Item@CCCC_Extent@./cccc/cccc_ext.cc@84@pass by reference@F????@*@?@p@
+CCCC_UseRel@CCCC_Extent@CCCC_Html_Stream@
+CCCC_UseExt@CCCC_Extent@CCCC_Html_Stream@./cccc/cccc_htm.cc@945@pass by reference@FT???@*@?@p@
+CCCC_UseExt@CCCC_Extent@CCCC_Html_Stream@./cccc/cccc_htm.cc@961@pass by reference@FT???@*@?@p@
+CCCC_UseRel@CCCC_Metric@CCCC_Html_Stream@
+CCCC_UseExt@CCCC_Metric@CCCC_Html_Stream@./cccc/cccc_htm.cc@932@pass by reference@FT???@*@?@p@
+CCCC_UseRel@CCCC_Module@CCCC_Html_Stream@
+CCCC_UseExt@CCCC_Module@CCCC_Html_Stream@./cccc/cccc_htm.cc@693@pass by reference@FT???@*@?@p@
+CCCC_UseExt@CCCC_Module@CCCC_Html_Stream@./cccc/cccc_htm.cc@1082@pass by reference@FT???@*@?@p@
+CCCC_UseExt@CCCC_Module@CCCC_Html_Stream@./cccc/cccc_htm.cc@1123@pass by reference@FT???@*@?@p@
+CCCC_UseExt@CCCC_Module@CCCC_Html_Stream@./cccc/cccc_htm.cc@1177@pass by reference@FT???@*@?@p@
+CCCC_UseExt@CCCC_Module@CCCC_Html_Stream@./cccc/cccc_htm.cc@1183@pass by reference@FT???@*@?@p@
+CCCC_UseRel@CCCC_Project@CCCC_Html_Stream@
+CCCC_UseExt@CCCC_Project@CCCC_Html_Stream@./cccc/cccc_htm.cc@147@pass by reference@?T???@*@?@p@
+CCCC_UseExt@CCCC_Project@CCCC_Html_Stream@./cccc/cccc_htm.cc@693@pass by reference@FT???@*@?@p@
+CCCC_UseRel@CCCC_Record@CCCC_Html_Stream@
+CCCC_UseExt@CCCC_Record@CCCC_Html_Stream@./cccc/cccc_htm.cc@881@pass by reference@FT???@*@?@p@
+CCCC_UseExt@CCCC_Record@CCCC_Html_Stream@./cccc/cccc_htm.cc@970@pass by reference@FT???@*@?@p@
+CCCC_UseRel@UserelNameLevel@CCCC_Html_Stream@
+CCCC_UseExt@UserelNameLevel@CCCC_Html_Stream@./cccc/cccc_htm.cc@693@pass by value@FT???@*@?@P@
+CCCC_UseRel@bool@CCCC_Html_Stream@
+CCCC_UseExt@bool@CCCC_Html_Stream@./cccc/cccc_htm.cc@248@pass by value@FT???@*@?@P@
+CCCC_UseExt@bool@CCCC_Html_Stream@./cccc/cccc_htm.cc@961@pass by value@FT???@*@?@P@
+CCCC_UseExt@bool@CCCC_Html_Stream@./cccc/cccc_htm.cc@970@pass by value@FT???@*@?@P@
+CCCC_UseRel@string@CCCC_Html_Stream@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@149@pass by reference@?T???@*@?@p@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@150@pass by reference@?T???@*@?@p@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@372@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@373@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@859@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@859@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@860@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@871@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@879@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@880@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@880@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@919@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@926@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@1164@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@1165@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@1166@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@1309@pass by reference@FT???@*@?@p@
+CCCC_UseExt@string@CCCC_Html_Stream@./cccc/cccc_htm.cc@1309@pass by reference@FT???@*@?@p@
+CCCC_UseRel@ifstream@CCCC_Item@
+CCCC_UseExt@ifstream@CCCC_Item@./cccc/cccc_itm.cc@119@pass by reference@F????@*@?@p@
+CCCC_UseRel@ofstream@CCCC_Item@
+CCCC_UseExt@ofstream@CCCC_Item@./cccc/cccc_itm.cc@112@pass by reference@F????@*@?@p@
+CCCC_UseRel@string@CCCC_Item@
+CCCC_UseExt@string@CCCC_Item@./cccc/cccc_itm.cc@10@pass by reference@?????@*@?@p@
+CCCC_UseExt@string@CCCC_Item@./cccc/cccc_itm.cc@17@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@CCCC_Item@./cccc/cccc_itm.cc@31@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@CCCC_Item@./cccc/cccc_itm.cc@47@pass by reference@F????@*@?@p@
+CCCC_UseRel@ifstream@CCCC_Member@
+CCCC_UseExt@ifstream@CCCC_Member@./cccc/cccc_mem.cc@148@pass by reference@T????@*@?@p@
+CCCC_UseRel@ofstream@CCCC_Member@
+CCCC_UseExt@ofstream@CCCC_Member@./cccc/cccc_mem.cc@64@pass by reference@F????@*@?@p@
+CCCC_UseRel@ifstream@CCCC_Module@
+CCCC_UseExt@ifstream@CCCC_Module@./cccc/cccc_mod.cc@237@pass by reference@F????@*@?@p@
+CCCC_UseRel@ofstream@CCCC_Module@
+CCCC_UseExt@ofstream@CCCC_Module@./cccc/cccc_mod.cc@207@pass by reference@F????@*@?@p@
+CCCC_UseRel@CCCC_Item@CCCC_Options@
+CCCC_UseExt@CCCC_Item@CCCC_Options@./cccc/cccc_opt.cc@90@pass by reference@FT???@*@?@p@
+CCCC_UseRel@string@CCCC_Options@
+CCCC_UseExt@string@CCCC_Options@./cccc/cccc_opt.cc@118@pass by reference@FT???@*@?@p@
+CCCC_UseExt@string@CCCC_Options@./cccc/cccc_opt.cc@164@pass by reference@FT???@*@?@p@
+CCCC_UseExt@string@CCCC_Options@./cccc/cccc_opt.cc@220@pass by reference@FT???@*@?@p@
+CCCC_UseExt@string@CCCC_Options@./cccc/cccc_opt.cc@253@pass by reference@FT???@*@?@p@
+CCCC_UseExt@string@CCCC_Options@./cccc/cccc_opt.cc@264@pass by reference@FT???@*@?@p@
+CCCC_UseExt@string@CCCC_Options@./cccc/cccc_opt.cc@264@pass by reference@FT???@*@?@p@
+CCCC_UseRel@CCCC_Item@CCCC_Project@
+CCCC_UseExt@CCCC_Item@CCCC_Project@./cccc/cccc_prj.cc@56@pass by reference@F????@*@?@p@
+CCCC_UseExt@CCCC_Item@CCCC_Project@./cccc/cccc_prj.cc@88@pass by reference@F????@*@?@p@
+CCCC_UseExt@CCCC_Item@CCCC_Project@./cccc/cccc_prj.cc@125@pass by reference@F????@*@?@p@
+CCCC_UseExt@CCCC_Item@CCCC_Project@./cccc/cccc_prj.cc@145@pass by reference@F????@*@?@p@
+CCCC_UseRel@ifstream@CCCC_Project@
+CCCC_UseExt@ifstream@CCCC_Project@./cccc/cccc_prj.cc@364@pass by reference@F????@*@?@p@
+CCCC_UseRel@ofstream@CCCC_Project@
+CCCC_UseExt@ofstream@CCCC_Project@./cccc/cccc_prj.cc@317@pass by reference@F????@*@?@p@
+CCCC_UseRel@string@CCCC_Project@
+CCCC_UseExt@string@CCCC_Project@./cccc/cccc_prj.cc@33@pass by reference@?????@*@?@p@
+CCCC_UseRel@CCCC_Item@CCCC_Record@
+CCCC_UseExt@CCCC_Item@CCCC_Record@./cccc/cccc_rec.cc@63@pass by reference@F????@*@?@p@
+CCCC_UseRel@CCCC_Project@CCCC_Record@
+CCCC_UseExt@CCCC_Project@CCCC_Record@./cccc/cccc_rec.cc@29@pass by reference@F????@*@?@p@
+CCCC_UseRel@string@CCCC_Record@
+CCCC_UseExt@string@CCCC_Record@./cccc/cccc_rec.cc@31@pass by reference@F????@*@?@p@
+CCCC_UseRel@T@CCCC_Table@
+CCCC_UseExt@T@CCCC_Table@./cccc/cccc_tbl.cc@78@pass by reference@F????@*@?@p@
+CCCC_UseExt@T@CCCC_Table@./cccc/cccc_tbl.cc@93@pass by reference@F????@*@?@p@
+CCCC_UseRel@string@CCCC_Table@
+CCCC_UseExt@string@CCCC_Table@./cccc/cccc_tbl.cc@66@pass by value@F????@*@?@P@
+CCCC_UseRel@CCCC_Item@CCCC_UseRelationship@
+CCCC_UseExt@CCCC_Item@CCCC_UseRelationship@./cccc/cccc_use.cc@30@pass by reference@?????@*@?@p@
+CCCC_UseExt@CCCC_Item@CCCC_UseRelationship@./cccc/cccc_use.cc@68@pass by reference@T????@*@?@p@
+CCCC_UseRel@CCCC_Project@CCCC_UseRelationship@
+CCCC_UseExt@CCCC_Project@CCCC_UseRelationship@./cccc/cccc_use.cc@164@pass by reference@F????@*@?@p@
+CCCC_UseExt@CCCC_Project@CCCC_UseRelationship@./cccc/cccc_use.cc@169@pass by reference@F????@*@?@p@
+CCCC_UseRel@ifstream@CCCC_UseRelationship@
+CCCC_UseExt@ifstream@CCCC_UseRelationship@./cccc/cccc_use.cc@206@pass by reference@F????@*@?@p@
+CCCC_UseRel@ofstream@CCCC_UseRelationship@
+CCCC_UseExt@ofstream@CCCC_UseRelationship@./cccc/cccc_use.cc@175@pass by reference@F????@*@?@p@
+CCCC_UseRel@CCCC_Extent@CCCC_Xml_Stream@
+CCCC_UseExt@CCCC_Extent@CCCC_Xml_Stream@./cccc/cccc_xml.cc@567@pass by reference@FT???@*@?@p@
+CCCC_UseExt@CCCC_Extent@CCCC_Xml_Stream@./cccc/cccc_xml.cc@580@pass by reference@FT???@*@?@p@
+CCCC_UseRel@CCCC_Metric@CCCC_Xml_Stream@
+CCCC_UseExt@CCCC_Metric@CCCC_Xml_Stream@./cccc/cccc_xml.cc@544@pass by reference@FT???@*@?@p@
+CCCC_UseRel@CCCC_Module@CCCC_Xml_Stream@
+CCCC_UseExt@CCCC_Module@CCCC_Xml_Stream@./cccc/cccc_xml.cc@384@pass by reference@FT???@*@?@p@
+CCCC_UseExt@CCCC_Module@CCCC_Xml_Stream@./cccc/cccc_xml.cc@698@pass by reference@FT???@*@?@p@
+CCCC_UseExt@CCCC_Module@CCCC_Xml_Stream@./cccc/cccc_xml.cc@734@pass by reference@FT???@*@?@p@
+CCCC_UseExt@CCCC_Module@CCCC_Xml_Stream@./cccc/cccc_xml.cc@775@pass by reference@FT???@*@?@p@
+CCCC_UseExt@CCCC_Module@CCCC_Xml_Stream@./cccc/cccc_xml.cc@784@pass by reference@FT???@*@?@p@
+CCCC_UseRel@CCCC_Project@CCCC_Xml_Stream@
+CCCC_UseExt@CCCC_Project@CCCC_Xml_Stream@./cccc/cccc_xml.cc@147@pass by reference@FT???@*@?@p@
+CCCC_UseExt@CCCC_Project@CCCC_Xml_Stream@./cccc/cccc_xml.cc@384@pass by reference@FT???@*@?@p@
+CCCC_UseRel@CCCC_Record@CCCC_Xml_Stream@
+CCCC_UseExt@CCCC_Record@CCCC_Xml_Stream@./cccc/cccc_xml.cc@509@pass by reference@FT???@*@?@p@
+CCCC_UseExt@CCCC_Record@CCCC_Xml_Stream@./cccc/cccc_xml.cc@592@pass by reference@FT???@*@?@p@
+CCCC_UseRel@UserelNameLevel@CCCC_Xml_Stream@
+CCCC_UseExt@UserelNameLevel@CCCC_Xml_Stream@./cccc/cccc_xml.cc@384@pass by value@FT???@*@?@P@
+CCCC_UseRel@bool@CCCC_Xml_Stream@
+CCCC_UseExt@bool@CCCC_Xml_Stream@./cccc/cccc_xml.cc@580@pass by value@FT???@*@?@P@
+CCCC_UseExt@bool@CCCC_Xml_Stream@./cccc/cccc_xml.cc@592@pass by value@FT???@*@?@P@
+CCCC_UseRel@string@CCCC_Xml_Stream@
+CCCC_UseExt@string@CCCC_Xml_Stream@./cccc/cccc_xml.cc@149@pass by reference@FT???@*@?@p@
+CCCC_UseExt@string@CCCC_Xml_Stream@./cccc/cccc_xml.cc@150@pass by reference@FT???@*@?@p@
+CCCC_UseExt@string@CCCC_Xml_Stream@./cccc/cccc_xml.cc@207@pass by reference@FT???@*@?@p@
+CCCC_UseExt@string@CCCC_Xml_Stream@./cccc/cccc_xml.cc@207@pass by reference@FT???@*@?@p@
+CCCC_UseExt@string@CCCC_Xml_Stream@./cccc/cccc_xml.cc@507@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Xml_Stream@./cccc/cccc_xml.cc@507@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Xml_Stream@./cccc/cccc_xml.cc@508@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Xml_Stream@./cccc/cccc_xml.cc@508@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Xml_Stream@./cccc/cccc_xml.cc@530@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Xml_Stream@./cccc/cccc_xml.cc@531@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Xml_Stream@./cccc/cccc_xml.cc@537@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Xml_Stream@./cccc/cccc_xml.cc@538@pass by value@FT???@*@?@P@
+CCCC_UseExt@string@CCCC_Xml_Stream@./cccc/cccc_xml.cc@544@pass by value@FT???@*@?@P@
+CCCC_UseRel@list@Main@
+CCCC_UseExt@list@Main@./cccc/ccccmain.cc@95@has by value@?????@LOC:0 COM:0 MVG:0@?@H@
+CCCC_UseRel@ostream@Main@
+CCCC_UseExt@ostream@Main@./cccc/ccccmain.cc@107@pass by reference@F???0@*@0@p@
+CCCC_UseExt@ostream@Main@./cccc/ccccmain.cc@108@pass by reference@F???0@*@0@p@
+CCCC_UseExt@ostream@Main@./cccc/ccccmain.cc@602@pass by reference@F????@*@?@p@
+CCCC_UseExt@ostream@Main@./cccc/ccccmain.cc@671@pass by reference@F????@*@?@p@
+CCCC_UseRel@string@Main@
+CCCC_UseExt@string@Main@./cccc/ccccmain.cc@79@has by value@????2@LOC:0 COM:0 MVG:0@2@H@
+CCCC_UseExt@string@Main@./cccc/ccccmain.cc@80@has by value@????2@LOC:0 COM:0 MVG:0@2@H@
+CCCC_UseExt@string@Main@./cccc/ccccmain.cc@81@has by value@????2@LOC:0 COM:0 MVG:0@2@H@
+CCCC_UseExt@string@Main@./cccc/ccccmain.cc@82@has by value@????2@LOC:0 COM:0 MVG:0@2@H@
+CCCC_UseExt@string@Main@./cccc/ccccmain.cc@83@has by value@????2@LOC:0 COM:0 MVG:0@2@H@
+CCCC_UseExt@string@Main@./cccc/ccccmain.cc@84@has by value@????2@LOC:0 COM:0 MVG:0@2@H@
+CCCC_UseExt@string@Main@./cccc/ccccmain.cc@85@has by value@????2@LOC:0 COM:0 MVG:0@2@H@
+CCCC_UseExt@string@Main@./cccc/ccccmain.cc@86@has by value@????2@LOC:0 COM:0 MVG:0@2@H@
+CCCC_UseExt@string@Main@./cccc/ccccmain.cc@99@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@Main@./cccc/ccccmain.cc@105@pass by reference@F???0@*@0@p@
+CCCC_UseExt@string@Main@./cccc/ccccmain.cc@106@pass by reference@F???0@*@0@p@
+CCCC_UseExt@string@Main@./cccc/ccccmain.cc@271@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@Main@./cccc/ccccmain.cc@497@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@Main@./cccc/ccccmain.cc@534@pass by reference@F????@*@?@p@
+CCCC_UseRel@CCCC_Item@Metric_Treatment@
+CCCC_UseExt@CCCC_Item@Metric_Treatment@./cccc/cccc_met.cc@29@pass by reference@?????@*@?@p@
+CCCC_UseRel@string@MyClass@
+CCCC_UseExt@string@MyClass@./test/prn4.cc@9@pass by reference@?????@*@?@p@
+CCCC_UseRel@CCCC_Item@ParseStore@
+CCCC_UseExt@CCCC_Item@ParseStore@./cccc/cccc_utl.cc@288@pass by reference@F????@*@?@p@
+CCCC_UseRel@PSFlag@ParseStore@
+CCCC_UseExt@PSFlag@ParseStore@./cccc/cccc_utl.cc@261@pass by value@F????@*@?@P@
+CCCC_UseExt@PSFlag@ParseStore@./cccc/cccc_utl.cc@265@pass by value@T????@*@?@P@
+CCCC_UseRel@UseType@ParseStore@
+CCCC_UseExt@UseType@ParseStore@./cccc/cccc_utl.cc@290@pass by value@F????@*@?@P@
+CCCC_UseExt@UseType@ParseStore@./cccc/cccc_utl.cc@353@pass by value@F????@*@?@P@
+CCCC_UseExt@UseType@ParseStore@./cccc/cccc_utl.cc@375@pass by value@F????@*@?@P@
+CCCC_UseExt@UseType@ParseStore@./cccc/cccc_utl.cc@411@pass by value@F????@*@?@P@
+CCCC_UseRel@Visibility@ParseStore@
+CCCC_UseExt@Visibility@ParseStore@./cccc/cccc_utl.cc@269@pass by value@F????@*@?@P@
+CCCC_UseExt@Visibility@ParseStore@./cccc/cccc_utl.cc@374@pass by value@F????@*@?@P@
+CCCC_UseExt@Visibility@ParseStore@./cccc/cccc_utl.cc@410@pass by value@F????@*@?@P@
+CCCC_UseRel@bool@ParseStore@
+CCCC_UseExt@bool@ParseStore@./cccc/cccc_utl.cc@290@pass by value@F????@*@?@P@
+CCCC_UseRel@string@ParseStore@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@234@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@289@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@289@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@350@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@351@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@352@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@369@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@370@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@371@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@372@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@373@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@406@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@407@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@408@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@409@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseStore@./cccc/cccc_utl.cc@453@pass by reference@F????@*@?@p@
+CCCC_UseRel@ANTLRAbstractToken@ParseUtility@
+CCCC_UseExt@ANTLRAbstractToken@ParseUtility@./cccc/cccc_utl.cc@503@pass by reference@FT???@*@?@p@
+CCCC_UseExt@ANTLRAbstractToken@ParseUtility@./cccc/cccc_utl.cc@522@pass by reference@FT???@*@?@p@
+CCCC_UseRel@ANTLRChar@ParseUtility@
+CCCC_UseExt@ANTLRChar@ParseUtility@./cccc/cccc_utl.cc@550@pass by reference@FT???@*@?@p@
+CCCC_UseRel@ANTLRParser@ParseUtility@
+CCCC_UseExt@ANTLRParser@ParseUtility@./cccc/cccc_utl.cc@183@pass by reference@F????@*@?@p@
+CCCC_UseRel@ANTLRTokenPtr@ParseUtility@
+CCCC_UseExt@ANTLRTokenPtr@ParseUtility@./cccc/cccc_utl.cc@117@pass by reference@F????@*@?@p@
+CCCC_UseRel@ANTLRTokenType@ParseUtility@
+CCCC_UseExt@ANTLRTokenType@ParseUtility@./cccc/cccc_utl.cc@551@pass by value@FT???@*@?@P@
+CCCC_UseRel@SetWordType@ParseUtility@
+CCCC_UseExt@SetWordType@ParseUtility@./cccc/cccc_utl.cc@116@pass by reference@F????@*@?@p@
+CCCC_UseExt@SetWordType@ParseUtility@./cccc/cccc_utl.cc@550@pass by reference@FT???@*@?@p@
+CCCC_UseRel@_ANTLRTokenPtr@ParseUtility@
+CCCC_UseExt@_ANTLRTokenPtr@ParseUtility@./cccc/cccc_utl.cc@550@pass by value@FT???@*@?@P@
+CCCC_UseRel@string@ParseUtility@
+CCCC_UseExt@string@ParseUtility@./cccc/cccc_utl.cc@207@pass by reference@F????@*@?@p@
+CCCC_UseExt@string@ParseUtility@./cccc/cccc_utl.cc@207@pass by reference@F????@*@?@p@
+CCCC_UseRel@ofstream@Source_Anchor@
+CCCC_UseExt@ofstream@Source_Anchor@./cccc/cccc_htm.cc@1447@pass by reference@TT???@*@?@p@
+CCCC_UseExt@ofstream@Source_Anchor@./cccc/cccc_htm.cc@1456@pass by reference@FT???@*@?@p@
+CCCC_UseExt@ofstream@Source_Anchor@./cccc/cccc_htm.cc@1467@pass by reference@FT???@*@?@p@
+CCCC_UseRel@Test2b@Test2a@
+CCCC_UseExt@Test2b@Test2a@./test/test2.cc@21@has by reference@????0@LOC:0 COM:0 MVG:0@0@h@
+CCCC_UseExt@Test2b@Test2a@./test/test2.cc@23@pass by value@F???2@*@2@P@
+CCCC_UseRel@Test2e@Test2a@
+CCCC_UseExt@Test2e@Test2a@./test/test2.cc@18@inheritance@????0@*@0@I@
+CCCC_UseRel@Test2d@Test2c@
+CCCC_UseExt@Test2d@Test2c@./test/test2.cc@29@has by value@F???1@LOC:0 COM:0 MVG:0@1@H@
+CCCC_UseRel@Test2a@Test2e@
+CCCC_UseExt@Test2a@Test2e@./test/test2.cc@39@pass by reference@F????@*@?@p@
+CCCC_UseRel@Test3b0@Test3b1@
+CCCC_UseExt@Test3b0@Test3b1@./test/test3.cc@33@inheritance@F???0@*@0@I@
+CCCC_UseRel@Test3b1@Test3b2@
+CCCC_UseExt@Test3b1@Test3b2@./test/test3.cc@34@inheritance@F???0@*@0@I@
+CCCC_UseRel@Test3b0@Test3b4@
+CCCC_UseExt@Test3b0@Test3b4@./test/test3.cc@35@inheritance@F???0@*@0@I@
+CCCC_UseRel@Test3b2@Test3b4@
+CCCC_UseExt@Test3b2@Test3b4@./test/test3.cc@35@inheritance@F???0@*@0@I@
+CCCC_UseRel@Test3b3@Test3b4@
+CCCC_UseExt@Test3b3@Test3b4@./test/test3.cc@35@inheritance@F???0@*@0@I@
+CCCC_UseRel@Test3b0@Test3b5@
+CCCC_UseExt@Test3b0@Test3b5@./test/test3.cc@41@has by value@F???2@LOC:0 COM:0 MVG:0@2@H@
+CCCC_UseRel@Test3b3@Test3b5@
+CCCC_UseExt@Test3b3@Test3b5@./test/test3.cc@39@pass by value@F???0@*@0@P@
+CCCC_RejExt@./cccc/cccc_itm.cc@1@<file scope items>@F????@LOC:0 COM:0 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_tpl.cc@1@<file scope items>@????2@LOC:1 COM:1 MVG:0@2@r@
+CCCC_RejExt@./cccc/cccc_mod.cc@1@<file scope items>@F????@LOC:1 COM:1 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_new.cc@1@<file scope items>@F????@LOC:6 COM:22 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_use.cc@1@<file scope items>@F????@LOC:1 COM:1 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_met.cc@1@<file scope items>@T????@LOC:29 COM:19 MVG:0@?@r@
+CCCC_RejExt@./cccc/ccccmain.cc@1@<file scope items>@F????@LOC:8 COM:10 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_tbl.cc@1@<file scope items>@F????@LOC:5 COM:1 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_htm.cc@1@<file scope items>@FT???@LOC:382 COM:27 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_prj.cc@1@<file scope items>@T????@LOC:1 COM:1 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_rec.cc@1@<file scope items>@T????@LOC:2 COM:21 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_ext.cc@1@<file scope items>@F????@LOC:2 COM:21 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_opt.cc@1@<file scope items>@FT???@LOC:85 COM:74 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_mem.cc@1@<file scope items>@F????@LOC:1 COM:1 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_utl.cc@1@<file scope items>@FT???@LOC:14 COM:23 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_xml.cc@1@<file scope items>@FT???@LOC:83 COM:25 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_tok.cc@1@<file scope items>@F????@LOC:6 COM:24 MVG:0@?@r@
+CCCC_RejExt@./cccc/cccc_db.cc@1@<file scope items>@FT???@LOC:16 COM:22 MVG:0@?@r@
+CCCC_RejExt@./test/test4.cc@1@<file scope items>@????2@LOC:1 COM:0 MVG:0@2@r@
+CCCC_RejExt@./test/prn10.cc@1@<file scope items>@?T??2@LOC:3 COM:5 MVG:0@2@r@
+CCCC_RejExt@./test/prn11.cc@1@<file scope items>@F????@LOC:4 COM:6 MVG:0@?@r@
+CCCC_RejExt@./test/prn6.cc@1@<file scope items>@?????@LOC:17 COM:0 MVG:0@?@r@
+CCCC_RejExt@./test/prn9.cc@1@<file scope items>@????0@LOC:1 COM:1 MVG:0@0@r@
+CCCC_RejExt@./test/test3.cc@1@<file scope items>@F???2@LOC:1 COM:0 MVG:0@2@r@
+CCCC_RejExt@./test/prn5.cc@1@<file scope items>@F????@LOC:1 COM:1 MVG:0@?@r@
+CCCC_RejExt@./test/prn1.cc@1@<file scope items>@F????@LOC:0 COM:0 MVG:0@?@r@
+CCCC_RejExt@./test/prn3.cc@1@<file scope items>@FT??2@LOC:4 COM:22 MVG:0@2@r@
+CCCC_RejExt@./test/test1.cc@1@<file scope items>@F????@LOC:1 COM:0 MVG:0@?@r@
+CCCC_RejExt@./test/prn2.cc@1@<file scope items>@F????@LOC:1 COM:1 MVG:0@?@r@
+CCCC_RejExt@./test/test2.cc@1@<file scope items>@F????@LOC:1 COM:0 MVG:0@?@r@
+CCCC_RejExt@./test/prn4.cc@1@<file scope items>@F????@LOC:1 COM:1 MVG:0@?@r@
+CCCC_RejExt@./test/prn12.cc@1@<file scope items>@F???2@LOC:1 COM:1 MVG:0@2@r@

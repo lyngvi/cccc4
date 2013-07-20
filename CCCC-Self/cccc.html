@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Report on software metrics</title>
+  </head>
+  <style type="text/css">
+      body {
+          font-family: sans-serif;
+          margin-left: 8pt;
+          margin-right: 8pt;
+          width: 98%;
+          position: relative;
+      }
+      p {
+          margin-top: 8pt;
+      }
+      table {
+           width: 100%;
+           border-top: 1px solid black;
+           border-spacing: 0;
+           border-collapse: collapse;
+           border-left: 1px solid black;
+      }
+      table.toc th {
+           background-color: aqua;
+           padding: 3pt;
+      }
+      table.toc td {
+           padding: 2pt;
+      }
+      table td, table th {
+           border-bottom: 1px solid black;
+           border-right: 1px solid black;
+      }
+      td.toc_entry_name {
+           text-align: left;
+      }
+      table.summary th {
+           background-color: aqua;
+      }
+      table.summary td {
+           font-family: monospace;
+      }
+      *.code {
+           font-family: monospace;
+           white-space: pre;
+      }
+      span.metric_low {
+      }
+      span.metric_medium {
+           font-style: italic;
+      }
+      span.metric_high {
+           font-weight: bold;
+      }
+      td.metric_low, td.metric_medium, td.metric_high {
+           text-align: right;
+      }
+      td.metric_low {
+      }
+      td.metric_medium {
+          background-color: yellow;
+      }
+      td.metric_high {
+          background-color: red;
+      }
+      a {
+          text-decoration: none;
+      }
+      a:visited {
+          color: purple;
+      }
+      a:hover {
+          color: red;
+      }
+      *.label {
+          background-color: #eee;
+      }
+      li p {
+          margin-top: 2pt;
+          margin-bottom: 4pt;
+          padding-left: 10pt;
+      }
+      div.tooltip {
+          display: none;
+          position: fixed;
+          border: 1px solid black;
+          background-color: #ddffdd;
+          width: 300px;
+          z-index: 2;
+          font-size: smaller;
+          padding: 5pt;
+          text-align: justify;
+      }
+      div.stickyHead {
+         display: none;
+         width: 98%;
+         position: fixed;
+         top: 0pt;
+         z-index: 1;
+      }
+      div.ttname {
+          font-weight: bold;
+          margin-bottom: 5pt;
+      }
+      #debug {
+          border: 1px solid black;
+          background-color: red;
+          position: fixed;
+          top: 100pt;
+          padding: 8pt;
+          width: 80%;
+          display: none;
+      }
+  </style>
+  <body>
+  <div id="debug"></div>
+  <script type="text/javascript">
+     window.g_Glossary = {}; // list of objects with name, description attributes for use in tooltips
+
+     function GetText(elem) {
+         var ret = "";
+         for (var cld = elem.firstChild; cld != null; cld = cld.nextSibling) {
+             switch (cld.nodeType) {
+             case 1: ret += GetText(cld); break;
+             case 3: ret += cld.nodeValue; break;
+             }
+         }
+         return ret.trim();
+     }
+     function GetElementPosition(elem) {
+         // return element position in page coords
+         var ret = { left: 0, top: 0 };
+         while (elem != null && elem != undefined) {
+             ret.left += elem.offsetLeft;
+             ret.top  += elem.offsetTop;
+             elem = elem.offsetParent;
+         }
+         return ret;
+     }
+     function SetupTooltip(elem, description) {
+         var div = document.createElement("div");
+         div.className = "tooltip";
+         div.innerHTML = "<div class=\"ttname\">" + description.name + "</div>\n<div class=\"ttdescr\">" + description.description + "</div>";
+         document.body.appendChild(div);
+         elem.addEventListener("mousemove", function(ev) {
+             div.style.display = "block";
+             div.style.top = (ev.clientY + 5) + "px";
+             div.style.left = (ev.clientX - 305) + "px";
+         });
+         elem.addEventListener("mouseout", function(ev) {
+             div.style.display = "none";
+         });
+     }
+     // Expect a th here. Assign a callback to it on-click such that it sorts all the rows in the table body
+     // according to the th.cellIndex'th element of the row.
+     function GetParentWithName(elem, name) {
+         var ret = elem;
+         while (ret != null && ret.nodeName.match(name) == null)
+             ret = ret.parentNode;
+         return ret;
+     }
+     function GetTableRows(elemInTable) {
+         var ret = [];
+         var tbody = GetParentWithName(elemInTable, /table/i);
+         // Sticky head support: Use original table if present
+         if (tbody.Original)
+             tbody = tbody.Original;
+         for (tbody = tbody.firstChild; tbody != null && tbody.nodeName.match(/tbody/i) == null; tbody = tbody.nextSibling);
+         for (var tr = tbody.firstChild; tr != null; tr = tr.nextSibling) {
+             if (tr.nodeName.match(/tr/i))
+                 ret.push(tr);
+         }
+         return { 'tbody': tbody, 'rows': ret };
+     }
+     function GetColumn(elem) {
+         /* FIXME I think you can still foil this with some pathlogical layouts - like staggering
+            multi-row squares in a stair-step pattern. Not intending to do that today, though. */
+         var column = 0, rowInd = 1;
+         for (var cell = elem.previousSibling; cell != null; cell = cell.previousSibling) {
+             if (cell.nodeType == 1)
+                 column += cell.colSpan;
+         }
+         for (var row = elem.parentNode.previousSibling; row != null; row = row.previousSibling) {
+             if (row.nodeType != 1)
+                 continue;
+             var colInd = 0, insertCols = 0;
+             for (var cell = row.firstChild; cell != null && colInd <= column; cell = cell.nextSibling) {
+                 if (cell.nodeType != 1)
+                     continue;
+                 if (cell != elem && cell.rowSpan - rowInd > 0 /* this element contributes to this column offset */)
+                     insertCols += cell.colSpan;
+                 colInd += cell.colSpan;
+             }
+             column += insertCols;
+             rowInd += 1;
+         }
+         return column;
+     }
+     function SetupSortColumn(elem) {
+         elem.firstChild.addEventListener("click", function(ev) {
+             var z = GetTableRows(elem);
+             var column = GetColumn(elem);
+             elem.SortDescending = (elem.SortDescending ? false : true);
+             z.rows.sort(function(a, b) {
+                 var ret = 0;
+                 var a_text = GetText(a.cells[column]);
+                 var b_text = GetText(b.cells[column]);
+                 var a_num = parseFloat(a_text);
+                 var b_num = parseFloat(b_text);
+                 if (isNaN(a_num) && isNaN(b_num))
+                     ret = (a_text > b_text) ?  1 :
+                           (a_text < b_text) ? -1 :
+                           (a_text >= b_text) ? 1 :
+                           -1;
+                 else if (isNaN(a_num))
+                     ret = -1;
+                 else if (isNaN(b_num))
+                     ret =  1;
+                 else
+                     ret = a_num - b_num;
+                 // tiebreakers
+                 return elem.SortDescending ? -ret : ret;
+             });
+             for (var k = 0; k < z.rows.length; ++k)
+                 z.tbody.removeChild(z.rows[k]);
+             for (var k = 0; k < z.rows.length; ++k)
+                 z.tbody.appendChild(z.rows[k]);
+         });
+     }
+     function GetScrollOffset() {
+         return (!isNaN(window.pageYOffset)) ? { 'X': window.pageXOffset,       'Y': window.pageYOffset } :
+                                               { 'X': document.body.scrollLeft, 'Y': document.body.scrollTop };
+     }
+     function StickyHead(table, thead) {
+         if (table.Original)
+             return;
+         var dupl = thead.cloneNode(true);
+         var div = document.createElement("div");
+         div.className = "stickyHead";
+         var newTable = table.cloneNode(false);
+         newTable.Original = table;
+         div.appendChild(newTable);
+         newTable.appendChild(dupl);
+         document.body.appendChild(div);
+         window.addEventListener("scroll", function() {
+             var headPos = GetElementPosition(thead);
+             var bodyPos = GetElementPosition(table);
+             var scrolly = GetScrollOffset().Y;
+             if (headPos.top < scrolly && bodyPos.top + table.scrollHeight > scrolly) {
+                 div.style.display = "block";
+             } else {
+                 div.style.display = "none";
+             }
+         });
+     }
+     function EnhanceTable(table) {
+         var headerNodes = table.getElementsByTagName("th");
+         for(var k = 0; k < headerNodes.length; ++k) {
+             var th = headerNodes[k];
+             var possibleAbbr = GetText(th);
+             if (th.className.indexOf("sortable") != -1)
+                 SetupSortColumn(th, th);
+             if (possibleAbbr in window.g_Glossary)
+                 SetupTooltip(th, window.g_Glossary[possibleAbbr]);
+         }
+         headerNodes = table.getElementsByTagName("thead");
+         for (var k = 0; k < headerNodes.length; ++k) {
+             var thead = headerNodes[k];
+             StickyHead(table, thead);
+         }
+     }
+
+     window.addEventListener("load", function() {
+         var tables = document.getElementsByTagName("table");
+         for (var k = 0; k < tables.length; ++k) {
+             var table = tables[k];
+             if (table.className.indexOf("summary") != -1)
+                 EnhanceTable(table);
+         }
+     });
+  </script>
+<script type="text/javascript">  window.g_Glossary['NOM'] = {  name: 'Number of modules',   description: 'Number of non-trivial modules identified by the analyser.  Non-trivial modules include all classes, and any other module for which member functions are identified.' };
+  window.g_Glossary['LOC'] = {  name: 'Lines of Code',   description: 'Number of non-blank, non-comment lines of source code counted by the analyser.' };
+  window.g_Glossary['COM'] = {  name: 'Lines of Comments',   description: 'Number of lines of comment identified by the analyser' };
+  window.g_Glossary['MVG'] = {  name: 'McCabe\'s Cyclomatic Complexity',   description: 'A measure of the decision complexity of the functions which make up the program.The strict definition of this measure is that it is the number of linearly independent routes through a directed acyclic graph which maps the flow of control of a subprogram.  The analyser counts this by recording the number of distinct decision outcomes contained within each function, which yields a good approximation to the formally defined version of the measure.' };
+  window.g_Glossary['L_C'] = {  name: 'Lines of code per line of comment',   description: 'Indicates density of comments with respect to textual size of program' };
+  window.g_Glossary['M_C'] = {  name: 'Cyclomatic Complexity per line of comment',   description: 'Indicates density of comments with respect to logical complexity of program' };
+  window.g_Glossary['IF4'] = {  name: 'Information Flow measure',   description: 'Measure of information flow between modules suggested by Henry and Kafura. The analyser makes an approximate count of this by counting inter-module couplings identified in the module interfaces.' };
+  window.g_Glossary['LOCpM'] = {  name: 'Lines of Code per Method',   description: 'The average number of lines of code per method. High LoC count may indicate poor functional isolation. Note that this measure may be weighted low by large numbers of small accessor methods.' };
+  window.g_Glossary['MLOCpM'] = {  name: 'Max Lines of Code per Method',   description: 'The largest number of lines of code in a single method. High LoC count may indicate poor functional isolation.' };
+  window.g_Glossary['WMC1'] = {  name: 'Weighted methods per class (all)',   description: 'The sum of a weighting function over the functions of the module. WMC1 uses the nominal weight of 1 for each function, and hence measures the number of functions.' };
+  window.g_Glossary['WMCv'] = {  name: 'Weighted methods per class (visible)',   description: 'The sum of a weighting function over the functions of the module. WMCv uses a weighting function which is 1 for functions accessible to other modules, 0 for private functions.' };
+  window.g_Glossary['DIT'] = {  name: 'Depth of inheritance tree',   description: 'The length of the longest path of inheritance ending at the current module.  The deeper the inheritance tree for a module, the harder it may be to predict its behaviour.  On the other hand, increasing depth gives the potential of greater reuse by the current module of behaviour defined for ancestor classes.' };
+  window.g_Glossary['NOC'] = {  name: 'Number of children',   description: 'The number of modules which inherit directly from the current module.  Moderate values of this measure indicate scope for reuse, however high values may indicate an inappropriate abstraction in the design.' };
+  window.g_Glossary['CBO'] = {  name: 'Coupling between objects',   description: 'The number of other modules which are coupled to the current module either as a client or a supplier. Excessive coupling indicates weakness of module encapsulation and may inhibit reuse.' };
+  window.g_Glossary['Fan-in'] = {  name: 'Fan-in',   description: 'The number of other modules which pass information into the current module.' };
+  window.g_Glossary['Fan-out'] = {  name: 'Fan-out',   description: 'The number of other modules into which the current module passes information' };
+  window.g_Glossary['IF4'] = {  name: 'Information Flow measure',   description: 'A composite measure of structural complexity, calculated as the square of the product of the fan-in and fan-out of a single module.  Proposed by Henry and Kafura.' };
+</script>
+<table class="toc">
+<tr><th colspan="2">
+CCCC Software Metrics Report
+<br /> generated Sat Jul 20 16:42:24 2013
+
+</tr>
+<tr>
+<td class="toc_entry_name" style="width: 20%;"><a href="#projsum">Project Summary</a></th><td>Summary table of high level measures summed over all files processed in the current run.
+</tr>
+<tr>
+<td class="toc_entry_name" style="width: 20%;"><a href="#procsum">Procedural Metrics Summary</a></th><td>Table of procedural measures (i.e. lines of code, lines of comment, McCabe's cyclomatic complexity summed over each module.
+</tr>
+<tr>
+<td class="toc_entry_name" style="width: 20%;"><a href="#oodesign">Object Oriented Design</a></th><td>Table of four of the 6 metrics proposed by Chidamber and Kemerer in their various papers on 'a metrics suite for object oriented design'.
+</tr>
+<tr>
+<td class="toc_entry_name" style="width: 20%;"><a href="#structsum">Structural Metrics Summary</a></th><td>Structural metrics based on the relationships of each module with others.  Includes fan-out (i.e. number of other modules the current module uses), fan-in (number of other modules which use the current module), and the Information Flow measure suggested by Henry and Kafura, which combines these to give a measure of coupling for the module.
+</tr>
+<tr>
+<td class="toc_entry_name" style="width: 20%;"><a href="#other">Other Extents</a></th><td>Lexical counts for parts of submitted source files which the analyser was unable to assign to a module. Each record in this table relates to either a part of the code which triggered a parse failure, or to the residual lexical counts relating to parts of a file not associated with a specific module.
+</tr>
+<tr>
+<td class="toc_entry_name" style="width: 20%;"><a href="#infocccc">About CCCC</a></th><td>A description of the CCCC program.
+</tr>
+</tr></table>
+<a name="projsum"></a><h1>Project Summary</h1>
+<p>This table shows measures over the project as a whole.</p>
+<ul class="Project_Summary">
+<li>NOM = Number of modules<p>Number of non-trivial modules identified by the analyser.  Non-trivial modules include all classes, and any other module for which member functions are identified.</p>
+</li>
+<li>LOC = Lines of Code<p>Number of non-blank, non-comment lines of source code counted by the analyser.</p>
+</li>
+<li>COM = Lines of Comments<p>Number of lines of comment identified by the analyser</p>
+</li>
+<li>MVG = McCabe's Cyclomatic Complexity<p>A measure of the decision complexity of the functions which make up the program.The strict definition of this measure is that it is the number of linearly independent routes through a directed acyclic graph which maps the flow of control of a subprogram.  The analyser counts this by recording the number of distinct decision outcomes contained within each function, which yields a good approximation to the formally defined version of the measure.</p>
+</li>
+<li>L_C = Lines of code per line of comment<p>Indicates density of comments with respect to textual size of program</p>
+</li>
+<li>M_C = Cyclomatic Complexity per line of comment<p>Indicates density of comments with respect to logical complexity of program</p>
+</li>
+<li>IF4 = Information Flow measure<p>Measure of information flow between modules suggested by Henry and Kafura. The analyser makes an approximate count of this by counting inter-module couplings identified in the module interfaces.</p>
+</li>
+<li>LOCpM = Lines of Code per Method<p>The average number of lines of code per method. High LoC count may indicate poor functional isolation. Note that this measure may be weighted low by large numbers of small accessor methods.</p>
+</li>
+<li>MLOCpM = Max Lines of Code per Method<p>The largest number of lines of code in a single method. High LoC count may indicate poor functional isolation.</p>
+</li>
+</ul>
+<p>Two variants on the information flow measure IF4 are also presented, one (IF4v) calculated using only relationships in the visible part of the module interface, and the other (IF4c) calculated using only those relationships which imply that changes to the client must be recompiled of the supplier's definition changes.</p>
+
+<table class="summary"><thead>
+<tr>
+<th class="header_cell sortable" style="width: 55%;"><div>Metric</div></th>
+<th class="header_cell sortable" style="width: 15%;"><div>Tag</div></th>
+<th class="header_cell sortable" style="width: 15%;"><div>Overall</div></th>
+<th class="header_cell sortable" style="width: 15%;"><div>Per Module</div></th>
+</tr>
+</thead>
+<tr>
+<td class="label">Number of modules</td><td class="label">NOM</td><td class="metric_low"><span class="metric_low">    60</span></td><td>&nbsp;</td></tr>
+<tr>
+<td class="label">Lines of Code</td><td class="label">LOC</td><td class="metric_low"><span class="metric_low">  5249</span></td><td class="metric_low"><span class="metric_low">87.483</span></td></tr>
+<tr>
+<td class="label">McCabe's Cyclomatic Number</td><td class="label">MVG</td><td class="metric_low"><span class="metric_low">   598</span></td><td class="metric_low"><span class="metric_low"> 9.967</span></td></tr>
+<tr>
+<td class="label">Lines of Comment</td><td class="label">COM</td><td class="metric_low"><span class="metric_low">  1026</span></td><td class="metric_low"><span class="metric_low">17.100</span></td></tr>
+<tr>
+<td class="label">LOC/COM</td><td class="label">L_C</td><td class="metric_low"><span class="metric_low"> 5.116</span></td><td></td></tr>
+<tr>
+<td class="label">MVG/COM</td><td class="label">M_C</td><td class="metric_low"><span class="metric_low"> 0.583</span></td><td></td></tr>
+<tr>
+<td class="label">Information Flow measure (inclusive)</td><td class="label">IF4</td><td class="metric_low"><span class="metric_low">   760</span></td><td class="metric_low"><span class="metric_low">  12.667</span></td></tr>
+<tr>
+<td class="label">Information Flow measure (visible)</td><td class="label">IF4v</td><td class="metric_low"><span class="metric_low">   760</span></td><td class="metric_low"><span class="metric_low">  12.667</span></td></tr>
+<tr>
+<td class="label">Information Flow measure (concrete)</td><td class="label">IF4c</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">   0.033</span></td></tr>
+<tr>
+<td class="label">Lines of Code rejected by parser</td><td class="label">REJ</td><td class="metric_low"><span class="metric_low">   680</span></td><td></td></tr>
+</table>
+<a name="procsum"></a><h1>Procedural Metrics Summary</h1>
+<p>For descriptions of each of these metrics see the information preceding the project summary table.</p>
+
+<p>The label cell for each row in this table provides a link to the functions table in the detailed report for the module in question</p>
+<table class="summary"><thead><tr>
+<th class="header_cell sortable"><div>Module Name</div></th>
+<th class="header_cell sortable" style="width: 8%;"><div>LOC</div></th>
+<th class="header_cell sortable" style="width: 8%;"><div>MVG</div></th>
+<th class="header_cell sortable" style="width: 8%;"><div>COM</div></th>
+<th class="header_cell sortable" style="width: 8%;"><div>L_C</div></th>
+<th class="header_cell sortable" style="width: 8%;"><div>M_C</div></th>
+<th class="header_cell sortable" style="width: 8%;"><div>LOCpM</div></th>
+<th class="header_cell sortable" style="width: 8%;"><div>MLOCpM</div></th>
+</tr></thead>
+<tr>
+<td class="label" style="width: 0%;"><a href="A.html#procdet">
+A</a>
+</td><td class="metric_low"><span class="metric_low">    20</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">    10</span></td><td class="metric_low"><span class="metric_low"> 2.000</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">    20</span></td><td class="metric_low"><span class="metric_low">     3</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRAbstractToken.html#procdet">
+ANTLRAbstractToken</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRChar.html#procdet">
+ANTLRChar</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRParser.html#procdet">
+ANTLRParser</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRToken.html#procdet">
+ANTLRToken</a>
+</td><td class="metric_low"><span class="metric_low">    59</span></td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_low"><span class="metric_low">    55</span></td><td class="metric_low"><span class="metric_low"> 1.073</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">     7</span></td><td class="metric_low"><span class="metric_low">    20</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRTokenPtr.html#procdet">
+ANTLRTokenPtr</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRTokenType.html#procdet">
+ANTLRTokenType</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="B.html#procdet">
+B</a>
+</td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="C.html#procdet">
+C</a>
+</td><td class="metric_low"><span class="metric_low">     9</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">     9</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Extent.html#procdet">
+CCCC_Extent</a>
+</td><td class="metric_low"><span class="metric_low">   111</span></td><td class="metric_low"><span class="metric_low">    33</span></td><td class="metric_low"><span class="metric_low">     8</span></td><td class="metric_medium"><span class="metric_medium">13.875</span></td><td class="metric_low"><span class="metric_low"> 4.125</span></td><td class="metric_low"><span class="metric_low">    16</span></td><td class="metric_low"><span class="metric_low">    28</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Html_Stream.html#procdet">
+CCCC_Html_Stream</a>
+</td><td class="metric_medium"><span class="metric_medium">  1099</span></td><td class="metric_low"><span class="metric_low">   108</span></td><td class="metric_low"><span class="metric_low">    70</span></td><td class="metric_medium"><span class="metric_medium">15.700</span></td><td class="metric_low"><span class="metric_low"> 1.543</span></td><td class="metric_low"><span class="metric_low">    29</span></td><td class="metric_high"><span class="metric_high">   104</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Item.html#procdet">
+CCCC_Item</a>
+</td><td class="metric_low"><span class="metric_low">   108</span></td><td class="metric_low"><span class="metric_low">    16</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_high"><span class="metric_high">108.000</span></td><td class="metric_high"><span class="metric_high">16.000</span></td><td class="metric_low"><span class="metric_low">     8</span></td><td class="metric_low"><span class="metric_low">    16</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Member.html#procdet">
+CCCC_Member</a>
+</td><td class="metric_low"><span class="metric_low">   181</span></td><td class="metric_low"><span class="metric_low">    36</span></td><td class="metric_low"><span class="metric_low">    32</span></td><td class="metric_low"><span class="metric_low"> 5.656</span></td><td class="metric_low"><span class="metric_low"> 1.125</span></td><td class="metric_medium"><span class="metric_medium">    30</span></td><td class="metric_medium"><span class="metric_medium">    77</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Metric.html#procdet">
+CCCC_Metric</a>
+</td><td class="metric_low"><span class="metric_low">    92</span></td><td class="metric_low"><span class="metric_low">    15</span></td><td class="metric_low"><span class="metric_low">    12</span></td><td class="metric_medium"><span class="metric_medium"> 7.667</span></td><td class="metric_low"><span class="metric_low"> 1.250</span></td><td class="metric_low"><span class="metric_low">    10</span></td><td class="metric_medium"><span class="metric_medium">    43</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Module.html#procdet">
+CCCC_Module</a>
+</td><td class="metric_low"><span class="metric_low">   248</span></td><td class="metric_low"><span class="metric_low">    49</span></td><td class="metric_low"><span class="metric_low">    32</span></td><td class="metric_medium"><span class="metric_medium"> 7.750</span></td><td class="metric_low"><span class="metric_low"> 1.531</span></td><td class="metric_medium"><span class="metric_medium">    41</span></td><td class="metric_high"><span class="metric_high">   119</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Options.html#procdet">
+CCCC_Options</a>
+</td><td class="metric_low"><span class="metric_low">   163</span></td><td class="metric_low"><span class="metric_low">    22</span></td><td class="metric_low"><span class="metric_low">     5</span></td><td class="metric_high"><span class="metric_high">32.600</span></td><td class="metric_low"><span class="metric_low"> 4.400</span></td><td class="metric_low"><span class="metric_low">    23</span></td><td class="metric_medium"><span class="metric_medium">    43</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Project.html#procdet">
+CCCC_Project</a>
+</td><td class="metric_low"><span class="metric_low">   313</span></td><td class="metric_low"><span class="metric_low">    52</span></td><td class="metric_low"><span class="metric_low">    37</span></td><td class="metric_medium"><span class="metric_medium"> 8.459</span></td><td class="metric_low"><span class="metric_low"> 1.405</span></td><td class="metric_medium"><span class="metric_medium">    31</span></td><td class="metric_high"><span class="metric_high">   130</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Record.html#procdet">
+CCCC_Record</a>
+</td><td class="metric_low"><span class="metric_low">    42</span></td><td class="metric_low"><span class="metric_low">     7</span></td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_medium"><span class="metric_medium">10.500</span></td><td class="metric_low"><span class="metric_low"> 1.750</span></td><td class="metric_low"><span class="metric_low">     7</span></td><td class="metric_low"><span class="metric_low">    28</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Table.html#procdet">
+CCCC_Table</a>
+</td><td class="metric_low"><span class="metric_low">    93</span></td><td class="metric_low"><span class="metric_low">    14</span></td><td class="metric_low"><span class="metric_low">    23</span></td><td class="metric_low"><span class="metric_low"> 4.043</span></td><td class="metric_low"><span class="metric_low"> 0.609</span></td><td class="metric_low"><span class="metric_low">     8</span></td><td class="metric_low"><span class="metric_low">    13</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_UseRelationship.html#procdet">
+CCCC_UseRelationship</a>
+</td><td class="metric_low"><span class="metric_low">   197</span></td><td class="metric_low"><span class="metric_low">    38</span></td><td class="metric_low"><span class="metric_low">    40</span></td><td class="metric_low"><span class="metric_low"> 4.925</span></td><td class="metric_low"><span class="metric_low"> 0.950</span></td><td class="metric_low"><span class="metric_low">    25</span></td><td class="metric_medium"><span class="metric_medium">    62</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Xml_Stream.html#procdet">
+CCCC_Xml_Stream</a>
+</td><td class="metric_medium"><span class="metric_medium">   527</span></td><td class="metric_low"><span class="metric_low">    42</span></td><td class="metric_low"><span class="metric_low">    32</span></td><td class="metric_medium"><span class="metric_medium">16.469</span></td><td class="metric_low"><span class="metric_low"> 1.312</span></td><td class="metric_low"><span class="metric_low">    21</span></td><td class="metric_medium"><span class="metric_medium">    52</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="FP.html#procdet">
+FP</a>
+</td><td class="metric_low"><span class="metric_low">     5</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Hugo.html#procdet">
+Hugo</a>
+</td><td class="metric_low"><span class="metric_low">    11</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     9</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">     5</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Hugo_2.html#procdet">
+Hugo_2</a>
+</td><td class="metric_low"><span class="metric_low">    11</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     8</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">     5</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="InlFunc.html#procdet">
+InlFunc</a>
+</td><td class="metric_low"><span class="metric_low">     7</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">    42</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Main.html#procdet">
+Main</a>
+</td><td class="metric_low"><span class="metric_low">   464</span></td><td class="metric_low"><span class="metric_low">    66</span></td><td class="metric_low"><span class="metric_low">    94</span></td><td class="metric_low"><span class="metric_low"> 4.936</span></td><td class="metric_low"><span class="metric_low"> 0.702</span></td><td class="metric_medium"><span class="metric_medium">    31</span></td><td class="metric_high"><span class="metric_high">   115</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Metric_Treatment.html#procdet">
+Metric_Treatment</a>
+</td><td class="metric_low"><span class="metric_low">    23</span></td><td class="metric_low"><span class="metric_low">     7</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_medium"><span class="metric_medium">11.500</span></td><td class="metric_low"><span class="metric_low"> 3.500</span></td><td class="metric_low"><span class="metric_low">    23</span></td><td class="metric_low"><span class="metric_low">    23</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="MyClass.html#procdet">
+MyClass</a>
+</td><td class="metric_low"><span class="metric_low">     6</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">    10</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     3</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="PSFlag.html#procdet">
+PSFlag</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ParseStore.html#procdet">
+ParseStore</a>
+</td><td class="metric_low"><span class="metric_low">   180</span></td><td class="metric_low"><span class="metric_low">    17</span></td><td class="metric_low"><span class="metric_low">    41</span></td><td class="metric_low"><span class="metric_low"> 4.390</span></td><td class="metric_low"><span class="metric_low"> 0.415</span></td><td class="metric_low"><span class="metric_low">    14</span></td><td class="metric_medium"><span class="metric_medium">    46</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ParseUtility.html#procdet">
+ParseUtility</a>
+</td><td class="metric_low"><span class="metric_low">   162</span></td><td class="metric_low"><span class="metric_low">    18</span></td><td class="metric_low"><span class="metric_low">    36</span></td><td class="metric_low"><span class="metric_low"> 4.500</span></td><td class="metric_low"><span class="metric_low"> 0.500</span></td><td class="metric_low"><span class="metric_low">    20</span></td><td class="metric_medium"><span class="metric_medium">    48</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="SetWordType.html#procdet">
+SetWordType</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Source_Anchor.html#procdet">
+Source_Anchor</a>
+</td><td class="metric_low"><span class="metric_low">    28</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">     7</span></td><td class="metric_low"><span class="metric_low">    10</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="T.html#procdet">
+T</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test1.html#procdet">
+Test1</a>
+</td><td class="metric_low"><span class="metric_low">    24</span></td><td class="metric_low"><span class="metric_low">     5</span></td><td class="metric_low"><span class="metric_low">     6</span></td><td class="metric_low"><span class="metric_low"> 4.000</span></td><td class="metric_low"><span class="metric_low"> 0.833</span></td><td class="metric_low"><span class="metric_low">    12</span></td><td class="metric_low"><span class="metric_low">    13</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2a.html#procdet">
+Test2a</a>
+</td><td class="metric_low"><span class="metric_low">     7</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">     7</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2b.html#procdet">
+Test2b</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2c.html#procdet">
+Test2c</a>
+</td><td class="metric_low"><span class="metric_low">     5</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2d.html#procdet">
+Test2d</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2e.html#procdet">
+Test2e</a>
+</td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     3</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3a.html#procdet">
+Test3a</a>
+</td><td class="metric_low"><span class="metric_low">    19</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b0.html#procdet">
+Test3b0</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b1.html#procdet">
+Test3b1</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b2.html#procdet">
+Test3b2</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b3.html#procdet">
+Test3b3</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b4.html#procdet">
+Test3b4</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b5.html#procdet">
+Test3b5</a>
+</td><td class="metric_low"><span class="metric_low">     7</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">     7</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test4a.html#procdet">
+Test4a</a>
+</td><td class="metric_low"><span class="metric_low">    11</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="UseType.html#procdet">
+UseType</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="UserelNameLevel.html#procdet">
+UserelNameLevel</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Visibility.html#procdet">
+Visibility</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="_ANTLRTokenPtr.html#procdet">
+_ANTLRTokenPtr</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="anonymous.html#procdet">
+anonymous</a>
+</td><td class="metric_low"><span class="metric_low">   322</span></td><td class="metric_low"><span class="metric_low">    48</span></td><td class="metric_low"><span class="metric_low">    59</span></td><td class="metric_low"><span class="metric_low"> 5.458</span></td><td class="metric_low"><span class="metric_low"> 0.814</span></td><td class="metric_low"><span class="metric_low">     8</span></td><td class="metric_low"><span class="metric_low">    24</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="bool.html#procdet">
+bool</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ifstream.html#procdet">
+ifstream</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="list.html#procdet">
+list</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="map.html#procdet">
+map</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">    21</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ofstream.html#procdet">
+ofstream</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ostream.html#procdet">
+ostream</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="string.html#procdet">
+string</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">------</span></td><td class="metric_low"><span class="metric_low">******</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+</table>
+<a name="oodesign"></a><h1>Object Oriented Design</h1>
+<ul>
+<li>WMC1 = Weighted methods per class (all)<p>The sum of a weighting function over the functions of the module. WMC1 uses the nominal weight of 1 for each function, and hence measures the number of functions.</p>
+</li>
+<li>WMCv = Weighted methods per class (visible)<p>The sum of a weighting function over the functions of the module. WMCv uses a weighting function which is 1 for functions accessible to other modules, 0 for private functions.</p>
+</li>
+<li>DIT = Depth of inheritance tree<p>The length of the longest path of inheritance ending at the current module.  The deeper the inheritance tree for a module, the harder it may be to predict its behaviour.  On the other hand, increasing depth gives the potential of greater reuse by the current module of behaviour defined for ancestor classes.</p>
+</li>
+<li>NOC = Number of children<p>The number of modules which inherit directly from the current module.  Moderate values of this measure indicate scope for reuse, however high values may indicate an inappropriate abstraction in the design.</p>
+</li>
+<li>CBO = Coupling between objects<p>The number of other modules which are coupled to the current module either as a client or a supplier. Excessive coupling indicates weakness of module encapsulation and may inhibit reuse.</p>
+</li>
+</ul>
+
+<p>The label cell for each row in this table provides a link to the module summary table in the detailed report for the module in question.</p>
+<table class="summary">
+<thead>
+<tr>
+<th class="header_cell sortable" style="width: 50%;"><div>Module Name</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>WMC1</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>WMCv</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>DIT</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>NOC</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>CBO</div></th>
+</tr></thead>
+<tr>
+<td class="label" style="width: 0%;"><a href="A.html#summary">
+A</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRAbstractToken.html#summary">
+ANTLRAbstractToken</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRChar.html#summary">
+ANTLRChar</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRParser.html#summary">
+ANTLRParser</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRToken.html#summary">
+ANTLRToken</a>
+</td><td class="metric_low"><span class="metric_low">     8</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRTokenPtr.html#summary">
+ANTLRTokenPtr</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRTokenType.html#summary">
+ANTLRTokenType</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="B.html#summary">
+B</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="C.html#summary">
+C</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Extent.html#summary">
+CCCC_Extent</a>
+</td><td class="metric_low"><span class="metric_low">     7</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     3</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Html_Stream.html#summary">
+CCCC_Html_Stream</a>
+</td><td class="metric_medium"><span class="metric_medium">    38</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     8</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Item.html#summary">
+CCCC_Item</a>
+</td><td class="metric_low"><span class="metric_low">    14</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">    10</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Member.html#summary">
+CCCC_Member</a>
+</td><td class="metric_low"><span class="metric_low">     6</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Metric.html#summary">
+CCCC_Metric</a>
+</td><td class="metric_low"><span class="metric_low">     9</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Module.html#summary">
+CCCC_Module</a>
+</td><td class="metric_low"><span class="metric_low">     6</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     4</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Options.html#summary">
+CCCC_Options</a>
+</td><td class="metric_low"><span class="metric_low">     7</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Project.html#summary">
+CCCC_Project</a>
+</td><td class="metric_low"><span class="metric_low">    10</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     8</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Record.html#summary">
+CCCC_Record</a>
+</td><td class="metric_low"><span class="metric_low">     6</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     5</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Table.html#summary">
+CCCC_Table</a>
+</td><td class="metric_low"><span class="metric_low">    11</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_UseRelationship.html#summary">
+CCCC_UseRelationship</a>
+</td><td class="metric_low"><span class="metric_low">     8</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     4</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Xml_Stream.html#summary">
+CCCC_Xml_Stream</a>
+</td><td class="metric_low"><span class="metric_low">    25</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     8</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="FP.html#summary">
+FP</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Hugo.html#summary">
+Hugo</a>
+</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Hugo_2.html#summary">
+Hugo_2</a>
+</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="InlFunc.html#summary">
+InlFunc</a>
+</td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Main.html#summary">
+Main</a>
+</td><td class="metric_low"><span class="metric_low">    15</span></td><td class="metric_medium"><span class="metric_medium">    14</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     3</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Metric_Treatment.html#summary">
+Metric_Treatment</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="MyClass.html#summary">
+MyClass</a>
+</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="PSFlag.html#summary">
+PSFlag</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ParseStore.html#summary">
+ParseStore</a>
+</td><td class="metric_low"><span class="metric_low">    13</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     6</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ParseUtility.html#summary">
+ParseUtility</a>
+</td><td class="metric_low"><span class="metric_low">     8</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     8</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="SetWordType.html#summary">
+SetWordType</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Source_Anchor.html#summary">
+Source_Anchor</a>
+</td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="T.html#summary">
+T</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test1.html#summary">
+Test1</a>
+</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2a.html#summary">
+Test2a</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     3</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2b.html#summary">
+Test2b</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2c.html#summary">
+Test2c</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2d.html#summary">
+Test2d</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2e.html#summary">
+Test2e</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     2</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3a.html#summary">
+Test3a</a>
+</td><td class="metric_low"><span class="metric_low">    13</span></td><td class="metric_low"><span class="metric_low">     6</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b0.html#summary">
+Test3b0</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     3</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b1.html#summary">
+Test3b1</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     2</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b2.html#summary">
+Test3b2</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     2</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b3.html#summary">
+Test3b3</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     2</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b4.html#summary">
+Test3b4</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     3</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b5.html#summary">
+Test3b5</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test4a.html#summary">
+Test4a</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="UseType.html#summary">
+UseType</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="UserelNameLevel.html#summary">
+UserelNameLevel</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Visibility.html#summary">
+Visibility</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="_ANTLRTokenPtr.html#summary">
+_ANTLRTokenPtr</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="anonymous.html#summary">
+anonymous</a>
+</td><td class="metric_medium"><span class="metric_medium">    39</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="bool.html#summary">
+bool</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     3</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ifstream.html#summary">
+ifstream</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     5</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="list.html#summary">
+list</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="map.html#summary">
+map</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ofstream.html#summary">
+ofstream</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     6</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ostream.html#summary">
+ostream</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="string.html#summary">
+string</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">    11</span></td></tr>
+</table>
+<a name="structsum"></a><h1>Structural Metrics Summary</h1>
+<ul>
+<li>Fan-in<p>The number of other modules which pass information into the current module.</p>
+</li>
+<li>Fan-out<p>The number of other modules into which the current module passes information</p>
+</li>
+<li>IF4 = Information Flow measure<p>A composite measure of structural complexity, calculated as the square of the product of the fan-in and fan-out of a single module.  Proposed by Henry and Kafura.</p>
+</li>
+</ul>
+<p>Note that the fan-in and fan-out are calculated by examining the interface of each module.  As noted above, three variants of each each of these measures are presented: a count restricted to the part of the interface which is externally visible, a count which only includes relationships which imply the client module needs to be recompiled if the supplier's implementation changes, and an inclusive count</p>
+
+<p>The label cell for each row in this table provides a link to the relationships table in the detailed report for the module in question</p>
+
+<table class="summary">
+<thead>
+<tr>
+<th rowspan="2" class="sortable"><div>Module Name</div></td>
+<th colspan="3">Fan-out</th>
+<th colspan="3">Fan-in</th>
+<th colspan="3">IF4</th>
+</tr>
+<tr>
+<th class="header_cell sortable" style="width: 7%;"><div>vis</div></th>
+<th class="header_cell sortable" style="width: 7%;"><div>con</div></th>
+<th class="header_cell sortable" style="width: 7%;"><div>inc</div></th>
+<th class="header_cell sortable" style="width: 7%;"><div>vis</div></th>
+<th class="header_cell sortable" style="width: 7%;"><div>con</div></th>
+<th class="header_cell sortable" style="width: 7%;"><div>incl</div></th>
+<th class="header_cell sortable" style="width: 7%;"><div>vis</div></th>
+<th class="header_cell sortable" style="width: 7%;"><div>con</div></th>
+<th class="header_cell sortable" style="width: 7%;"><div>inc</div></th>
+</tr></thead>
+<tr>
+<td class="label" style="width: 0%;"><a href="A.html#structdet">
+A</a>
+</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRAbstractToken.html#structdet">
+ANTLRAbstractToken</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRChar.html#structdet">
+ANTLRChar</a>
+</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRParser.html#structdet">
+ANTLRParser</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRToken.html#structdet">
+ANTLRToken</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRTokenPtr.html#structdet">
+ANTLRTokenPtr</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ANTLRTokenType.html#structdet">
+ANTLRTokenType</a>
+</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="B.html#structdet">
+B</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="C.html#structdet">
+C</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Extent.html#structdet">
+CCCC_Extent</a>
+</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     4</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Html_Stream.html#structdet">
+CCCC_Html_Stream</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_medium"><span class="metric_medium">     8</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     8</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Item.html#structdet">
+CCCC_Item</a>
+</td><td class="metric_medium"><span class="metric_medium">     7</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     7</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_high"><span class="metric_high">   441</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_medium"><span class="metric_medium">   441</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Member.html#structdet">
+CCCC_Member</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Metric.html#structdet">
+CCCC_Metric</a>
+</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Module.html#structdet">
+CCCC_Module</a>
+</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">    16</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">    16</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Options.html#structdet">
+CCCC_Options</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Project.html#structdet">
+CCCC_Project</a>
+</td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_high"><span class="metric_high">   256</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_medium"><span class="metric_medium">   256</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Record.html#structdet">
+CCCC_Record</a>
+</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_medium"><span class="metric_medium">    36</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">    36</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Table.html#structdet">
+CCCC_Table</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_UseRelationship.html#structdet">
+CCCC_UseRelationship</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="CCCC_Xml_Stream.html#structdet">
+CCCC_Xml_Stream</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_medium"><span class="metric_medium">     8</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     8</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="FP.html#structdet">
+FP</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Hugo.html#structdet">
+Hugo</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Hugo_2.html#structdet">
+Hugo_2</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="InlFunc.html#structdet">
+InlFunc</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Main.html#structdet">
+Main</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Metric_Treatment.html#structdet">
+Metric_Treatment</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="MyClass.html#structdet">
+MyClass</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="PSFlag.html#structdet">
+PSFlag</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ParseStore.html#structdet">
+ParseStore</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     6</span></td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_low"><span class="metric_low">     6</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ParseUtility.html#structdet">
+ParseUtility</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_medium"><span class="metric_medium">     8</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     8</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="SetWordType.html#structdet">
+SetWordType</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Source_Anchor.html#structdet">
+Source_Anchor</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="T.html#structdet">
+T</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test1.html#structdet">
+Test1</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2a.html#structdet">
+Test2a</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     4</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2b.html#structdet">
+Test2b</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2c.html#structdet">
+Test2c</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2d.html#structdet">
+Test2d</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test2e.html#structdet">
+Test2e</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3a.html#structdet">
+Test3a</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b0.html#structdet">
+Test3b0</a>
+</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b1.html#structdet">
+Test3b1</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b2.html#structdet">
+Test3b2</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b3.html#structdet">
+Test3b3</a>
+</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b4.html#structdet">
+Test3b4</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test3b5.html#structdet">
+Test3b5</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Test4a.html#structdet">
+Test4a</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="UseType.html#structdet">
+UseType</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="UserelNameLevel.html#structdet">
+UserelNameLevel</a>
+</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="Visibility.html#structdet">
+Visibility</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="_ANTLRTokenPtr.html#structdet">
+_ANTLRTokenPtr</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="anonymous.html#structdet">
+anonymous</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="bool.html#structdet">
+bool</a>
+</td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ifstream.html#structdet">
+ifstream</a>
+</td><td class="metric_low"><span class="metric_low">     5</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     5</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="list.html#structdet">
+list</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="map.html#structdet">
+map</a>
+</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ofstream.html#structdet">
+ofstream</a>
+</td><td class="metric_low"><span class="metric_low">     6</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     6</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="ostream.html#structdet">
+ostream</a>
+</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr>
+<td class="label" style="width: 0%;"><a href="string.html#structdet">
+string</a>
+</td><td class="metric_medium"><span class="metric_medium">    11</span></td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_low"><span class="metric_low">    11</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+</table>
+<a name="other"></a><h1>Other Extents</h1>
+<table class="summary">
+<thead>
+<tr>
+<th class="header_cell sortable" style="width: 25%;"><div>Location</div></th>
+<th class="header_cell sortable" style="width: 45%;"><div>Text</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>LOC</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>COM</div></th>
+<th class="header_cell sortable" style="width: 10%;"><div>MVG</div></th>
+</tr>
+</thead>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_itm.cc:00000001">./cccc/cccc_itm.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_tpl.cc:00000001">./cccc/cccc_tpl.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_mod.cc:00000001">./cccc/cccc_mod.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_new.cc:00000001">./cccc/cccc_new.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     6</span></td><td class="metric_low"><span class="metric_low">    22</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_use.cc:00000001">./cccc/cccc_use.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_met.cc:00000001">./cccc/cccc_met.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">    29</span></td><td class="metric_low"><span class="metric_low">    19</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/ccccmain.cc:00000001">./cccc/ccccmain.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     8</span></td><td class="metric_low"><span class="metric_low">    10</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_tbl.cc:00000001">./cccc/cccc_tbl.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     5</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_htm.cc:00000001">./cccc/cccc_htm.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">   382</span></td><td class="metric_low"><span class="metric_low">    27</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_prj.cc:00000001">./cccc/cccc_prj.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_rec.cc:00000001">./cccc/cccc_rec.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">    21</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_ext.cc:00000001">./cccc/cccc_ext.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     2</span></td><td class="metric_low"><span class="metric_low">    21</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_opt.cc:00000001">./cccc/cccc_opt.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">    85</span></td><td class="metric_low"><span class="metric_low">    74</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_mem.cc:00000001">./cccc/cccc_mem.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_utl.cc:00000001">./cccc/cccc_utl.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">    14</span></td><td class="metric_low"><span class="metric_low">    23</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_xml.cc:00000001">./cccc/cccc_xml.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">    83</span></td><td class="metric_low"><span class="metric_low">    25</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_tok.cc:00000001">./cccc/cccc_tok.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     6</span></td><td class="metric_low"><span class="metric_low">    24</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./cccc/cccc_db.cc:00000001">./cccc/cccc_db.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">    16</span></td><td class="metric_low"><span class="metric_low">    22</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./test/test4.cc:00000001">./test/test4.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./test/prn10.cc:00000001">./test/prn10.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     3</span></td><td class="metric_low"><span class="metric_low">     5</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./test/prn11.cc:00000001">./test/prn11.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_low"><span class="metric_low">     6</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./test/prn6.cc:00000001">./test/prn6.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">    17</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./test/prn9.cc:00000001">./test/prn9.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./test/test3.cc:00000001">./test/test3.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./test/prn5.cc:00000001">./test/prn5.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./test/prn1.cc:00000001">./test/prn1.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./test/prn3.cc:00000001">./test/prn3.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     4</span></td><td class="metric_low"><span class="metric_low">    22</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./test/test1.cc:00000001">./test/test1.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./test/prn2.cc:00000001">./test/prn2.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./test/test2.cc:00000001">./test/test2.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./test/prn4.cc:00000001">./test/prn4.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+<tr><td class="extent" style="width: 0%;"><a class="sourceAnchor" href="cccc_src.html#./test/prn12.cc:00000001">./test/prn12.cc:1</a><br />
+</td>
+<td>&lt;file scope items&gt;</td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     1</span></td><td class="metric_low"><span class="metric_low">     0</span></td></tr>
+</table>
+<a name="infocccc"></a><h1>About CCCC</h1>
+<p>This report was generated by the program CCCC, which is FREELY REDISTRIBUTABLE but carries NO WARRANTY.</p><p>CCCC was developed by Tim Littlefair. as part of a PhD research project. This project is now completed and descriptions of the findings can be accessed at <a href="http://www.chs.ecu.edu.au/~tlittlef">http://www.chs.ecu.edu.au/~tlittlef</a>.</p><p>User support for CCCC can be obtained by <a href="mailto:cccc-users@lists.sourceforge.net">mailing the list cccc-users@lists.sourceforge.net</a>.</p><p>Please also visit the CCCC development website at <a href="http://cccc.sourceforge.net">http://cccc.sourceforge.net</a>.</p><p>The CCCC4 fork adds some interactivity to the HTML rendering of CCCC's results, and the additional fields LOCpM and MLOCpM; its intent is to make the HTML output more suited for immediate presentation in a build environment e such as Jenkins. Visit the CCCC4 fork at <a href="http://www.github.com/lyngvi/cccc4">http://www.github.com/lyngvi/cccc4</a>.</p></BODY></HTML>
