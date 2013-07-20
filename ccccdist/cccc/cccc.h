@@ -1,5 +1,5 @@
 /*
- * cccc.h 
+ * cccc.h
  * diagnostic and portability facilities for the cccc project
  */
 
@@ -11,7 +11,7 @@
 #endif
 
 // I am trying to standardise on using the ANSI C++ names
-// for the ANSI C header files, and bringing all of 
+// for the ANSI C header files, and bringing all of
 // the includes of these libraries into this file.
 // I have not yet attempted to purge includes for these
 // files from the other source files.
@@ -40,10 +40,10 @@ using std::cerr;
 
 // debugging facilities
 extern int DebugMask;
-enum DebugFlags { 
-  LEXER=0x01, 
-  PARSER=0x02, 
-  COUNTER=0x04, 
+enum DebugFlags {
+  LEXER=0x01,
+  PARSER=0x02,
+  COUNTER=0x04,
   MEMORY=0x08,
   EXTENT=0x10,
   DATABASE=0x20
@@ -66,11 +66,11 @@ extern char *skip_identifiers[SKIP_IDENTIFIERS_ARRAY_SIZE];
 // The differences are no longer necessary.
 #define MAKE_STRSTREAM(X)     stringstream X;
 #define CONVERT_STRSTREAM(X)  (X)
-#define RELEASE_STRSTREAM(X)  
+#define RELEASE_STRSTREAM(X)
 
 
-// The -gd option generates uncompilable code with a missing 
-// variable called zzTracePrevRuleName if the generated 
+// The -gd option generates uncompilable code with a missing
+// variable called zzTracePrevRuleName if the generated
 // files cccc.cpp, java.cpp, ada.cpp don't include a version
 // of AParser.h seen with zzTRACE_RULES defined.
 // I'm not sure how this is supposed to work, but for the moment
@@ -82,6 +82,22 @@ extern char *skip_identifiers[SKIP_IDENTIFIERS_ARRAY_SIZE];
 #include "cccc_tok.h"
 #define zzTRACE_RULES
 #include "AParser.h"
+
+#define COUNT_TAG_NUMBER_OF_MODULES                     "NOM"
+#define COUNT_TAG_LINES_OF_CODE                         "LOC"
+#define COUNT_TAG_CYCLOMATIC_NUMBER                     "MVG"
+#define COUNT_TAG_LINES_OF_COMMENT                      "COM"
+#define COUNT_TAG_INTERMODULE_COMPLEXITY4               "IF4"
+#define COUNT_TAG_VISIBLE_SUFFIX                        "v"
+#define COUNT_TAG_CONCRETE_SUFFIX                       "c"
+
+#define COUNT_TAG_COUPLING_BETWEEN_OBJECTS              "CBO"
+#define COUNT_TAG_NUMBER_OF_CHILDREN                    "NOC"
+#define COUNT_TAG_INHERITANCE_TREE_DEPTH                "DIT"
+#define COUNT_TAG_FAN_IN                                "FI"
+#define COUNT_TAG_FAN_OUT                               "FO"
+#define COUNT_TAG_WEIGHTED_METHODS_PER_CLASS            "WMC"
+#define COUNT_TAG_WEIGHTED_METHODS_PER_CLASS_UNITY      "WMC1"
 
 #endif
 

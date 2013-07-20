@@ -36,11 +36,11 @@ int CCCC_Member::get_count(const char* count_tag) {
   int retval=0;
   string count_tag_str=count_tag;
 
-  if(count_tag_str=="WMC1")
+  if(count_tag_str==COUNT_TAG_WEIGHTED_METHODS_PER_CLASS_UNITY)
     {
       retval=1;
     }
-  else if(count_tag_str=="WMCv")
+  else if(count_tag_str==COUNT_TAG_WEIGHTED_METHODS_PER_CLASS COUNT_TAG_VISIBLE_SUFFIX)
     {
       switch(get_visibility())
 	{
@@ -84,20 +84,20 @@ int CCCC_Member::ToFile(ofstream& ofstr)
       extent_line.Insert(param_list);
       extent_ptr->AddToItem(extent_line);
       extent_line.ToFile(ofstr);
-     
+
       extent_ptr=extent_table.next_item();
     }
-  
+
   if(ofstr.good())
     {
       retval=TRUE;
-    } 
+    }
 
   return retval;
 }
 
 string CCCC_Member::name(int name_level) const
-{ 
+{
   string namestr;
 
   switch(name_level)
@@ -109,9 +109,9 @@ string CCCC_Member::name(int name_level) const
 	{
           namestr.append("<NULL>::");
         }
-      else if( 
-	      (parent->name(nlMODULE_NAME)!="") && 
-	      (parent->name(nlMODULE_TYPE)!="file") 
+      else if(
+	      (parent->name(nlMODULE_NAME)!="") &&
+	      (parent->name(nlMODULE_TYPE)!="file")
 	      )
 	{
 	  namestr.append(parent->name(nlMODULE_NAME));
@@ -125,9 +125,9 @@ string CCCC_Member::name(int name_level) const
     case nlSIMPLE:
       namestr=member_name;
       break;
-    
+
     case nlMEMBER_TYPE:
-      namestr=member_type; 
+      namestr=member_type;
       break;
 
     case nlMEMBER_PARAMS:
@@ -137,13 +137,13 @@ string CCCC_Member::name(int name_level) const
       namestr.append(member_name);
       namestr.append(param_list);
       break;
-	
+
     default:
       cerr << "unexpected name level" << endl;
     }
 
   return namestr.c_str();
-}	
+}
 
 int CCCC_Member::FromFile(ifstream& ifstr)
 {
@@ -153,7 +153,7 @@ int CCCC_Member::FromFile(ifstream& ifstr)
   CCCC_Item next_line;
   next_line.FromFile(ifstr);
   ifstr_line++;
-  
+
   string line_keyword_dummy;
   string parent_name;
 
@@ -164,8 +164,8 @@ int CCCC_Member::FromFile(ifstream& ifstr)
      next_line.Extract(parent_name) &&
      next_line.Extract(this->member_name) &&
      next_line.Extract(this->member_type) &&
-     next_line.Extract(this->param_list) 
-     ) 
+     next_line.Extract(this->param_list)
+     )
     {
       parent=current_loading_project->module_table.find(parent_name);
       if(parent!=NULL)
@@ -183,14 +183,14 @@ int CCCC_Member::FromFile(ifstream& ifstr)
 	    {
 	      retval=RECORD_TRANSCRIBED;
 	    }
- 
+
 	  // process extent records
 	  while(PeekAtNextLinePrefix(ifstr,MEMEXT_PREFIX))
 	    {
 	      CCCC_Extent *new_extent=new CCCC_Extent;
 	      next_line.FromFile(ifstr);
 	      ifstr_line++;
-	      string parent_key_dummy, member_name_dummy, 
+	      string parent_key_dummy, member_name_dummy,
 		member_type_dummy, param_list_dummy;
 
 	      if(
@@ -203,13 +203,13 @@ int CCCC_Member::FromFile(ifstream& ifstr)
 		 )
 		{
 		  // We don't ever expect to find duplicated extent records
-		  // but just in case... 
+		  // but just in case...
 		  CCCC_Extent *found_eptr=
 		    found_mptr->extent_table.find_or_insert(new_extent);
 		  if(found_eptr!=new_extent)
 		    {
 		      cerr << "Failed to add extent for member "
-			   << found_mptr->key() << " at line " << ifstr_line 
+			   << found_mptr->key() << " at line " << ifstr_line
 			   << endl;
 		      delete new_extent;
 		    }
@@ -221,7 +221,7 @@ int CCCC_Member::FromFile(ifstream& ifstr)
 	{
 	  retval=MEMBER_RECORD_NO_PARENT_FOUND;
 	}
-    } 
+    }
   else // extraction of module intial line failed
     {
       // unexpected problem with the input
@@ -238,7 +238,7 @@ int CCCC_Member::FromFile(ifstream& ifstr)
       ifstr_line++;
       cerr << "Ignoring member extent on line " << ifstr_line << endl;
     }
- 
+
   return retval;
 }
 
