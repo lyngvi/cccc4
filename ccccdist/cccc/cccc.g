@@ -153,7 +153,12 @@ inline void endOfLine(CLexer &lexer)
 #token CHARSTART "\'" << mode(CONST_CHAR); skip(); >>
 #lexclass CONST_CHAR
 #token CHARCONST "'" << replstr("'.'"); mode(START); >>
-#token CH_ANYTHING "~[']" << skip(); >>
+#token CH_ANYTHING     "~[']" << skip(); >>
+// For some reason, '.' does not seem to be honored as any character. So, we'll divide the character
+// space into characters which are the literal ., and characters which are not the literal ., which seems to work.
+// Ugh.
+#token ESCAPED_DOT     "\\[.]" << skip(); >>
+#token ESCAPED_NOT_DOT "\\~[.]" << skip(); >>
 #lexclass START
 
 
