@@ -23,6 +23,7 @@
 #include "cccc.h"
 #include "cccc_itm.h"
 #include "cccc_htm.h"
+#include "cccc_ver.h"
 
 // I would love to use the C++ standard preprocessor
 // directive #if here, but I have had reports before now
@@ -269,7 +270,7 @@ void CCCC_Html_Stream::Table_Of_Contents(int report_mask, bool showGenTime)
     {
       time_t generationTime=time(NULL);
       fstr << _HTMLLineBreak
-    	   << " generated " << ctime(&generationTime) << endl;
+           << " generated " << ctime(&generationTime) << " by CCCC v" CCCC_VERSION_STRING << endl;
     }
 
   fstr << HTMLEndElement(_TableRow) << endl;
