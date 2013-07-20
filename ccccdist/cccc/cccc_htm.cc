@@ -280,8 +280,8 @@ void CCCC_Html_Stream::Put_Section_Heading(
 					   string heading_tag,
 					   int heading_level)
 {
-  fstr << "<h" << heading_level << ">"
-       << "<a name=\"" << heading_tag << "\"></a>"
+  fstr << "<a name=\"" << heading_tag << "\"></a>"
+       << "<h" << heading_level << ">"
        << heading_title
        << "</h" << heading_level << ">" << endl;
 }
@@ -1341,8 +1341,6 @@ void CCCC_Html_Stream::Source_Listing()
   filename+="/cccc_src.html";
   CCCC_Html_Stream source_html_str(filename.c_str(),"source file");
 
-  source_html_str.fstr << style_open << endl;
-
   source_anchor_map_t::iterator iter=source_anchor_map.begin();
   while(iter!=source_anchor_map.end())
     {
@@ -1355,14 +1353,13 @@ void CCCC_Html_Stream::Source_Listing()
 	  delete src_str;
 	  src_str=new ifstream(current_filename.c_str(),std::ios::in);
 	  src_str->getline(linebuf,1023);
-	  source_html_str.fstr << style_close << endl;
-	  source_html_str.Put_Section_Heading(current_filename.c_str(),"",1);
-	  source_html_str.fstr << style_open << endl;
+	  source_html_str.Put_Section_Heading(current_filename.c_str(), current_filename.c_str(), 1);
 	}
 
       while(src_str->good())
 	{
 	  current_line++;
+          source_html_str.fstr << style_open;
 	  if(
 	     (iter!=source_anchor_map.end()) &&
 	     (current_filename==(*iter).second.get_file()) &&
@@ -1378,6 +1375,7 @@ void CCCC_Html_Stream::Source_Listing()
 	    }
  	  source_html_str << linebuf;
  	  source_html_str.fstr << endl;
+          source_html_str.fstr << style_close << endl;
 	  src_str->getline(linebuf,1023);
  	}
 
@@ -1389,12 +1387,11 @@ void CCCC_Html_Stream::Source_Listing()
 	    (current_filename==(*iter).second.get_file())
 	    )
 	{
+          source_html_str.fstr << style_open;
 	  (*iter).second.Emit_NAME(source_html_str.fstr);
+          source_html_str.fstr << style_close;
 	  iter++;
-	  source_html_str.fstr << _HTMLLineBreak << endl;
 	}
-
-
     }
 
   // delete the last input stream created
@@ -1419,11 +1416,9 @@ static string pad_string(int target_width, string the_string, string padding)
 
 string Source_Anchor::key() const
 {
-  string retval;
   char linebuf[16];
-  sprintf(linebuf,"%d",line_);
-  retval=file_+":"+pad_string(10,linebuf," ");
-  return retval;
+  snprintf(linebuf, sizeof(linebuf), "%d", line_);
+  return file_ + ":" + linebuf;
 }
 
 
@@ -1440,7 +1435,7 @@ void Source_Anchor::Emit_NAME(ofstream& fstr)
 {
   string anchor_key=key();
   char ln_buf[32];
-  sprintf(ln_buf,"%d",line_);
+  snprintf(ln_buf, sizeof(ln_buf), "%d", line_);
   string ln_string=pad_string(8, ln_buf, " ");
   string space_string=pad_string(2, ""," ");
   fstr << "<a name=\"" << anchor_key.c_str() << "\"></a>"
