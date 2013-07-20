@@ -33,12 +33,12 @@ CCCC_Module::CCCC_Module()
 
 
 string CCCC_Module::name(int name_level) const
-{ 
+{
   string retval;
 
   switch(name_level)
     {
-    case nlMODULE_TYPE: 
+    case nlMODULE_TYPE:
       retval=module_type;
       break;
 
@@ -46,7 +46,7 @@ string CCCC_Module::name(int name_level) const
       retval=module_name;
       break;
 
-    case nlMODULE_TYPE_AND_NAME: 
+    case nlMODULE_TYPE_AND_NAME:
       retval=module_type;
       if(retval.size()>0)
 	{
@@ -55,7 +55,7 @@ string CCCC_Module::name(int name_level) const
       retval=retval+module_name;
       break;
 
-    default: 
+    default:
       retval=module_name;
     }
   return retval.c_str();
@@ -64,18 +64,18 @@ string CCCC_Module::name(int name_level) const
 int CCCC_Module::get_count(const char* count_tag)
 {
   int retval=0;
-  if(strcmp(count_tag,"NOM")==0)
+  if(strcmp(count_tag, COUNT_TAG_NUMBER_OF_MODULES)==0)
     {
       if(is_trivial()==FALSE)
 	{
 	  retval=1;
 	}
     }
-  else if(strcmp(count_tag,"CBO")==0)
+  else if(strcmp(count_tag, COUNT_TAG_COUPLING_BETWEEN_OBJECTS)==0)
     {
       retval=client_map.size()+supplier_map.size();
     }
-  else if(strcmp(count_tag,"NOC")==0)
+  else if(strcmp(count_tag, COUNT_TAG_NUMBER_OF_CHILDREN)==0)
     {
       retval=0;
 
@@ -90,7 +90,7 @@ int CCCC_Module::get_count(const char* count_tag)
 	  iter++;
 	}
     }
-  else if(strcmp(count_tag,"DIT")==0)
+  else if(strcmp(count_tag, COUNT_TAG_INHERITANCE_TREE_DEPTH)==0)
     {
       retval=0;
 
@@ -114,7 +114,7 @@ int CCCC_Module::get_count(const char* count_tag)
 	      if((*iter).second->get_usetype()==utINHERITS)
 		{
 		  int parent_depth=
-		    (*iter).second->supplier_module_ptr(project)->get_count("DIT");
+		    (*iter).second->supplier_module_ptr(project)->get_count(COUNT_TAG_INHERITANCE_TREE_DEPTH);
 		  if(retval<parent_depth+1)
 		    {
 		      retval=parent_depth+1;
@@ -125,7 +125,7 @@ int CCCC_Module::get_count(const char* count_tag)
 	}
       recursion_depth--;
     }
-  else if(strncmp(count_tag,"FI",2)==0)
+  else if(strncmp(count_tag, COUNT_TAG_FAN_IN, 2)==0)
     {
       relationship_map_t::iterator iter;
       iter=supplier_map.begin();
@@ -135,7 +135,7 @@ int CCCC_Module::get_count(const char* count_tag)
 	  iter++;
 	}
     }
-  else if(strncmp(count_tag,"FO",2)==0)
+  else if(strncmp(count_tag, COUNT_TAG_FAN_OUT, 2)==0)
     {
       relationship_map_t::iterator iter;
       iter=client_map.begin();
@@ -145,7 +145,7 @@ int CCCC_Module::get_count(const char* count_tag)
 	  iter++;
 	}
     }
-  else if(strncmp(count_tag,"IF4",3)==0)
+  else if(strncmp(count_tag, COUNT_TAG_INTERMODULE_COMPLEXITY4, 3)==0)
     {
       char if4_suffix=count_tag[3];
       string fi_variant="FI", fo_variant="FO";
@@ -186,7 +186,7 @@ int CCCC_Module::is_trivial()
      (module_type=="builtin") ||
      (module_type=="enum") ||
      (module_type=="struct") ||
-     (module_type=="trivial") 
+     (module_type=="trivial")
      )
     {
       retval=TRUE;
@@ -213,15 +213,15 @@ int CCCC_Module::ToFile(ofstream& ofstr)
       extent_line.Insert(module_type);
       extent_ptr->AddToItem(extent_line);
       extent_line.ToFile(ofstr);
-    
+
       extent_ptr=extent_table.next_item();
     }
- 
+
   if(ofstr.good())
     {
       retval=TRUE;
-    } 
- 
+    }
+
   return retval;
 }
 
@@ -232,7 +232,7 @@ int CCCC_Module::FromFile(ifstream& ifstr)
   CCCC_Item next_line;
   next_line.FromFile(ifstr);
   ifstr_line++;
-  
+
   string line_keyword_dummy;
 
   CCCC_Module *found_mptr=NULL;
@@ -240,8 +240,8 @@ int CCCC_Module::FromFile(ifstream& ifstr)
   if(
      next_line.Extract(line_keyword_dummy) &&
      next_line.Extract(this->module_name) &&
-     next_line.Extract(this->module_type) 
-     ) 
+     next_line.Extract(this->module_type)
+     )
     {
       found_mptr=
 	current_loading_project->module_table.find_or_insert(this);
@@ -273,13 +273,13 @@ int CCCC_Module::FromFile(ifstream& ifstr)
 	     )
 	    {
 	      // We don't ever expect to find duplicated extent records
-	      // but just in case... 
+	      // but just in case...
 	      CCCC_Extent *found_eptr=
 		found_mptr->extent_table.find_or_insert(new_extent);
 	      if(found_eptr!=new_extent)
        		{
 		  cerr << "Failed to add extent for module "
-		       << found_mptr->key() << " at line " << ifstr_line 
+		       << found_mptr->key() << " at line " << ifstr_line
 		       << endl;
 		  delete new_extent;
 		}
@@ -291,7 +291,7 @@ int CCCC_Module::FromFile(ifstream& ifstr)
       // unexpected problem with the input
       retval=RECORD_ERROR;
     }
-  
+
   // If the import was successful, we will also have imported all dependent
   // extent records following the main record.
   // If not, we must skip them.

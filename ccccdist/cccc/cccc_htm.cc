@@ -292,17 +292,17 @@ void  CCCC_Html_Stream::Project_Summary() {
   fstr << "<p>This table shows measures over the project as a whole.</p>" << endl;
 
   fstr << HTMLBeginElement(_UnorderedList, "Project_Summary") << endl;
-  Metric_Description("NOM","Number of modules",
+  Metric_Description(COUNT_TAG_NUMBER_OF_MODULES, "Number of modules",
 		     "Number of non-trivial modules identified by the "
 		     "analyser.  Non-trivial modules include all classes, "
 		     "and any other module for which member functions are "
 		     "identified.");
-  Metric_Description("LOC","Lines of Code",
+  Metric_Description(COUNT_TAG_LINES_OF_CODE, "Lines of Code",
 		     "Number of non-blank, non-comment lines of source code "
 		     "counted by the analyser.");
-  Metric_Description("COM","Lines of Comments",
+  Metric_Description(COUNT_TAG_LINES_OF_COMMENT,"Lines of Comments",
 		     "Number of lines of comment identified by the analyser");
-  Metric_Description("MVG","McCabe's Cyclomatic Complexity",
+  Metric_Description(COUNT_TAG_CYCLOMATIC_NUMBER, "McCabe's Cyclomatic Complexity",
 		     "A measure of the decision complexity of the functions "
 		     "which make up the program."
 		     "The strict definition of this measure is that it is "
@@ -318,7 +318,7 @@ void  CCCC_Html_Stream::Project_Summary() {
   Metric_Description("M_C","Cyclomatic Complexity per line of comment",
 		     "Indicates density of comments with respect to logical "
 		     "complexity of program");
-  Metric_Description("IF4","Information Flow measure",
+  Metric_Description(COUNT_TAG_INTERMODULE_COMPLEXITY4, "Information Flow measure",
 		     "Measure of information flow between modules suggested "
 		     "by Henry and Kafura. The analyser makes an approximate "
 		     "count of this by counting inter-module couplings "
@@ -335,14 +335,14 @@ void  CCCC_Html_Stream::Project_Summary() {
        << endl << endl;
 
   // calculate the counts on which all displayed data will be based
-  int nom=prjptr->get_count("NOM");  // number of modules
-  int loc=prjptr->get_count("LOC");  // lines of code
-  int mvg=prjptr->get_count("MVG");  // McCabes cyclomatic complexity
-  int com=prjptr->get_count("COM");  // lines of comment
-  int if4=prjptr->get_count("IF4");    // intermodule complexity (all couplings)
-  int if4v=prjptr->get_count("IF4v");  // intermodule complexity (visible only)
-  int if4c=prjptr->get_count("IF4c");  // intermodule complexity (concrete only)
-  int rej=prjptr->rejected_extent_table.get_count("LOC");
+  int nom=prjptr->get_count(COUNT_TAG_NUMBER_OF_MODULES);
+  int loc=prjptr->get_count(COUNT_TAG_LINES_OF_CODE);
+  int mvg=prjptr->get_count(COUNT_TAG_CYCLOMATIC_NUMBER);
+  int com=prjptr->get_count(COUNT_TAG_LINES_OF_COMMENT);
+  int if4=prjptr->get_count(COUNT_TAG_INTERMODULE_COMPLEXITY4);
+  int if4v=prjptr->get_count(COUNT_TAG_INTERMODULE_COMPLEXITY4 COUNT_TAG_VISIBLE_SUFFIX);
+  int if4c=prjptr->get_count(COUNT_TAG_INTERMODULE_COMPLEXITY4 COUNT_TAG_CONCRETE_SUFFIX);
+  int rej=prjptr->rejected_extent_table.get_count(COUNT_TAG_LINES_OF_CODE);
 
   fstr << HTMLBeginElement(_Table, "summary")
        << HTMLBeginElement(_TableHead) << endl
@@ -356,28 +356,28 @@ void  CCCC_Html_Stream::Project_Summary() {
 
   fstr << HTMLBeginElement(_TableRow) << endl;
   Put_Label_Cell("Number of modules");
-  Put_Label_Cell("NOM");
+  Put_Label_Cell(COUNT_TAG_NUMBER_OF_MODULES);
   Put_Metric_Cell(nom);
   fstr << HTMLTableCell("&nbsp;");
   fstr << HTMLEndElement(_TableRow) << endl;
 
   fstr << HTMLBeginElement(_TableRow) << endl;
   Put_Label_Cell("Lines of Code");
-  Put_Label_Cell("LOC");
+  Put_Label_Cell(COUNT_TAG_LINES_OF_CODE);
   Put_Metric_Cell(loc,"LOCp");
   Put_Metric_Cell(loc,nom,"LOCper");
   fstr << HTMLEndElement(_TableRow) << endl;
 
   fstr << HTMLBeginElement(_TableRow) << endl;
   Put_Label_Cell("McCabe's Cyclomatic Number");
-  Put_Label_Cell("MVG");
+  Put_Label_Cell(COUNT_TAG_CYCLOMATIC_NUMBER);
   Put_Metric_Cell(mvg,"MVGp");
   Put_Metric_Cell(mvg,nom,"MVGper");
   fstr << HTMLEndElement(_TableRow) << endl;
 
   fstr << HTMLBeginElement(_TableRow) << endl;
   Put_Label_Cell("Lines of Comment");
-  Put_Label_Cell("COM");
+  Put_Label_Cell(COUNT_TAG_LINES_OF_COMMENT);
   Put_Metric_Cell(com,"COM");
   Put_Metric_Cell(com,nom,"COMper");
   fstr << HTMLEndElement(_TableRow) << endl;
@@ -398,21 +398,21 @@ void  CCCC_Html_Stream::Project_Summary() {
 
   fstr << HTMLBeginElement(_TableRow) << endl;
   Put_Label_Cell("Information Flow measure (inclusive)");
-  Put_Label_Cell("IF4");
+  Put_Label_Cell(COUNT_TAG_INTERMODULE_COMPLEXITY4);
   Put_Metric_Cell(if4);
   Put_Metric_Cell(if4,nom,"8.3");
   fstr << HTMLEndElement(_TableRow) << endl;
 
   fstr << HTMLBeginElement(_TableRow) << endl;
   Put_Label_Cell("Information Flow measure (visible)");
-  Put_Label_Cell("IF4v");
+  Put_Label_Cell(COUNT_TAG_INTERMODULE_COMPLEXITY4 COUNT_TAG_VISIBLE_SUFFIX);
   Put_Metric_Cell(if4v);
   Put_Metric_Cell(if4v,nom,"8.3");
   fstr << HTMLEndElement(_TableRow) << endl;
 
   fstr << HTMLBeginElement(_TableRow) << endl;
   Put_Label_Cell("Information Flow measure (concrete)");
-  Put_Label_Cell("IF4c");
+  Put_Label_Cell(COUNT_TAG_INTERMODULE_COMPLEXITY4 COUNT_TAG_CONCRETE_SUFFIX);
   Put_Metric_Cell(if4c);
   Put_Metric_Cell(if4c,nom,"8.3");
   fstr << HTMLEndElement(_TableRow) << endl;
@@ -546,9 +546,9 @@ void CCCC_Html_Stream::Procedural_Summary() {
 	  string href=mod_ptr->key()+".html#procdet";
 
 	  Put_Label_Cell(mod_ptr->name(nlSIMPLE).c_str(),0,"",href.c_str());
-	  int loc=mod_ptr->get_count("LOC");
-	  int mvg=mod_ptr->get_count("MVG");
-	  int com=mod_ptr->get_count("COM");
+	  int loc=mod_ptr->get_count(COUNT_TAG_LINES_OF_CODE);
+	  int mvg=mod_ptr->get_count(COUNT_TAG_CYCLOMATIC_NUMBER);
+	  int com=mod_ptr->get_count(COUNT_TAG_LINES_OF_COMMENT);
 	  CCCC_Metric mloc(loc,"LOCm");
 	  CCCC_Metric mmvg(mvg,"MVGm");
 	  CCCC_Metric ml_c(loc,com,"L_C");
@@ -630,17 +630,17 @@ void CCCC_Html_Stream::Structural_Summary()
 	{
 	  fstr << HTMLBeginElement(_TableRow) << endl;
 
-	  int fov=module_ptr->get_count("FOv");
-	  int foc=module_ptr->get_count("FOc");
-	  int fo=module_ptr->get_count("FO");
+	  int fov=module_ptr->get_count(COUNT_TAG_FAN_OUT COUNT_TAG_VISIBLE_SUFFIX);
+	  int foc=module_ptr->get_count(COUNT_TAG_FAN_OUT COUNT_TAG_CONCRETE_SUFFIX);
+	  int fo=module_ptr->get_count(COUNT_TAG_FAN_OUT);
 
-	  int fiv=module_ptr->get_count("FIv");
-	  int fic=module_ptr->get_count("FIc");
-	  int fi=module_ptr->get_count("FI");
+	  int fiv=module_ptr->get_count(COUNT_TAG_FAN_IN COUNT_TAG_VISIBLE_SUFFIX);
+	  int fic=module_ptr->get_count(COUNT_TAG_FAN_IN COUNT_TAG_CONCRETE_SUFFIX);
+	  int fi=module_ptr->get_count(COUNT_TAG_FAN_IN);
 
-	  int if4v=module_ptr->get_count("IF4v");
-	  int if4c=module_ptr->get_count("IF4c");
-	  int if4=module_ptr->get_count("IF4");
+	  int if4v=module_ptr->get_count(COUNT_TAG_INTERMODULE_COMPLEXITY4 COUNT_TAG_VISIBLE_SUFFIX);
+	  int if4c=module_ptr->get_count(COUNT_TAG_INTERMODULE_COMPLEXITY4 COUNT_TAG_CONCRETE_SUFFIX);
+	  int if4=module_ptr->get_count(COUNT_TAG_INTERMODULE_COMPLEXITY4);
 
 	  // the last two arguments here turn on links to enable jumping between
 	  // the summary and detail cells for the same module
@@ -819,9 +819,9 @@ void CCCC_Html_Stream::Other_Extents()
 	  fstr << HTMLBeginElement(_TableRow);
 	  Put_Extent_Cell(*extent_ptr,0);
 	  fstr << HTMLTableCell(HTMLEscapeLiteral(extent_ptr->name(nlDESCRIPTION).c_str()).c_str());
-	  Put_Metric_Cell(extent_ptr->get_count("LOC"),"");
-	  Put_Metric_Cell(extent_ptr->get_count("COM"),"");
-	  Put_Metric_Cell(extent_ptr->get_count("MVG"),"");
+	  Put_Metric_Cell(extent_ptr->get_count(COUNT_TAG_LINES_OF_CODE),"");
+	  Put_Metric_Cell(extent_ptr->get_count(COUNT_TAG_LINES_OF_COMMENT),"");
+	  Put_Metric_Cell(extent_ptr->get_count(COUNT_TAG_CYCLOMATIC_NUMBER),"");
 	  fstr << HTMLEndElement(_TableRow) << endl;
 	  extent_ptr=prjptr->rejected_extent_table.next_item();
 	}
@@ -1079,9 +1079,9 @@ void CCCC_Html_Stream::Module_Detail(CCCC_Module *module_ptr)
 	  CCCC_Extent *ext_ptr=(*eIter).second;
 	  fstr << HTMLBeginElement(_TableRow) << endl;
 	  Put_Extent_Cell(*ext_ptr,0,true);
-	  int loc=ext_ptr->get_count("LOC");
-	  int mvg=ext_ptr->get_count("MVG");
-	  int com=ext_ptr->get_count("COM");
+	  int loc=ext_ptr->get_count(COUNT_TAG_LINES_OF_CODE);
+	  int mvg=ext_ptr->get_count(COUNT_TAG_CYCLOMATIC_NUMBER);
+	  int com=ext_ptr->get_count(COUNT_TAG_LINES_OF_COMMENT);
 
 	  Put_Metric_Cell(CCCC_Metric(loc, "LOCf"));
 	  Put_Metric_Cell(CCCC_Metric(mvg, "MVGf"));
@@ -1119,9 +1119,9 @@ void CCCC_Html_Stream::Procedural_Detail(CCCC_Module *module_ptr)
 	  CCCC_Member *mem_ptr=(*iter).second;
 	  fstr << HTMLBeginElement(_TableRow) << endl;
 	  Put_Label_Cell(mem_ptr->name(nlLOCAL).c_str(),0,"","",mem_ptr);
-	  int loc=mem_ptr->get_count("LOC");
-	  int mvg=mem_ptr->get_count("MVG");
-	  int com=mem_ptr->get_count("COM");
+	  int loc=mem_ptr->get_count(COUNT_TAG_LINES_OF_CODE);
+	  int mvg=mem_ptr->get_count(COUNT_TAG_CYCLOMATIC_NUMBER);
+	  int com=mem_ptr->get_count(COUNT_TAG_LINES_OF_COMMENT);
 
 	  Put_Metric_Cell(CCCC_Metric(loc, "LOCf"));
 	  Put_Metric_Cell(CCCC_Metric(mvg, "MVGf"));
@@ -1164,20 +1164,20 @@ void CCCC_Html_Stream::Module_Summary(CCCC_Module *module_ptr)
   // calculate the counts on which all displayed data will be based
   // int nof=module_ptr->member_table.records(); // Number of functions
   int nof=0;
-  int loc=module_ptr->get_count("LOC");  // lines of code
-  int mvg=module_ptr->get_count("MVG");  // McCabes cyclomatic complexity
-  int com=module_ptr->get_count("COM");  // lines of comment
+  int loc=module_ptr->get_count(COUNT_TAG_LINES_OF_CODE);
+  int mvg=module_ptr->get_count(COUNT_TAG_CYCLOMATIC_NUMBER);
+  int com=module_ptr->get_count(COUNT_TAG_LINES_OF_COMMENT);
 
   // the variants of IF4 measure information flow and couplings
-  int if4=module_ptr->get_count("IF4");   // (all couplings)
-  int if4v=module_ptr->get_count("IF4v"); // (visible only)
-  int if4c=module_ptr->get_count("IF4c"); // (concrete only)
+  int if4=module_ptr->get_count(COUNT_TAG_INTERMODULE_COMPLEXITY4);
+  int if4v=module_ptr->get_count(COUNT_TAG_INTERMODULE_COMPLEXITY4 COUNT_TAG_VISIBLE_SUFFIX);
+  int if4c=module_ptr->get_count(COUNT_TAG_INTERMODULE_COMPLEXITY4 COUNT_TAG_CONCRETE_SUFFIX);
 
-  int wmc1=module_ptr->get_count("WMC1"); // Weighted methods/class (unity)
-  int wmcv=module_ptr->get_count("WMCv"); // Weighted methods/class (visible)
-  int dit=module_ptr->get_count("DIT");   // depth of inheritance tree
-  int noc=module_ptr->get_count("NOC");   // number of children
-  int cbo=module_ptr->get_count("CBO");   // coupling between objects
+  int wmc1=module_ptr->get_count(COUNT_TAG_WEIGHTED_METHODS_PER_CLASS_UNITY);
+  int wmcv=module_ptr->get_count(COUNT_TAG_WEIGHTED_METHODS_PER_CLASS COUNT_TAG_VISIBLE_SUFFIX);
+  int dit=module_ptr->get_count(COUNT_TAG_INHERITANCE_TREE_DEPTH);
+  int noc=module_ptr->get_count(COUNT_TAG_NUMBER_OF_CHILDREN);
+  int cbo=module_ptr->get_count(COUNT_TAG_COUPLING_BETWEEN_OBJECTS);
 
   fstr << HTMLBeginElement(_Table, "summary");
 
