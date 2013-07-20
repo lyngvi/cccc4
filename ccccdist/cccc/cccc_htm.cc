@@ -1427,7 +1427,7 @@ static string pad_string(int target_width, string the_string, string padding)
 string Source_Anchor::key() const
 {
   char linebuf[16];
-  snprintf(linebuf, sizeof(linebuf), "%d", line_);
+  snprintf(linebuf, sizeof(linebuf), "%08d", line_);
   return file_ + ":" + linebuf;
 }
 
