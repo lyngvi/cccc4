@@ -99,6 +99,8 @@ extern char *skip_identifiers[SKIP_IDENTIFIERS_ARRAY_SIZE];
 #define COUNT_TAG_WEIGHTED_METHODS_PER_CLASS            "WMC"   // may take VISIBLE suffix
 #define COUNT_TAG_WEIGHTED_METHODS_PER_CLASS_UNITY      "WMC1"
 
+#define COUNT_TAG_MAX_LINES_OF_CODE_PER_METHOD          "MLOCpM" // must be used at module get_count level - doesn't make sense to sum
+
 #endif
 
 

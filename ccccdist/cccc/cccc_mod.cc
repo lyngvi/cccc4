@@ -157,6 +157,15 @@ int CCCC_Module::get_count(const char* count_tag)
       retval=get_count(fi_variant.c_str())*get_count(fo_variant.c_str());
 	  retval*=retval;
     }
+  else if (strcmp(count_tag, COUNT_TAG_MAX_LINES_OF_CODE_PER_METHOD) == 0)
+    {
+      retval = 0;
+      for (member_map_t::iterator z = member_map.begin(); z != member_map.end(); ++z) {
+          int loc = z->second->get_count(COUNT_TAG_LINES_OF_CODE);
+          if (retval < loc)
+              retval = loc;
+      }
+    }
   else
     {
       CCCC_Extent *extPtr=extent_table.first_item();

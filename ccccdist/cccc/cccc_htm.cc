@@ -323,7 +323,13 @@ void  CCCC_Html_Stream::Project_Summary() {
 		     "by Henry and Kafura. The analyser makes an approximate "
 		     "count of this by counting inter-module couplings "
 		     "identified in the module interfaces.");
-
+  Metric_Description("LOCpM", "Lines of Code per Method",
+          "The average number of lines of code per method. "
+          "High LoC count may indicate poor functional isolation. "
+          "Note that this measure may be weighted low by large numbers of small accessor methods.");
+  Metric_Description("MLOCpM", "Max Lines of Code per Method",
+          "The largest number of lines of code in a single method. "
+          "High LoC count may indicate poor functional isolation.");
   fstr << HTMLEndElement(_UnorderedList) << endl
        << HTMLParagraph(
     	  "Two variants on the information flow measure IF4 are also "
@@ -535,6 +541,8 @@ void CCCC_Html_Stream::Procedural_Summary() {
   Put_Header_Cell("COM",8);
   Put_Header_Cell("L_C",8);
   Put_Header_Cell("M_C",8);
+  Put_Header_Cell("LOCpM",8);
+  Put_Header_Cell("MLOCpM", 8);
 
   fstr << HTMLEndElement(_TableRow)
 	   << HTMLEndElement(_TableHead) << endl;
@@ -553,16 +561,14 @@ void CCCC_Html_Stream::Procedural_Summary() {
 	  int loc=mod_ptr->get_count(COUNT_TAG_LINES_OF_CODE);
 	  int mvg=mod_ptr->get_count(COUNT_TAG_CYCLOMATIC_NUMBER);
 	  int com=mod_ptr->get_count(COUNT_TAG_LINES_OF_COMMENT);
-	  CCCC_Metric mloc(loc,"LOCm");
-	  CCCC_Metric mmvg(mvg,"MVGm");
-	  CCCC_Metric ml_c(loc,com,"L_C");
-	  CCCC_Metric mm_c(mvg,com,"M_C");
 
-	  Put_Metric_Cell(mloc);
-	  Put_Metric_Cell(mmvg);
+	  Put_Metric_Cell(CCCC_Metric(loc, "LOCm"));
+	  Put_Metric_Cell(CCCC_Metric(mvg, "MVGm"));
 	  Put_Metric_Cell(com);
-	  Put_Metric_Cell(ml_c);
-	  Put_Metric_Cell(mm_c);
+	  Put_Metric_Cell(CCCC_Metric(loc, com, "L_C"));
+	  Put_Metric_Cell(CCCC_Metric(mvg, com, "M_C"));
+	  Put_Metric_Cell(CCCC_Metric(loc, mod_ptr->get_count(COUNT_TAG_WEIGHTED_METHODS_PER_CLASS_UNITY), "LOCf"));
+          Put_Metric_Cell(CCCC_Metric(mod_ptr->get_count(COUNT_TAG_MAX_LINES_OF_CODE_PER_METHOD), "LOCf"));
 
 	  fstr << HTMLEndElement(_TableRow) << endl;
 
