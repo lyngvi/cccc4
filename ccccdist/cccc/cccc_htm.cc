@@ -430,32 +430,42 @@ void  CCCC_Html_Stream::Project_Summary() {
 void CCCC_Html_Stream::OO_Design() {
   Put_Section_Heading("Object Oriented Design","oodesign",1);
 
-  fstr << HTMLBeginElement(_UnorderedList) << endl;
   const char* wmcDescription = "The sum of a weighting function over the functions of the module. ";
   const char* wmcName = "Weighted methods per class";
-  Metric_Description("WMC1", wmcName, string(wmcDescription) +
-		     "WMC1 uses the nominal weight of 1 for each "
-		     "function, and hence measures the number of functions.");
-  Metric_Description("WMCv", string(wmcName) + " (non-private)", string(wmcDescription) +
-		     "WMCv uses a weighting function which is 1 for functions "
-		     "accessible to other modules, 0 for private functions.");
-  Metric_Description("DIT","Depth of inheritance tree",
-		     "The length of the longest path of inheritance ending at "
-		     "the current module.  The deeper the inheritance tree "
-		     "for a module, the harder it may be to predict its "
-		     "behaviour.  On the other hand, increasing depth gives "
-		     "the potential of greater reuse by the current module "
-		     "of behaviour defined for ancestor classes.");
-  Metric_Description("NOC","Number of children",
-		     "The number of modules which inherit directly from the "
-		     "current module.  Moderate values of this measure "
-		     "indicate scope for reuse, however high values may "
-		     "indicate an inappropriate abstraction in the design.");
-  Metric_Description("CBO","Coupling between objects",
-		     "The number of other modules which are coupled to the "
-		     "current module either as a client or a supplier. "
-		     "Excessive coupling indicates weakness of module "
-		     "encapsulation and may inhibit reuse.");
+  struct {
+      string abbreviation;
+      string name;
+      string description;
+  } metric_tags[] = {
+      { COUNT_TAG_WEIGHTED_METHODS_PER_CLASS_UNITY, wmcName, string(wmcDescription) +
+              "WMC1 uses the nominal weight of 1 for each "
+              "function, and hence measures the number of functions." },
+      { COUNT_TAG_WEIGHTED_METHODS_PER_CLASS COUNT_TAG_VISIBLE_SUFFIX, wmcName, string(wmcDescription) +
+              "WMCv uses a weighting function which is 1 for functions "
+              "accessible to other modules, 0 for private functions."},
+      { COUNT_TAG_INHERITANCE_TREE_DEPTH, "Depth of inheritance tree",
+              "The length of the longest path of inheritance ending at "
+              "the current module.  The deeper the inheritance tree "
+              "for a module, the harder it may be to predict its "
+              "behaviour.  On the other hand, increasing depth gives "
+              "the potential of greater reuse by the current module "
+              "of behaviour defined for ancestor classes." },
+      { COUNT_TAG_NUMBER_OF_CHILDREN, "Number of children",
+              "The number of modules which inherit directly from the "
+              "current module.  Moderate values of this measure "
+              "indicate scope for reuse, however high values may "
+              "indicate an inappropriate abstraction in the design." },
+      { COUNT_TAG_COUPLING_BETWEEN_OBJECTS, "Coupling between objects",
+              "The number of other modules which are coupled to the "
+              "current module either as a client or a supplier. "
+              "Excessive coupling indicates weakness of module "
+              "encapsulation and may inhibit reuse." }
+  };
+  int metric_tag_count = sizeof(metric_tags) / sizeof(metric_tags[0]);
+
+  fstr << HTMLBeginElement(_UnorderedList) << endl;
+  for (size_t k = 0; k < metric_tag_count; ++k)
+      Metric_Description(metric_tags[k].abbreviation, metric_tags[k].name, metric_tags[k].description);
   fstr << HTMLEndElement(_UnorderedList) << endl << endl;
 
   fstr << HTMLParagraph(
@@ -467,12 +477,10 @@ void CCCC_Html_Stream::OO_Design() {
   fstr << HTMLBeginElement(_Table, "summary") << endl
        << HTMLBeginElement(_TableHead) << endl
        << HTMLBeginElement(_TableRow) << endl;
-  Put_Header_Cell("Module Name",50);
-  Put_Header_Cell("WMC1",10);
-  Put_Header_Cell("WMCv",10);
-  Put_Header_Cell("DIT",10);
-  Put_Header_Cell("NOC",10);
-  Put_Header_Cell("CBO",10);
+
+  Put_Header_Cell("Module Name", 100 - 10 * metric_tag_count);
+  for (size_t k = 0; k < metric_tag_count; ++k)
+      Put_Header_Cell(metric_tags[k].abbreviation, 10);
 
   fstr << HTMLEndElement(_TableRow)
        << HTMLEndElement(_TableHead) << endl;
@@ -484,20 +492,16 @@ void CCCC_Html_Stream::OO_Design() {
       i++;
       if( mod_ptr->is_trivial() == FALSE)
 	{
-	  const char *metric_tags[5]={"WMC1","WMCv","DIT","NOC","CBO"};
 	  fstr << HTMLBeginElement(_TableRow) << endl;
 
 	  string href=mod_ptr->key()+".html#summary";
 
 	  Put_Label_Cell(mod_ptr->name(nlSIMPLE).c_str(),0,"",href.c_str());
 
-	  int j;
-	  for(j=0; j<5; j++)
+	  for(size_t j=0; j < metric_tag_count; j++)
 	    {
-	      CCCC_Metric metric_value(
-				       mod_ptr->get_count(metric_tags[j]),
-				       metric_tags[j]
-				       );
+	      CCCC_Metric metric_value(mod_ptr->get_count(metric_tags[j].abbreviation.c_str()),
+				       metric_tags[j].abbreviation.c_str());
 	      Put_Metric_Cell(metric_value);
 	    }
 	  fstr << HTMLEndElement(_TableRow) << endl;
