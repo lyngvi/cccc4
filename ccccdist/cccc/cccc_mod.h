@@ -36,10 +36,10 @@ static const string MODULE_PREFIX="CCCC_Module";
 static const string MODEXT_PREFIX="CCCC_ModExt";
 
 
-enum ModuleNameLevel 
+enum ModuleNameLevel
 { nlMODULE_TYPE=-1, nlMODULE_NAME=-2, nlMODULE_TYPE_AND_NAME=-3 };
 
-class CCCC_Module : public CCCC_Record 
+class CCCC_Module : public CCCC_Record
 {
   friend class CCCC_Project;
   friend class CCCC_Html_Stream;
@@ -55,14 +55,19 @@ class CCCC_Module : public CCCC_Record
   relationship_map_t supplier_map;
 
   CCCC_Module();
-  
+
 public:
 
-  string name(int name_level) const; 
-    
+  string name(int name_level) const;
+
   int FromFile(ifstream& infile);
   int ToFile(ofstream& outfile);
-  
+
+  /**
+   * Implements special counters with tags NOM, CBO, NOC, DIT, FI, FO, and IF4
+   * Sums counts matching count_tag across all members
+   * @ref CCCC_Member::get_count, CCCC_Extent::get_count
+   */
   virtual int get_count(const char *count_tag);
   int is_trivial();
 };

@@ -31,20 +31,26 @@ enum MemberNameLevel { nlMEMBER_NAME=-1, nlMEMBER_TYPE=-2, nlMEMBER_PARAMS=-3 };
 
 class CCCC_Module;
 
-class CCCC_Member : public CCCC_Record 
+class CCCC_Member : public CCCC_Record
 {
   friend class CCCC_Project;
   friend class CCCC_Module;
   string member_type, member_name, param_list;
   Visibility visibility;
   CCCC_Module *parent;
-  CCCC_Member(); 
+  CCCC_Member();
  public:
   string name( int index ) const;
   CCCC_Member(CCCC_Item& member_data_line, CCCC_Module* parent_ptr=NULL);
   int FromFile(ifstream& infile);
   int ToFile(ofstream& outfile);
-  void generate_report(ostream&); 
+  void generate_report(ostream&);
+
+  /**
+   * Implements special counters WMC1, WMCv
+   * Sums counts across all extents
+   * @ref CCCC_Extent::get_count
+   */
   int get_count(const char *count_tag);
   Visibility get_visibility();
 };
