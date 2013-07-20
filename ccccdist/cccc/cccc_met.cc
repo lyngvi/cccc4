@@ -83,7 +83,7 @@ void CCCC_Metric::set_ratio(float _num, float _denom)
 EmphasisLevel CCCC_Metric::emphasis_level() const
 {
   EmphasisLevel retval=elLOW;
-  if(treatment!=NULL && numerator>treatment->numerator_threshold)
+  if(denominator > 0 && treatment!=NULL && numerator>treatment->numerator_threshold)
     {
       if( numerator > (treatment->upper_threshold*denominator) )
 	{
