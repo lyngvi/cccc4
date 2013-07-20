@@ -221,7 +221,7 @@
 <name>main()</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1891" />
+<source_reference file="./cccc/cccc_htm.cc" line="1892" />
 </extent>
 <extent>
 <description>definition</description>
@@ -249,7 +249,7 @@
 <name>operator &lt;&lt;(CCCC_Html_Stream &amp;,const CCCC_Metric &amp;)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="991" />
+<source_reference file="./cccc/cccc_htm.cc" line="992" />
 </extent>
 <lines_of_code value="9" level="0" />
 <McCabes_cyclomatic_complexity value="1" level="0" />
@@ -261,7 +261,7 @@
 <name>operator &lt;&lt;(CCCC_Html_Stream &amp;,const string &amp;)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="985" />
+<source_reference file="./cccc/cccc_htm.cc" line="986" />
 </extent>
 <lines_of_code value="2" level="0" />
 <McCabes_cyclomatic_complexity value="0" level="0" />
@@ -429,7 +429,7 @@
 <name>pad_string(int,string,string)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1426" />
+<source_reference file="./cccc/cccc_htm.cc" line="1427" />
 </extent>
 <extent>
 <description>definition</description>
@@ -457,7 +457,7 @@
 <name>setup_anchor_data()</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1331" />
+<source_reference file="./cccc/cccc_htm.cc" line="1332" />
 </extent>
 <lines_of_code value="15" level="0" />
 <McCabes_cyclomatic_complexity value="1" level="0" />

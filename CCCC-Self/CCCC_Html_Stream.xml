@@ -29,7 +29,7 @@
 <name>CCCC_Html_Stream(const string &amp;,const string &amp;)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1309" />
+<source_reference file="./cccc/cccc_htm.cc" line="1310" />
 </extent>
 <lines_of_code value="18" level="0" />
 <McCabes_cyclomatic_complexity value="2" level="0" />
@@ -41,7 +41,7 @@
 <name>GenerateReports(CCCC_Project *,int,const string &amp;,const string &amp;)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="147" />
+<source_reference file="./cccc/cccc_htm.cc" line="148" />
 </extent>
 <lines_of_code value="77" level="1" />
 <McCabes_cyclomatic_complexity value="12" level="1" />
@@ -53,7 +53,7 @@
 <name>HTMLBeginElement(const char *,const char *,int)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1497" />
+<source_reference file="./cccc/cccc_htm.cc" line="1498" />
 </extent>
 <lines_of_code value="11" level="0" />
 <McCabes_cyclomatic_complexity value="3" level="0" />
@@ -65,7 +65,7 @@
 <name>HTMLEndElement(const char *)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1525" />
+<source_reference file="./cccc/cccc_htm.cc" line="1526" />
 </extent>
 <lines_of_code value="6" level="0" />
 <McCabes_cyclomatic_complexity value="1" level="0" />
@@ -77,7 +77,7 @@
 <name>HTMLEscapeLiteral(const char *)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1547" />
+<source_reference file="./cccc/cccc_htm.cc" line="1548" />
 </extent>
 <lines_of_code value="16" level="0" />
 <McCabes_cyclomatic_complexity value="9" level="0" />
@@ -89,7 +89,7 @@
 <name>HTMLMultiColumnHeaderCell(const char *,int)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1487" />
+<source_reference file="./cccc/cccc_htm.cc" line="1488" />
 </extent>
 <lines_of_code value="9" level="0" />
 <McCabes_cyclomatic_complexity value="2" level="0" />
@@ -101,7 +101,7 @@
 <name>HTMLParagraph(const char *)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1518" />
+<source_reference file="./cccc/cccc_htm.cc" line="1519" />
 </extent>
 <lines_of_code value="6" level="0" />
 <McCabes_cyclomatic_complexity value="1" level="0" />
@@ -113,7 +113,7 @@
 <name>HTMLSingleEntryRow(int,const char *,int)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1477" />
+<source_reference file="./cccc/cccc_htm.cc" line="1478" />
 </extent>
 <lines_of_code value="9" level="0" />
 <McCabes_cyclomatic_complexity value="2" level="0" />
@@ -125,7 +125,7 @@
 <name>HTMLTableCell(const char *,const char *,int)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1509" />
+<source_reference file="./cccc/cccc_htm.cc" line="1510" />
 </extent>
 <lines_of_code value="8" level="0" />
 <McCabes_cyclomatic_complexity value="1" level="0" />
@@ -137,7 +137,7 @@
 <name>JSEscapeStringLiteral(const char *)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1532" />
+<source_reference file="./cccc/cccc_htm.cc" line="1533" />
 </extent>
 <lines_of_code value="14" level="0" />
 <McCabes_cyclomatic_complexity value="8" level="0" />
@@ -149,7 +149,7 @@
 <name>Metric_Description(string,string,string)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1163" />
+<source_reference file="./cccc/cccc_htm.cc" line="1164" />
 </extent>
 <lines_of_code value="12" level="0" />
 <McCabes_cyclomatic_complexity value="1" level="0" />
@@ -161,7 +161,7 @@
 <name>Module_Detail(CCCC_Module *)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1082" />
+<source_reference file="./cccc/cccc_htm.cc" line="1083" />
 </extent>
 <lines_of_code value="27" level="0" />
 <McCabes_cyclomatic_complexity value="2" level="0" />
@@ -173,7 +173,7 @@
 <name>Module_Summary(CCCC_Module *)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1183" />
+<source_reference file="./cccc/cccc_htm.cc" line="1184" />
 </extent>
 <lines_of_code value="103" level="2" />
 <McCabes_cyclomatic_complexity value="0" level="0" />
@@ -185,7 +185,7 @@
 <name>OO_Design()</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="493" />
+<source_reference file="./cccc/cccc_htm.cc" line="494" />
 </extent>
 <lines_of_code value="40" level="1" />
 <McCabes_cyclomatic_complexity value="5" level="0" />
@@ -197,7 +197,7 @@
 <name>Other_Extents()</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="821" />
+<source_reference file="./cccc/cccc_htm.cc" line="822" />
 </extent>
 <lines_of_code value="34" level="1" />
 <McCabes_cyclomatic_complexity value="2" level="0" />
@@ -209,7 +209,7 @@
 <name>PopulateJSTooltipMap()</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1572" />
+<source_reference file="./cccc/cccc_htm.cc" line="1573" />
 </extent>
 <lines_of_code value="14" level="0" />
 <McCabes_cyclomatic_complexity value="3" level="0" />
@@ -221,7 +221,7 @@
 <name>Procedural_Detail()</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="790" />
+<source_reference file="./cccc/cccc_htm.cc" line="791" />
 </extent>
 <lines_of_code value="27" level="0" />
 <McCabes_cyclomatic_complexity value="4" level="0" />
@@ -233,7 +233,7 @@
 <name>Procedural_Detail(CCCC_Module *)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1123" />
+<source_reference file="./cccc/cccc_htm.cc" line="1124" />
 </extent>
 <lines_of_code value="25" level="0" />
 <McCabes_cyclomatic_complexity value="2" level="0" />
@@ -245,7 +245,7 @@
 <name>Procedural_Summary()</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="547" />
+<source_reference file="./cccc/cccc_htm.cc" line="548" />
 </extent>
 <lines_of_code value="48" level="1" />
 <McCabes_cyclomatic_complexity value="2" level="0" />
@@ -257,7 +257,7 @@
 <name>Project_Summary()</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="382" />
+<source_reference file="./cccc/cccc_htm.cc" line="383" />
 </extent>
 <lines_of_code value="94" level="1" />
 <McCabes_cyclomatic_complexity value="1" level="0" />
@@ -269,7 +269,7 @@
 <name>Put_Extent_Cell(const CCCC_Extent &amp;,int,bool)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="961" />
+<source_reference file="./cccc/cccc_htm.cc" line="962" />
 </extent>
 <lines_of_code value="8" level="0" />
 <McCabes_cyclomatic_complexity value="1" level="0" />
@@ -281,7 +281,7 @@
 <name>Put_Extent_List(CCCC_Record &amp;,bool)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="970" />
+<source_reference file="./cccc/cccc_htm.cc" line="971" />
 </extent>
 <lines_of_code value="14" level="0" />
 <McCabes_cyclomatic_complexity value="2" level="0" />
@@ -293,7 +293,7 @@
 <name>Put_Extent_URL(const CCCC_Extent &amp;)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="945" />
+<source_reference file="./cccc/cccc_htm.cc" line="946" />
 </extent>
 <lines_of_code value="12" level="0" />
 <McCabes_cyclomatic_complexity value="0" level="0" />
@@ -305,7 +305,7 @@
 <name>Put_Header_Cell(string,int)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="871" />
+<source_reference file="./cccc/cccc_htm.cc" line="872" />
 </extent>
 <lines_of_code value="6" level="0" />
 <McCabes_cyclomatic_complexity value="0" level="0" />
@@ -317,7 +317,7 @@
 <name>Put_Label_Cell(string,int,string,string,CCCC_Record *)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="878" />
+<source_reference file="./cccc/cccc_htm.cc" line="879" />
 </extent>
 <lines_of_code value="26" level="0" />
 <McCabes_cyclomatic_complexity value="4" level="0" />
@@ -329,7 +329,7 @@
 <name>Put_Metric_Cell(const CCCC_Metric &amp;,int)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="932" />
+<source_reference file="./cccc/cccc_htm.cc" line="933" />
 </extent>
 <lines_of_code value="12" level="0" />
 <McCabes_cyclomatic_complexity value="4" level="0" />
@@ -341,7 +341,7 @@
 <name>Put_Metric_Cell(int,int,string,int)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="925" />
+<source_reference file="./cccc/cccc_htm.cc" line="926" />
 </extent>
 <lines_of_code value="6" level="0" />
 <McCabes_cyclomatic_complexity value="0" level="0" />
@@ -353,7 +353,7 @@
 <name>Put_Metric_Cell(int,string,int)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="918" />
+<source_reference file="./cccc/cccc_htm.cc" line="919" />
 </extent>
 <lines_of_code value="6" level="0" />
 <McCabes_cyclomatic_complexity value="0" level="0" />
@@ -365,7 +365,7 @@
 <name>Put_Section_Heading(string,string,int)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="371" />
+<source_reference file="./cccc/cccc_htm.cc" line="372" />
 </extent>
 <lines_of_code value="10" level="0" />
 <McCabes_cyclomatic_complexity value="0" level="0" />
@@ -377,7 +377,7 @@
 <name>Put_Section_TOC_Entry(string,string,string)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="858" />
+<source_reference file="./cccc/cccc_htm.cc" line="859" />
 </extent>
 <lines_of_code value="12" level="0" />
 <McCabes_cyclomatic_complexity value="0" level="0" />
@@ -389,7 +389,7 @@
 <name>Put_Structural_Details_Cell(CCCC_Module *,CCCC_Project *,int,UserelNameLevel)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="692" />
+<source_reference file="./cccc/cccc_htm.cc" line="693" />
 </extent>
 <lines_of_code value="56" level="1" />
 <McCabes_cyclomatic_complexity value="8" level="0" />
@@ -401,7 +401,7 @@
 <name>Separate_Modules()</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1004" />
+<source_reference file="./cccc/cccc_htm.cc" line="1005" />
 </extent>
 <lines_of_code value="65" level="1" />
 <McCabes_cyclomatic_complexity value="2" level="0" />
@@ -413,7 +413,7 @@
 <name>Source_Listing()</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1348" />
+<source_reference file="./cccc/cccc_htm.cc" line="1349" />
 </extent>
 <lines_of_code value="60" level="1" />
 <McCabes_cyclomatic_complexity value="8" level="0" />
@@ -425,7 +425,7 @@
 <name>Structural_Detail()</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="762" />
+<source_reference file="./cccc/cccc_htm.cc" line="763" />
 </extent>
 <lines_of_code value="25" level="0" />
 <McCabes_cyclomatic_complexity value="2" level="0" />
@@ -437,7 +437,7 @@
 <name>Structural_Detail(CCCC_Module *)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1177" />
+<source_reference file="./cccc/cccc_htm.cc" line="1178" />
 </extent>
 <lines_of_code value="5" level="0" />
 <McCabes_cyclomatic_complexity value="0" level="0" />
@@ -449,7 +449,7 @@
 <name>Structural_Summary()</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="607" />
+<source_reference file="./cccc/cccc_htm.cc" line="608" />
 </extent>
 <lines_of_code value="69" level="1" />
 <McCabes_cyclomatic_complexity value="3" level="0" />
@@ -461,7 +461,7 @@
 <name>Table_Of_Contents(int,bool)</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="248" />
+<source_reference file="./cccc/cccc_htm.cc" line="249" />
 </extent>
 <lines_of_code value="104" level="2" />
 <McCabes_cyclomatic_complexity value="11" level="1" />
@@ -473,7 +473,7 @@
 <name>~CCCC_Html_Stream()</name>
 <extent>
 <description>definition</description>
-<source_reference file="./cccc/cccc_htm.cc" line="242" />
+<source_reference file="./cccc/cccc_htm.cc" line="243" />
 </extent>
 <lines_of_code value="5" level="0" />
 <McCabes_cyclomatic_complexity value="0" level="0" />
@@ -493,100 +493,96 @@
 <concrete>false</concrete>
 <extent>
 <description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="945" />
+<source_reference file="./cccc/cccc_htm.cc" line="946" />
 </extent>
 <extent>
 <description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="961" />
+<source_reference file="./cccc/cccc_htm.cc" line="962" />
 </extent>
 <name>CCCC_Metric</name>
 <visible>true</visible>
 <concrete>false</concrete>
 <extent>
 <description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="932" />
+<source_reference file="./cccc/cccc_htm.cc" line="933" />
 </extent>
 <name>CCCC_Module</name>
 <visible>true</visible>
 <concrete>false</concrete>
 <extent>
 <description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="693" />
+<source_reference file="./cccc/cccc_htm.cc" line="694" />
 </extent>
 <extent>
 <description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1082" />
+<source_reference file="./cccc/cccc_htm.cc" line="1083" />
 </extent>
 <extent>
 <description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1123" />
+<source_reference file="./cccc/cccc_htm.cc" line="1124" />
 </extent>
 <extent>
 <description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1177" />
+<source_reference file="./cccc/cccc_htm.cc" line="1178" />
 </extent>
 <extent>
 <description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1183" />
+<source_reference file="./cccc/cccc_htm.cc" line="1184" />
 </extent>
 <name>CCCC_Project</name>
 <visible>true</visible>
 <concrete>false</concrete>
 <extent>
 <description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="147" />
+<source_reference file="./cccc/cccc_htm.cc" line="148" />
 </extent>
 <extent>
 <description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="693" />
+<source_reference file="./cccc/cccc_htm.cc" line="694" />
 </extent>
 <name>CCCC_Record</name>
 <visible>true</visible>
 <concrete>false</concrete>
 <extent>
 <description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="881" />
+<source_reference file="./cccc/cccc_htm.cc" line="882" />
 </extent>
 <extent>
 <description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="970" />
+<source_reference file="./cccc/cccc_htm.cc" line="971" />
 </extent>
 <name>UserelNameLevel</name>
 <visible>true</visible>
 <concrete>true</concrete>
 <extent>
 <description>pass by value</description>
-<source_reference file="./cccc/cccc_htm.cc" line="693" />
+<source_reference file="./cccc/cccc_htm.cc" line="694" />
 </extent>
 <name>bool</name>
 <visible>true</visible>
 <concrete>true</concrete>
 <extent>
 <description>pass by value</description>
-<source_reference file="./cccc/cccc_htm.cc" line="248" />
+<source_reference file="./cccc/cccc_htm.cc" line="249" />
 </extent>
 <extent>
 <description>pass by value</description>
-<source_reference file="./cccc/cccc_htm.cc" line="961" />
+<source_reference file="./cccc/cccc_htm.cc" line="962" />
 </extent>
 <extent>
 <description>pass by value</description>
-<source_reference file="./cccc/cccc_htm.cc" line="970" />
+<source_reference file="./cccc/cccc_htm.cc" line="971" />
 </extent>
 <name>string</name>
 <visible>true</visible>
 <concrete>true</concrete>
 <extent>
 <description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="149" />
-</extent>
-<extent>
-<description>pass by reference</description>
 <source_reference file="./cccc/cccc_htm.cc" line="150" />
 </extent>
 <extent>
-<description>pass by value</description>
-<source_reference file="./cccc/cccc_htm.cc" line="372" />
+<description>pass by reference</description>
+<source_reference file="./cccc/cccc_htm.cc" line="151" />
 </extent>
 <extent>
 <description>pass by value</description>
@@ -594,11 +590,7 @@
 </extent>
 <extent>
 <description>pass by value</description>
-<source_reference file="./cccc/cccc_htm.cc" line="859" />
-</extent>
-<extent>
-<description>pass by value</description>
-<source_reference file="./cccc/cccc_htm.cc" line="859" />
+<source_reference file="./cccc/cccc_htm.cc" line="374" />
 </extent>
 <extent>
 <description>pass by value</description>
@@ -606,11 +598,15 @@
 </extent>
 <extent>
 <description>pass by value</description>
-<source_reference file="./cccc/cccc_htm.cc" line="871" />
+<source_reference file="./cccc/cccc_htm.cc" line="860" />
 </extent>
 <extent>
 <description>pass by value</description>
-<source_reference file="./cccc/cccc_htm.cc" line="879" />
+<source_reference file="./cccc/cccc_htm.cc" line="861" />
+</extent>
+<extent>
+<description>pass by value</description>
+<source_reference file="./cccc/cccc_htm.cc" line="872" />
 </extent>
 <extent>
 <description>pass by value</description>
@@ -618,19 +614,19 @@
 </extent>
 <extent>
 <description>pass by value</description>
-<source_reference file="./cccc/cccc_htm.cc" line="880" />
+<source_reference file="./cccc/cccc_htm.cc" line="881" />
 </extent>
 <extent>
 <description>pass by value</description>
-<source_reference file="./cccc/cccc_htm.cc" line="919" />
+<source_reference file="./cccc/cccc_htm.cc" line="881" />
 </extent>
 <extent>
 <description>pass by value</description>
-<source_reference file="./cccc/cccc_htm.cc" line="926" />
+<source_reference file="./cccc/cccc_htm.cc" line="920" />
 </extent>
 <extent>
 <description>pass by value</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1164" />
+<source_reference file="./cccc/cccc_htm.cc" line="927" />
 </extent>
 <extent>
 <description>pass by value</description>
@@ -641,12 +637,16 @@
 <source_reference file="./cccc/cccc_htm.cc" line="1166" />
 </extent>
 <extent>
-<description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1309" />
+<description>pass by value</description>
+<source_reference file="./cccc/cccc_htm.cc" line="1167" />
 </extent>
 <extent>
 <description>pass by reference</description>
-<source_reference file="./cccc/cccc_htm.cc" line="1309" />
+<source_reference file="./cccc/cccc_htm.cc" line="1310" />
+</extent>
+<extent>
+<description>pass by reference</description>
+<source_reference file="./cccc/cccc_htm.cc" line="1310" />
 </extent>
 </supplier_module>
 </module>
