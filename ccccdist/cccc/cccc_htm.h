@@ -73,7 +73,7 @@ class CCCC_Html_Stream {
   static string HTMLSingleEntryRow(int columnCount, const char* text = "", int height = -1);
   static string HTMLTableCell(const char* txt, const char* clasName = "", int width = -1);
   static string HTMLMultiColumnHeaderCell(const char* text, int columnCount = 1);
-  string HTMLParagraph(const char* txt);
+  static string HTMLParagraph(const char* txt);
 
   void Table_Of_Contents(int report_mask, bool showGenTime);
   void Project_Summary();
