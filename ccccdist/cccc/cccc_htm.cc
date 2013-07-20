@@ -431,11 +431,12 @@ void CCCC_Html_Stream::OO_Design() {
   Put_Section_Heading("Object Oriented Design","oodesign",1);
 
   fstr << HTMLBeginElement(_UnorderedList) << endl;
-  Metric_Description("WMC","Weighted methods per class",
-		     "The sum of a weighting function over the functions of "
-		     "the module.  Two different weighting functions are "
-		     "applied: WMC1 uses the nominal weight of 1 for each "
-		     "function, and hence measures the number of functions, "
+  const char* wmcDescription = "The sum of a weighting function over the functions of the module. ";
+  const char* wmcName = "Weighted methods per class";
+  Metric_Description("WMC1", wmcName, string(wmcDescription) +
+		     "WMC1 uses the nominal weight of 1 for each "
+		     "function, and hence measures the number of functions.");
+  Metric_Description("WMCv", string(wmcName) + " (non-private)", string(wmcDescription) +
 		     "WMCv uses a weighting function which is 1 for functions "
 		     "accessible to other modules, 0 for private functions.");
   Metric_Description("DIT","Depth of inheritance tree",
@@ -574,10 +575,10 @@ void CCCC_Html_Stream::Structural_Summary()
   Put_Section_Heading("Structural Metrics Summary","structsum",1);
 
   fstr << HTMLBeginElement(_UnorderedList) << endl;
-  Metric_Description("FI","Fan-in",
+  Metric_Description("Fan-in", string(),
 		     "The number of other modules which pass information "
 		     "into the current module.");
-  Metric_Description("FO","Fan-out",
+  Metric_Description("Fan-out", string(),
 		     "The number of other modules into which the current "
 		     "module passes information");
   Metric_Description("IF4","Information Flow measure",
@@ -1140,13 +1141,15 @@ void CCCC_Html_Stream::Metric_Description(
 					  string description)
 {
   // this is intended to be called in the context of an unnumbered list
-  fstr 	<< HTMLBeginElement(_ListItem)
-		<< abbreviation << " = " << name
-		<< HTMLParagraph(description.c_str()) << endl
-		<< HTMLEndElement(_ListItem) << endl;
+  fstr << HTMLBeginElement(_ListItem)
+       << abbreviation;
+  if (!name.empty())
+      fstr  << " = " << name;
+  fstr << HTMLParagraph(description.c_str()) << endl
+       << HTMLEndElement(_ListItem) << endl;
   fstr << "<script type=\"text/javascript\">window.g_Glossary['"
 		  << JSEscapeStringLiteral(abbreviation.c_str()) << "'] = {"
-		  "  name: '" << JSEscapeStringLiteral(name.c_str()) << "', "
+		  "  name: '" << JSEscapeStringLiteral(name.empty() ? abbreviation.c_str() : name.c_str()) << "', "
 		  "  description: '" << JSEscapeStringLiteral(description.c_str()) << "' };</script>\n";
 }
 
